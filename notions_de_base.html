@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notions de base — Physique Sec. 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette "banc d'optique" — bleu nuit + cyan laser, distincte de la
+       palette indigo/ambre du cours de chimie. */
+    --indigo-dark: #0d1b2e;
+    --indigo-mid:  #163a5c;
+    --indigo-light:#4f90b8;
+    --amber:       #2bc4d4;
+    --amber-dim:   #1f8fa0;
+    --flame:       #dd4a3a;
+    --bg:          #eef2f5;
+    --surface:     #ffffff;
+    --text:        #16212c;
+    --muted:       #5c6b78;
+    --border:      #d7e0e6;
+    --sidebar-w:   268px;
+    --mono:        'JetBrains Mono', monospace;
+    /* Motif signature : le spectre visible, utilisé avec parcimonie */
+    --spectre:        linear-gradient(90deg, #6a4fd0 0%, #3f7fd6 20%, #2fa9a0 40%, #d9c93f 60%, #e8863b 80%, #dd4a3a 100%);
+    --spectre-pastel: linear-gradient(100deg, #b9a8e8 0%, #9dc8ec 20%, #9de0c4 40%, #ecdd8f 60%, #f0c890 80%, #eba393 100%);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar { width: var(--sidebar-w); background: var(--indigo-dark); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; display: flex; flex-direction: column; z-index: 100; transition: transform .3s ease; }
+  .sidebar-header { background: var(--spectre-pastel); padding: 20px 18px 16px; flex-shrink: 0; }
+  .back-to-index { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--indigo-dark); text-decoration: none; opacity: .65; margin-bottom: 12px; transition: opacity .15s; }
+  .back-to-index:hover { opacity: 1; text-decoration: underline; }
+  .sidebar-header .label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-dark); }
+  .sidebar-header .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 800; line-height: 1; color: var(--indigo-dark); }
+  .sidebar-header .chap-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-dark); margin-top: 4px; }
+  .toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--indigo-light); padding: 20px 18px 8px; }
+  #sidebar nav ul { list-style: none; }
+  #sidebar nav ul li a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; border-left: 3px solid transparent; transition: background .15s, color .15s, border-color .15s; line-height: 1.35; }
+  #sidebar nav ul li a:hover, #sidebar nav ul li a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--amber); }
+  #sidebar nav ul li a .num { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+  .sidebar-footer { margin-top: auto; padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
+  .sidebar-footer button { background: none; border: none; cursor: pointer; font-size: 11px; color: rgba(255,255,255,.3); padding: 0; text-align: left; width: 100%; transition: color .15s; }
+  .sidebar-footer button:hover { color: rgba(255,255,255,.6); }
+  .attrib-popover { display: none; position: absolute; bottom: 60px; left: 14px; width: 230px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.18); padding: 14px 16px; font-size: 12px; color: var(--text); line-height: 1.6; z-index: 200; }
+  .attrib-popover::after { content: ''; position: absolute; bottom: -7px; left: 20px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 2px 2px 4px rgba(0,0,0,.08); }
+  .attrib-popover.visible { display: block; }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+  .hero { background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-mid) 60%, var(--indigo-light) 100%); padding: 60px 56px 48px; color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: 'λ'; position: absolute; right: 40px; top: -30px; font-family: 'Barlow Condensed', sans-serif; font-size: 260px; font-weight: 800; color: rgba(255,255,255,.07); line-height: 1; pointer-events: none; }
+  .hero .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px, 5vw, 56px); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 20px; }
+  .hero p { max-width: 600px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.82); }
+
+  .search-bar-wrap { background: var(--indigo-dark); padding: 14px 56px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid var(--amber); }
+  .search-bar-wrap label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.5); white-space: nowrap; letter-spacing: .06em; text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif; }
+  #search-input { flex: 1; max-width: 440px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 8px 14px; font-size: 14px; color: #fff; font-family: 'Inter', sans-serif; outline: none; transition: background .2s, border-color .2s; }
+  #search-input::placeholder { color: rgba(255,255,255,.4); }
+  #search-input:focus { background: rgba(255,255,255,.16); border-color: var(--amber); }
+  #search-count { font-size: 12px; color: var(--amber); font-family: var(--mono); min-width: 90px; }
+
+  .content { padding: 48px 56px 80px; max-width: 880px; }
+
+  /* Carte d'introduction */
+  .intro-card { background: linear-gradient(120deg, var(--indigo-dark), var(--indigo-mid)); border-radius: 10px; padding: 24px 28px; color: rgba(255,255,255,.88); margin-bottom: 24px; }
+  .intro-card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--amber); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; }
+  .intro-card h2 svg { margin-top: 3px; flex-shrink: 0; }
+  .intro-card p { color: rgba(255,255,255,.82); font-size: 14px; margin-bottom: 10px; line-height: 1.65; }
+  .intro-card p:last-child { margin-bottom: 0; }
+
+  .section-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .section-toggle { width: 100%; background: none; border: none; cursor: pointer; padding: 0; text-align: left; display: block; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; background: var(--surface); transition: background .15s; border-bottom: 1px solid transparent; }
+  .section-toggle:hover .section-header, .section-toggle[aria-expanded="true"] .section-header { background: #f0f4f6; border-bottom-color: var(--border); }
+  .section-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 4px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; margin-top: 2px; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--indigo-dark); flex: 1; }
+  .chevron { width: 20px; height: 20px; color: var(--muted); transition: transform .25s ease; flex-shrink: 0; margin-top: 2px; }
+  .section-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .section-body { display: none; padding: 28px 28px 32px; border-top: 3px solid; border-image: var(--spectre) 1; }
+  .section-body.open { display: block; }
+
+  .subsection { margin-bottom: 32px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--indigo-mid); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .subsection-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--amber); border-radius: 2px; flex-shrink: 0; }
+
+  p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul.content-list { padding-left: 20px; margin-bottom: 14px; }
+  ul.content-list li { font-size: 15px; line-height: 1.7; margin-bottom: 6px; }
+
+  .def-box { background: linear-gradient(135deg, #eef2fa, #f2f6fb); border-left: 4px solid var(--indigo-light); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .def-box .def-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 6px; }
+  .def-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
+  .def-box p:last-child { margin: 0; }
+  .def-box strong { color: var(--indigo-dark); font-weight: 600; }
+
+  .note-box { margin: 20px 0; border: 1.5px solid var(--amber-dim); border-radius: 10px; overflow: hidden; background: #eaf8fa; }
+  .note-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: rgba(43,196,212,.22); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .note-bar:hover { background: rgba(43,196,212,.32); }
+  .note-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #0d5a66; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .note-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .note-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: #2a7d8a; }
+  .note-bar .chevron-n { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #0d5a66; margin-top: 1px; }
+  .note-bar[aria-expanded="true"] .chevron-n { transform: rotate(180deg); }
+  .note-body { display: none; padding: 14px 18px 18px; font-size: 14px; color: #0d3a42; line-height: 1.65; }
+  .note-bar[aria-expanded="true"] + .note-body { display: block; }
+
+  .formula { font-family: var(--mono); background: var(--indigo-dark); color: var(--amber); padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 16px 0; letter-spacing: .04em; text-align: center; overflow-x: auto; }
+  .formula-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: -10px; margin-bottom: 14px; }
+
+  .kw { background: rgba(43,196,212,.22); color: var(--indigo-dark); padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+  mark.sh { background: #cdeef1; color: var(--text); border-radius: 2px; padding: 0 2px; }
+  mark.sh.current { background: var(--flame); color: #fff; box-shadow: 0 0 0 2px var(--flame); }
+
+  .fig-block { margin: 18px 0; background: #f8fafb; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-align: center; }
+  .fig-block .fig-inner { padding: 20px; }
+  .fig-block figcaption { font-size: 12.5px; color: var(--muted); padding: 10px 16px 14px; border-top: 1px solid var(--border); line-height: 1.5; font-style: italic; text-align: left; }
+
+  .compare-block { display: flex; gap: 2px; margin: 16px 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .compare-col { flex: 1; padding: 18px 20px; }
+  .compare-col--a { background: linear-gradient(135deg, #eef2fa, #e3e9f7); }
+  .compare-col--b { background: linear-gradient(135deg, #eafaf5, #dcf3ea); }
+  .compare-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--indigo-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .compare-col--b .compare-label { color: #1a8f6e; }
+  .compare-col p { font-size: 13.5px; line-height: 1.6; margin: 0 0 8px; color: var(--text); }
+  .compare-col p:last-child { margin-bottom: 0; }
+  .compare-col svg.bond-fig { width: 100%; max-width: 180px; height: auto; margin: 4px auto 10px; display: block; }
+
+  .cause-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0 22px; }
+  .cause-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 16px 14px; }
+  .cause-card .cause-icon { width: 30px; height: 30px; color: var(--indigo-mid); margin-bottom: 8px; }
+  .cause-card .cause-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--indigo-dark); margin-bottom: 4px; line-height: 1.25; }
+  .cause-card p { font-size: 12.5px; color: var(--muted); margin: 0; line-height: 1.5; }
+  @media (max-width: 768px) { .cause-grid { grid-template-columns: 1fr; } }
+
+  .data-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  .data-table th { background: var(--indigo-dark); color: var(--amber); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; padding: 10px 14px; text-align: left; }
+  .data-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f2f6f8; }
+  .data-table td strong { color: var(--indigo-dark); }
+  .data-table td.formula-cell { color: var(--indigo-dark); font-family: var(--mono); font-weight: 700; font-size: 14.5px; }
+
+  #to-top { position: fixed; bottom: 28px; right: 28px; width: 42px; height: 42px; background: var(--indigo-dark); color: var(--amber); border: 2px solid var(--amber); border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 200; }
+  #to-top.visible { opacity: 1; pointer-events: auto; }
+
+  #menu-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 150; background: var(--indigo-dark); border: 2px solid var(--amber); color: var(--amber); width: 40px; height: 40px; border-radius: 8px; font-size: 20px; cursor: pointer; align-items: center; justify-content: center; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: flex; }
+    .hero { padding: 60px 24px 36px; }
+    .search-bar-wrap { padding: 12px 24px; }
+    .content { padding: 28px 20px 60px; }
+    .compare-block { flex-direction: column; }
+  }
+
+  /* ── QUIZ ── */
+  .quiz-block { margin-top: 36px; margin-bottom: 32px; border-top: 2px solid var(--amber); border-bottom: 2px solid var(--amber); padding-top: 24px; padding-bottom: 24px; }
+  .quiz-block-bar { width: 100%; display: flex; align-items: flex-start; gap: 10px; background: var(--indigo-dark); border: none; border-radius: 10px; cursor: pointer; padding: 14px 18px; margin-bottom: 6px; text-align: left; transition: background .15s; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .quiz-block-bar:hover { background: var(--indigo-mid); }
+  .quiz-block-bar .quiz-block-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--amber); margin-top: 2px; }
+  .quiz-block-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .quiz-block-subtitle { font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); margin-left: 2px; }
+  .quiz-block-bar .chevron-q { margin-left: auto; width: 20px; height: 20px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 2px; }
+  .quiz-block-bar[aria-expanded="true"] .chevron-q { transform: rotate(180deg); }
+  .quiz-body { display: none; }
+  .quiz-block-bar[aria-expanded="true"] + .quiz-body { display: block; padding-top: 14px; }
+  .quiz-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 13px; color: var(--muted); }
+  .quiz-score-bar progress { flex: 1; height: 6px; border-radius: 3px; appearance: none; -webkit-appearance: none; }
+  .quiz-score-bar progress::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  .quiz-score-bar progress::-webkit-progress-value { background: var(--indigo-mid); border-radius: 3px; transition: width .4s; }
+
+  .quiz-q { background: var(--bg); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; border: 1.5px solid var(--border); transition: border-color .2s; }
+  .quiz-q.answered { border-color: transparent; }
+  .quiz-q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 14px; }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background .15s, border-color .15s; text-align: left; width: 100%; line-height: 1.45; }
+  .quiz-option:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-option .opt-letter { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-option.correct { background: #e8f8ef; border-color: #2da262; color: #1a6640; }
+  .quiz-option.correct .opt-letter { color: #2da262; }
+  .quiz-option.wrong { background: #fdecea; border-color: #d94f3d; color: #8b2218; }
+  .quiz-option.wrong .opt-letter { color: #d94f3d; }
+  .quiz-option.reveal { background: #e8f8ef; border-color: #2da262; color: #1a6640; opacity: .7; }
+  .quiz-option.reveal .opt-letter { color: #2da262; }
+
+  .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13.5px; line-height: 1.55; display: none; }
+  .quiz-feedback.show { display: flex; gap: 8px; align-items: flex-start; }
+  .quiz-feedback .icon-sm { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+  .quiz-feedback.ok { background: #e8f8ef; color: #1a6640; }
+  .quiz-feedback.ko { background: #fdecea; color: #8b2218; }
+  .quiz-result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; text-align: center; display: none; align-items: center; justify-content: center; gap: 8px; }
+  .quiz-result-msg.show { display: flex; }
+  .quiz-result-msg .icon-sm { width: 18px; height: 18px; flex-shrink: 0; }
+  .quiz-result-msg.great { background: #e8f8ef; color: #1a6640; }
+  .quiz-result-msg.good { background: #fdf6e3; color: #7a5c00; }
+  .quiz-result-msg.poor { background: #fdecea; color: #8b2218; }
+
+  .quiz-reset { margin-top: 20px; padding: 9px 20px; border-radius: 8px; border: 1.5px solid var(--indigo-mid); background: #fff; color: var(--indigo-dark); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; display: none; }
+  .quiz-reset:hover { background: #eef2fa; }
+
+  /* === ACTIVITÉ SUGGÉRÉE === */
+  .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+  .activity-block { margin: 22px 0; border: 1.5px solid var(--flame); border-radius: 10px; overflow: hidden; background: #fdf5f4; }
+  .activity-bar { width: 100%; display: flex; align-items: flex-start; gap: 10px; padding: 11px 16px; background: #fbdcd6; border: none; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--flame); text-align: left; transition: background .15s; line-height: 1.35; }
+  .activity-bar:hover { background: #f8cac2; }
+  .activity-bar .activity-icon { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+  .activity-bar .chevron-a { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; margin-top: 1px; }
+  .activity-bar[aria-expanded="true"] .chevron-a { transform: rotate(180deg); }
+  .activity-content { display: none; padding: 16px 18px 18px; }
+  .activity-bar[aria-expanded="true"] + .activity-content { display: block; }
+  .activity-question { font-size: 14.5px; color: var(--text); line-height: 1.6; font-style: italic; }
+  .activity-hint-toggle { margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--indigo-mid); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; }
+  .activity-hint { display: none; margin-top: 8px; font-size: 13px; color: var(--muted); background: var(--bg); border-radius: 6px; padding: 10px 12px; line-height: 1.55; }
+  .activity-hint.show { display: block; }
+</style>
+</head>
+<body>
+
+<button id="menu-toggle" aria-label="Menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<aside id="sidebar" role="navigation" aria-label="Table des matières">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-to-index" title="Retour à la table des matières du cours">
+      <svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Tous les chapitres
+    </a>
+    <div class="label">Physique Sec. 5 · Révision</div>
+    <div class="chap-num">R</div>
+    <div class="chap-title">Notions de base</div>
+  </div>
+  <div class="toc-label">Table des matières</div>
+  <nav>
+    <ul>
+      <li><a href="#intro" class="toc-link"><span class="num">—</span> Avant de commencer</a></li>
+      <li><a href="#section-1" class="toc-link"><span class="num">Section 1</span> Les caractéristiques des ondes</a></li>
+      <li><a href="#section-2" class="toc-link"><span class="num">Section 2</span> Le spectre de la lumière</a></li>
+      <li><a href="#section-3" class="toc-link"><span class="num">Section 3</span> La propagation de la lumière</a></li>
+      <li><a href="#section-4" class="toc-link"><span class="num">Section 4</span> Les chiffres significatifs</a></li>
+      <li><a href="#notions-recap" class="toc-link"><span class="num">Révision</span> Exercices de synthèse</a></li>
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <button onclick="document.getElementById('attrib-pop').classList.toggle('visible')" title="À propos de ce document" style="display:flex;align-items:center;gap:6px;"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg> À propos de ce document</button>
+    <div class="attrib-popover" id="attrib-pop">
+      Matériel préparé par M. Raphaël Sylvestre Bouchard, à l'aide du manuel <em>Delta</em>, Secondaire 5 (TC Média Livres inc.).
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="hero">
+    <div class="eyebrow">Physique · Secondaire 5 · Révision</div>
+    <h1>Notions de base</h1>
+    <p>Avant d'attaquer l'optique géométrique, un court détour par les fondations : ce qu'est une onde, ce qui distingue le son ou une vague de la lumière, comment le spectre électromagnétique se découpe, pourquoi ce cours peut se permettre de traiter la lumière comme si elle voyageait toujours en ligne droite, et comment exprimer un résultat numérique avec la bonne précision.</p>
+  </div>
+
+  <div class="search-bar-wrap">
+    <label for="search-input">🔍 Recherche rapide</label>
+    <input type="text" id="search-input" placeholder="Ex : longueur d'onde, fréquence, spectre, rayon lumineux…" oninput="doSearch(this.value)">
+    <span id="search-count"></span>
+  </div>
+
+  <div class="content">
+
+    <!-- INTRO -->
+    <div id="intro" class="intro-card">
+      <h2><svg aria-hidden="true" style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg> Onde ou particule? Un débat vieux de plusieurs siècles</h2>
+      <p>La nature profonde de la lumière a longtemps divisé les scientifiques. Pour certains, elle était formée de minuscules particules filant en ligne droite; pour d'autres, elle se comportait comme une onde, avec sa fréquence et sa longueur d'onde bien à elle. Chaque camp expliquait une partie des observations sans pouvoir rendre compte de l'autre — jusqu'à ce qu'on comprenne que la lumière possède, en réalité, une double nature : elle se manifeste tantôt comme particule, tantôt comme onde, selon l'expérience réalisée. Une équipe de recherche a même réussi, en 2015, à capter une image où les deux comportements apparaissent simultanément sur une seule photo.</p>
+      <p>Ce chapitre de révision met de côté le débat philosophique pour se concentrer sur les outils dont on aura besoin pour la suite : les grandeurs qui décrivent une onde, le découpage du spectre électromagnétique, et la façon dont la lumière se propage en ligne droite — la base même de l'optique géométrique.</p>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-card" id="section-1">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 1</span>
+          <span class="section-title">Les caractéristiques des ondes</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <p>On croise des ondes partout, mais pas toutes de la même façon : les vagues qui parcourent la surface d'un lac se voient à l'œil nu, alors que le son, tout aussi réel, reste invisible. Ce qui unit ces phénomènes, c'est qu'une onde est une perturbation qui se propage en transportant de l'énergie — sans jamais transporter la matière elle-même.</p>
+
+        <div class="def-box">
+          <div class="def-label">Définition</div>
+          <p><strong>Onde :</strong> une perturbation dont la propagation permet un transport d'énergie, sans déplacement net de matière.</p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Onde mécanique et onde électromagnétique</div>
+          <p>Toutes les ondes ne se propagent pas de la même façon. Certaines ont besoin d'un support matériel pour exister; d'autres s'en passent très bien.</p>
+
+          <div class="compare-block">
+            <div class="compare-col compare-col--a">
+              <div class="compare-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/></svg> Onde mécanique</div>
+              <p>A besoin d'un <strong>milieu matériel</strong> — solide, liquide ou gazeux — pour se propager. Le son, les vagues à la surface de l'eau et les secousses sismiques en sont des exemples : retire le milieu, et l'onde ne peut plus exister.</p>
+            </div>
+            <div class="compare-col compare-col--b">
+              <div class="compare-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/></svg> Onde électromagnétique</div>
+              <p>Peut se propager aussi bien <strong>dans le vide</strong> que dans la matière. La lumière en est le seul exemple traité dans ce cours : contrairement au son, elle nous parvient du Soleil après avoir traversé des millions de kilomètres de vide.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+            <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">La vague au stade</span></span>
+            <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="note-body">
+            <p>Le mouvement créé par les spectateurs d'un stade sportif qui se lèvent et s'assoient les uns après les autres illustre bien ce qu'est une onde : la perturbation (les bras levés) parcourt les gradins d'un bout à l'autre, mais aucun spectateur ne change de siège — chacun ne fait que se lever et se rasseoir sur place. C'est exactement ce qui se passe pour un point d'une corde secouée, ou pour une molécule d'air traversée par un son : le point oscille autour de sa position d'équilibre, il ne voyage pas avec l'onde.</p>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">La périodicité, la longueur d'onde et la période</div>
+          <p>Lorsqu'une perturbation se répète de façon rigoureusement régulière, on dit que l'onde est périodique. Une corde secouée de haut en bas à intervalles réguliers, par exemple, adopte un profil qui se répète indéfiniment — un motif que trois grandeurs suffisent à décrire complètement.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 400 190" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Schéma d'une onde périodique montrant l'amplitude et la longueur d'onde">
+                <line x1="15" y1="115" x2="385" y2="115" stroke="var(--muted)" stroke-width="1.5"/>
+                <polygon points="385,115 374,110 374,120" fill="var(--muted)"/>
+                <text x="386" y="130" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">x</text>
+                <path d="M30,115 C56.7,71,83.3,71,110,115 C136.7,159,163.3,159,190,115 C216.7,71,243.3,71,270,115 C296.7,159,323.3,159,350,115" fill="none" stroke="var(--indigo-mid)" stroke-width="3"/>
+                <line x1="70" y1="115" x2="70" y2="73" stroke="var(--amber-dim)" stroke-width="2" stroke-dasharray="3 3"/>
+                <polygon points="70,73 66,81 74,81" fill="var(--amber-dim)"/>
+                <text x="79" y="99" font-family="'Barlow Condensed', sans-serif" font-size="16" font-weight="700" fill="var(--amber-dim)">A</text>
+                <line x1="70" y1="42" x2="70" y2="113" stroke="#c7d0d6" stroke-width="1" stroke-dasharray="2 3"/>
+                <line x1="230" y1="42" x2="230" y2="113" stroke="#c7d0d6" stroke-width="1" stroke-dasharray="2 3"/>
+                <line x1="70" y1="48" x2="230" y2="48" stroke="var(--muted)" stroke-width="1.5"/>
+                <polygon points="70,48 79,44 79,52" fill="var(--muted)"/>
+                <polygon points="230,48 221,44 221,52" fill="var(--muted)"/>
+                <text x="150" y="38" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="17" font-weight="700" fill="var(--text)">λ</text>
+              </svg>
+            </div>
+            <figcaption>Sur une onde périodique, l'amplitude (A) se mesure entre la position d'équilibre et une crête; la longueur d'onde (λ) sépare deux crêtes consécutives.</figcaption>
+          </div>
+
+          <div class="def-box">
+            <div class="def-label">Définitions</div>
+            <p><strong>Longueur d'onde (λ) :</strong> distance séparant deux points consécutifs d'une onde ayant complété exactement un cycle — par exemple, deux crêtes voisines. Elle se mesure en mètres (m).</p>
+            <p><strong>Période (T) :</strong> temps nécessaire à l'onde pour effectuer un cycle complet, soit pour parcourir une distance égale à sa longueur d'onde. Elle se mesure en secondes (s).</p>
+          </div>
+
+          <div class="formula">T = temps total ÷ nombre de cycles</div>
+          <div class="formula">λ = v × T</div>
+          <p class="formula-caption">où v est la vitesse de propagation de l'onde (m/s), λ sa longueur d'onde (m) et T sa période (s).</p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">L'amplitude et la fréquence</div>
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Amplitude (A) :</strong> déplacement maximal d'un point de l'onde par rapport à sa position d'équilibre (voir le graphique ci-dessus). L'unité dépend de la nature de l'onde.</p>
+          </div>
+          <p>La <strong>fréquence (f)</strong> correspond plutôt au nombre de cycles complets effectués par l'onde en une seconde. Comme elle est inversement proportionnelle au temps, son unité est l'inverse de la seconde (s⁻¹), qu'on appelle le hertz (Hz).</p>
+          <div class="formula">f = nombre de cycles ÷ temps total</div>
+          <div class="formula">f = 1 / T&nbsp;&nbsp;&nbsp;&nbsp;ou&nbsp;&nbsp;&nbsp;&nbsp;T = 1 / f</div>
+          <p class="formula-caption">1 Hz = 1 s⁻¹ — fréquence et période sont toujours inverses l'une de l'autre.</p>
+        </div>
+
+        <div class="quiz-block" data-quiz="s1">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 1<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Une onde mécanique, contrairement à une onde électromagnétique, a besoin d'un milieu matériel pour se propager.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le son, les vagues et les séismes ont besoin d'un support matériel; la lumière, elle, voyage aussi bien dans le vide.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : une onde mécanique (son, vague, séisme) exige un milieu matériel, alors qu'une onde électromagnétique comme la lumière se propage même dans le vide.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Lorsqu'une onde se propage le long d'une corde, chaque point de la corde se déplace horizontalement dans la même direction que l'onde.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Chaque point oscille verticalement autour de sa position d'équilibre; seule la perturbation avance horizontalement, pas la matière (comme dans la vague au stade).</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : chaque point de la corde oscille verticalement sur place. Seule la perturbation se déplace horizontalement — la matière, elle, ne voyage pas.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">La distance entre deux points consécutifs d'une onde ayant complété exactement un cycle porte le nom de…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> la période</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> l'amplitude</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> la longueur d'onde</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> la fréquence</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est la définition même de la longueur d'onde (λ), qui se mesure en mètres.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est la longueur d'onde (λ) : la période mesure un temps, pas une distance, et l'amplitude se mesure par rapport à l'équilibre, pas entre deux points de l'onde.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Une onde complète 8 cycles en 4 secondes. Quelle est sa fréquence?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 0,5 Hz</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> 2 Hz</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 8 Hz</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 32 Hz</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. f = nombre de cycles ÷ temps total = 8 ÷ 4 = 2 Hz.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 2 Hz : f = nombre de cycles ÷ temps total = 8 ÷ 4 = 2 Hz.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Si la période d'une onde est de 0,25 s, quelle est sa fréquence?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 0,25 Hz</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> 4 Hz</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 0,4 Hz</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 25 Hz</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. f = 1 / T = 1 / 0,25 = 4 Hz.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 4 Hz : f = 1 / T = 1 / 0,25 = 4 Hz.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-card" id="section-2">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 2</span>
+          <span class="section-title">Le spectre de la lumière</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <p>La lumière est un cas particulier d'onde : une onde électromagnétique. Contrairement à une onde mécanique, elle ne fait vibrer aucune matière — ce sont deux champs, électrique et magnétique, qui oscillent perpendiculairement l'un à l'autre tout en se propageant à très grande vitesse.</p>
+
+        <div class="fig-block">
+          <div class="fig-inner">
+            <svg viewBox="0 0 400 190" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Schéma d'une onde électromagnétique montrant les champs électrique et magnétique perpendiculaires">
+              <line x1="15" y1="115" x2="385" y2="115" stroke="var(--muted)" stroke-width="1.5"/>
+              <polygon points="385,115 374,110 374,120" fill="var(--muted)"/>
+              <path d="M30,115 C56.7,71,83.3,71,110,115 C136.7,159,163.3,159,190,115 C216.7,71,243.3,71,270,115 C296.7,159,323.3,159,350,115" fill="none" stroke="var(--amber)" stroke-width="3"/>
+              <path d="M30,115 C56.7,95,83.3,95,110,115 C136.7,135,163.3,135,190,115 C216.7,95,243.3,95,270,115 C296.7,135,323.3,135,350,115" fill="none" stroke="var(--indigo-light)" stroke-width="2.5" stroke-dasharray="6 4"/>
+              <text x="82" y="59" font-family="'Barlow Condensed', sans-serif" font-size="17" font-weight="700" fill="var(--amber-dim)">E</text>
+              <text x="82" y="151" font-family="'Barlow Condensed', sans-serif" font-size="17" font-weight="700" fill="var(--indigo-light)">B</text>
+              <text x="345" y="130" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">propagation</text>
+            </svg>
+          </div>
+          <figcaption>Les champs électrique (E) et magnétique (B) oscillent perpendiculairement l'un à l'autre, en phase, le long de la direction de propagation de l'onde.</figcaption>
+        </div>
+
+        <div class="def-box">
+          <div class="def-label">Définition</div>
+          <p><strong>Onde lumineuse :</strong> une perturbation électromagnétique dont la propagation permet un transport d'énergie lumineuse.</p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">La vitesse de la lumière et l'équation universelle des ondes</div>
+          <p>Dans le vide, la lumière se propage à une vitesse constante, notée c. Sa valeur exacte est de 299 792 458 m/s, mais on utilise presque toujours l'approximation suivante.</p>
+          <div class="formula">c = 3,00 × 10⁸ m/s</div>
+
+          <p>En combinant la relation λ = v × T, vue à la section précédente, avec T = 1/f, on obtient une équation qui relie directement la longueur d'onde et la fréquence d'une onde à sa vitesse de propagation. Comme elle s'applique aussi bien aux ondes mécaniques qu'aux ondes électromagnétiques, on la qualifie d'« équation universelle des ondes ».</p>
+          <div class="formula">v = λ × f</div>
+          <p class="formula-caption">L'équation universelle des ondes — pour la lumière se propageant dans le vide, v devient c, et l'équation s'écrit λ = c / f.</p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Le spectre électromagnétique</div>
+          <p>En faisant varier la fréquence (ou la longueur d'onde) d'une onde électromagnétique, on balaie tout un spectre — des ondes radio, de basse fréquence et grande longueur d'onde, jusqu'aux rayons gamma, à l'autre extrémité. Entre les deux se trouvent, dans l'ordre, les micro-ondes, le rayonnement infrarouge, la lumière visible, le rayonnement ultraviolet et les rayons X.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 560 135" style="width:100%;max-width:560px;height:auto;" role="img" aria-label="Le spectre électromagnétique, de faible à haute fréquence, avec la lumière visible mise en évidence">
+                <defs>
+                  <linearGradient id="visSpec" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#dd4a3a"/>
+                    <stop offset="20%" stop-color="#e8863b"/>
+                    <stop offset="40%" stop-color="#d9c93f"/>
+                    <stop offset="60%" stop-color="#2fa9a0"/>
+                    <stop offset="80%" stop-color="#3f7fd6"/>
+                    <stop offset="100%" stop-color="#6a4fd0"/>
+                  </linearGradient>
+                </defs>
+                <rect x="20" y="55" width="140" height="36" fill="var(--indigo-mid)"/>
+                <rect x="160" y="55" width="70" height="36" fill="var(--indigo-mid)"/>
+                <rect x="230" y="55" width="60" height="36" fill="var(--indigo-mid)"/>
+                <rect x="290" y="55" width="30" height="36" fill="url(#visSpec)" stroke="#fff" stroke-width="2"/>
+                <rect x="320" y="55" width="60" height="36" fill="var(--indigo-mid)"/>
+                <rect x="380" y="55" width="70" height="36" fill="var(--indigo-mid)"/>
+                <rect x="450" y="55" width="90" height="36" fill="var(--indigo-mid)"/>
+                <line x1="160" y1="55" x2="160" y2="91" stroke="#fff" stroke-width="1.5"/>
+                <line x1="230" y1="55" x2="230" y2="91" stroke="#fff" stroke-width="1.5"/>
+                <line x1="320" y1="55" x2="320" y2="91" stroke="#fff" stroke-width="1.5"/>
+                <line x1="380" y1="55" x2="380" y2="91" stroke="#fff" stroke-width="1.5"/>
+                <line x1="450" y1="55" x2="450" y2="91" stroke="#fff" stroke-width="1.5"/>
+
+                <line x1="90" y1="55" x2="90" y2="45" stroke="var(--muted)" stroke-width="1"/>
+                <text x="90" y="36" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">Ondes radio</text>
+
+                <line x1="260" y1="55" x2="260" y2="45" stroke="var(--muted)" stroke-width="1"/>
+                <text x="260" y="36" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">Infrarouge</text>
+
+                <line x1="350" y1="55" x2="350" y2="45" stroke="var(--muted)" stroke-width="1"/>
+                <text x="350" y="36" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">Ultraviolet</text>
+
+                <line x1="495" y1="55" x2="495" y2="45" stroke="var(--muted)" stroke-width="1"/>
+                <text x="495" y="36" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">Rayons gamma</text>
+
+                <line x1="195" y1="91" x2="195" y2="101" stroke="var(--muted)" stroke-width="1"/>
+                <text x="195" y="113" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">Micro-ondes</text>
+
+                <line x1="415" y1="91" x2="415" y2="101" stroke="var(--muted)" stroke-width="1"/>
+                <text x="415" y="113" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">Rayons X</text>
+
+                <line x1="305" y1="91" x2="305" y2="101" stroke="var(--indigo-dark)" stroke-width="1.3"/>
+                <text x="305" y="113" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-weight="700" font-size="12" fill="var(--indigo-dark)">Visible</text>
+              </svg>
+            </div>
+            <figcaption>Le spectre électromagnétique, ordonné par fréquence croissante (et longueur d'onde décroissante) de gauche à droite. La lumière visible n'en occupe qu'une mince tranche — mise en évidence ici par son propre dégradé de couleurs.</figcaption>
+          </div>
+
+          <p>Le spectre visible — celui auquel l'œil humain est sensible — s'étend entre environ 400 nm (violet) et 700 nm (rouge). C'est la longueur d'onde (ou la fréquence) d'une onde lumineuse qui détermine sa couleur.</p>
+
+          <table class="data-table">
+            <tr><th>Couleur</th><th>Longueur d'onde λ (nm)</th><th>Fréquence f (×10¹⁴ Hz)</th></tr>
+            <tr><td><strong>Violet</strong></td><td>400 à 450</td><td>7,5 à 6,7</td></tr>
+            <tr><td><strong>Bleu</strong></td><td>450 à 490</td><td>6,7 à 6,1</td></tr>
+            <tr><td><strong>Vert</strong></td><td>490 à 570</td><td>6,1 à 5,3</td></tr>
+            <tr><td><strong>Jaune</strong></td><td>570 à 585</td><td>5,3 à 5,1</td></tr>
+            <tr><td><strong>Orange</strong></td><td>585 à 620</td><td>5,1 à 4,8</td></tr>
+            <tr><td><strong>Rouge</strong></td><td>620 à 700</td><td>4,8 à 4,3</td></tr>
+          </table>
+
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Monochromatique ou polychromatique?</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body">
+              <p>Une lumière qui ne contient qu'une seule longueur d'onde est dite <strong>monochromatique</strong>. Une lumière qui en regroupe plusieurs — comme la lumière blanche, qui contient toutes les couleurs du spectre visible — est dite <strong>polychromatique</strong>. C'est cette diversité qui permet à un prisme de décomposer la lumière blanche en un arc-en-ciel de couleurs.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s2">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 2<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">La vitesse de la lumière dans le vide est d'environ 3,00 × 10⁸ m/s.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La valeur exacte est 299 792 458 m/s, mais 3,00 × 10⁸ m/s est l'approximation utilisée dans ce cours.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : la vitesse de la lumière dans le vide vaut environ 3,00 × 10⁸ m/s (299 792 458 m/s exactement).</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Plus la longueur d'onde d'une onde électromagnétique est grande, plus sa fréquence est grande.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. À vitesse constante (v = λf), λ et f sont inversement proportionnelles : une grande longueur d'onde correspond à une petite fréquence.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : λ et f sont inversement proportionnelles (v = λf, avec v constante). Une grande longueur d'onde correspond à une petite fréquence.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Une onde lumineuse a une fréquence de 6,0 × 10¹⁴ Hz. Quelle est sa longueur d'onde dans le vide?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 500 nm</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 200 nm</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 5,0 nm</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 1,8 × 10²³ nm</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. λ = c / f = (3,00×10⁸) / (6,0×10¹⁴) = 5,0×10⁻⁷ m = 500 nm.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 500 nm : λ = c / f = (3,00×10⁸) / (6,0×10¹⁴) = 5,0×10⁻⁷ m, soit 500 nm.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Dans le spectre électromagnétique, laquelle de ces séquences est bien ordonnée en fréquence croissante?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Ondes radio → micro-ondes → infrarouge → visible → ultraviolet → rayons X → rayons gamma</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Rayons gamma → ultraviolet → visible → rayons X → infrarouge → micro-ondes → ondes radio</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Visible → infrarouge → ultraviolet → ondes radio → rayons X → micro-ondes → gamma</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Micro-ondes → ondes radio → visible → infrarouge → gamma → rayons X → ultraviolet</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est l'ordre du spectre, de la fréquence la plus basse (ondes radio) à la plus haute (rayons gamma).</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est A : ondes radio, micro-ondes, infrarouge, visible, ultraviolet, rayons X, puis rayons gamma — de la fréquence la plus basse à la plus haute.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Parmi ces couleurs du spectre visible, laquelle correspond à la plus grande longueur d'onde?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Violet</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Vert</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Orange</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">D</span> Rouge</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le rouge occupe l'extrémité du spectre visible la plus proche de l'infrarouge, avec des longueurs d'onde de 620 à 700 nm.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est le rouge (620 à 700 nm) : dans le tableau, c'est la couleur avec les plus grandes longueurs d'onde et les plus basses fréquences.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-card" id="section-3">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 3</span>
+          <span class="section-title">La propagation de la lumière</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <p>Les ondes mécaniques qui parcourent la surface d'un lac ont un avantage sur la lumière : on les voit directement, et on peut facilement les reproduire en laboratoire. Même si elles ne sont pas électromagnétiques, leur comportement présente d'étroites analogies avec celui de la lumière — c'est cette analogie qu'on exploite dans cette section. En laboratoire, on utilise par exemple un vibreur qui frappe la surface de l'eau à une fréquence fixe; comme cette oscillation est sinusoïdale, les ondes créées à la surface le sont aussi.</p>
+
+        <div class="subsection">
+          <div class="subsection-title">Front d'onde, train d'ondes et rayon d'onde</div>
+          <p>Lorsque le vibreur frappe la surface de l'eau, la perturbation se propage sur toute la surface. Après un certain temps, elle atteint un point qui fait partie d'un cercle centré sur la source — ce cercle est appelé « front d'onde ». Comme le vibreur continue de frapper l'eau, de nouveaux fronts d'onde sont créés en continu.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définitions</div>
+            <p><strong>Front d'onde :</strong> ligne imaginaire qui relie tous les points touchés par une onde au même instant.</p>
+            <p><strong>Train d'ondes :</strong> série d'ondes consécutives se propageant dans une même direction.</p>
+          </div>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 380 220" style="width:100%;max-width:380px;height:auto;" role="img" aria-label="Fronts d'onde concentriques autour d'une source ponctuelle, avec un rayon d'onde perpendiculaire aux fronts">
+                <circle cx="55" cy="115" r="25" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
+                <circle cx="55" cy="115" r="55" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
+                <circle cx="55" cy="115" r="85" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
+                <circle cx="55" cy="115" r="112" fill="none" stroke="var(--indigo-mid)" stroke-width="1.8"/>
+                <circle cx="55" cy="115" r="4" fill="var(--indigo-dark)"/>
+                <text x="42" y="132" font-family="'Barlow Condensed', sans-serif" font-size="15" font-weight="700" fill="var(--indigo-dark)">S</text>
+                <line x1="55" y1="115" x2="152" y2="68" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <polygon points="152,68 141,68 148,58" fill="var(--amber-dim)"/>
+                <text x="120" y="55" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--amber-dim)">rayon d'onde</text>
+                <line x1="126" y1="185" x2="185" y2="205" stroke="var(--muted)" stroke-width="1"/>
+                <text x="188" y="209" font-family="Inter, sans-serif" font-size="12" fill="var(--text)">front d'onde</text>
+              </svg>
+            </div>
+            <figcaption>Les fronts d'onde forment des cercles concentriques autour de la source S; le rayon d'onde indique la direction de propagation, toujours perpendiculaire aux fronts d'onde.</figcaption>
+          </div>
+
+          <div class="def-box">
+            <p><strong>Rayon d'onde</strong> (ou <strong>rayon lumineux</strong>, dans le cas de la lumière) : flèche perpendiculaire aux fronts d'onde, indiquant la direction de propagation de l'onde.</p>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Les types de faisceaux lumineux</div>
+          <p>Un ensemble de rayons lumineux forme un <strong>faisceau</strong>. Selon la position de la source par rapport aux rayons considérés, ce faisceau peut prendre trois formes.</p>
+
+          <div class="cause-grid">
+            <div class="cause-card">
+              <svg class="cause-icon" aria-hidden="true" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 15L27 4M3 15L27 10M3 15L27 15M3 15L27 20M3 15L27 26"/></svg>
+              <div class="cause-title">Divergent</div>
+              <p>Les rayons proviennent d'un même point et s'écartent les uns des autres.</p>
+            </div>
+            <div class="cause-card">
+              <svg class="cause-icon" aria-hidden="true" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M27 15L3 4M27 15L3 10M27 15L3 15M27 15L3 20M27 15L3 26"/></svg>
+              <div class="cause-title">Convergent</div>
+              <p>Les rayons se dirigent tous vers un même point.</p>
+            </div>
+            <div class="cause-card">
+              <svg class="cause-icon" aria-hidden="true" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4L27 4M3 10L27 10M3 15L27 15M3 20L27 20M3 26L27 26"/></svg>
+              <div class="cause-title">Parallèle</div>
+              <p>Les rayons sont parallèles entre eux — le cas d'une source extrêmement éloignée, comme le Soleil.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">La propagation rectiligne de la lumière</div>
+          <p>De nombreuses observations quotidiennes confirment que la lumière voyage en ligne droite — la formation d'une ombre en est l'exemple le plus convaincant. Si la lumière suivait des courbes plutôt que des lignes droites, aucune ombre ne pourrait se former.</p>
+
+          <div class="compare-block">
+            <div class="compare-col compare-col--a">
+              <div class="compare-label">Source ponctuelle</div>
+              <svg class="bond-fig" viewBox="0 0 180 100" role="img" aria-label="Une source ponctuelle produit une ombre franche, sans pénombre">
+                <circle cx="16" cy="50" r="3.5" fill="var(--indigo-dark)"/>
+                <rect x="83" y="40" width="8" height="20" fill="var(--muted)"/>
+                <line x1="16" y1="50" x2="165" y2="28" stroke="#aab5bd" stroke-width="1"/>
+                <line x1="16" y1="50" x2="165" y2="72" stroke="#aab5bd" stroke-width="1"/>
+                <line x1="163" y1="10" x2="163" y2="28" stroke="#c7d0d6" stroke-width="3"/>
+                <line x1="163" y1="28" x2="163" y2="72" stroke="var(--indigo-dark)" stroke-width="3"/>
+                <line x1="163" y1="72" x2="163" y2="90" stroke="#c7d0d6" stroke-width="3"/>
+                <text x="120" y="53" font-family="Inter, sans-serif" font-size="10.5" fill="var(--indigo-dark)">ombre</text>
+              </svg>
+              <p>Source dont l'étendue est nulle, ou si lointaine qu'on peut l'assimiler à un point. Elle produit uniquement une ombre franche.</p>
+            </div>
+            <div class="compare-col compare-col--b">
+              <div class="compare-label">Source étendue</div>
+              <svg class="bond-fig" viewBox="0 0 180 100" role="img" aria-label="Une source étendue produit une ombre et une pénombre">
+                <line x1="16" y1="40" x2="16" y2="60" stroke="var(--indigo-dark)" stroke-width="4" stroke-linecap="round"/>
+                <rect x="85" y="40" width="6" height="20" fill="var(--muted)"/>
+                <line x1="16" y1="40" x2="165" y2="18.6" stroke="#aab5bd" stroke-width="1"/>
+                <line x1="16" y1="40" x2="165" y2="60" stroke="#aab5bd" stroke-width="1"/>
+                <line x1="16" y1="60" x2="165" y2="40" stroke="#aab5bd" stroke-width="1"/>
+                <line x1="16" y1="60" x2="165" y2="81.4" stroke="#aab5bd" stroke-width="1"/>
+                <line x1="163" y1="8" x2="163" y2="18.6" stroke="#c7d0d6" stroke-width="3"/>
+                <line x1="163" y1="18.6" x2="163" y2="40" stroke="#8fa0ab" stroke-width="3"/>
+                <line x1="163" y1="40" x2="163" y2="60" stroke="var(--indigo-dark)" stroke-width="3"/>
+                <line x1="163" y1="60" x2="163" y2="81.4" stroke="#8fa0ab" stroke-width="3"/>
+                <line x1="163" y1="81.4" x2="163" y2="92" stroke="#c7d0d6" stroke-width="3"/>
+                <text x="112" y="53" font-family="Inter, sans-serif" font-size="10" fill="var(--indigo-dark)">ombre</text>
+                <text x="94" y="24" font-family="Inter, sans-serif" font-size="9.5" fill="#5a6b76">pénombre</text>
+              </svg>
+              <p>Source dont les dimensions physiques sont bien définies. Elle produit à la fois une ombre et une pénombre.</p>
+            </div>
+          </div>
+
+          <div class="formula">λ &lt;&lt; d</div>
+          <p class="formula-caption">« très inférieur à » — la longueur d'onde de la lumière, comparée aux dimensions des obstacles rencontrés</p>
+          <p>Ce principe de propagation rectiligne, fondement de l'optique géométrique, n'est valide que si la longueur d'onde (λ) de la lumière est très petite par rapport aux dimensions (d) des obstacles ou des ouvertures rencontrées sur son trajet. C'est cette condition qui sera respectée tout au long de ce cours : lorsque λ devient comparable à d, des phénomènes comme la diffraction ou les interférences apparaissent, et l'on doit alors faire appel à la nature ondulatoire de la lumière pour les expliquer.</p>
+        </div>
+
+        <div class="quiz-block" data-quiz="s3">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 3<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Un front d'onde est une ligne imaginaire reliant tous les points touchés par la perturbation au même instant.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est précisément la définition du front d'onde.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : un front d'onde relie tous les points atteints par la perturbation au même instant.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Le rayon lumineux est…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> une onde mécanique se propageant dans l'eau</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> une flèche perpendiculaire aux fronts d'onde, indiquant la direction de propagation</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> la distance entre deux fronts d'onde consécutifs</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> un faisceau composé uniquement de lumière blanche</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le rayon lumineux indique simplement la direction de propagation, toujours perpendiculaire aux fronts d'onde.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : le rayon lumineux est une flèche perpendiculaire aux fronts d'onde, indiquant la direction de propagation.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Un faisceau dont les rayons proviennent tous d'un même point et s'écartent les uns des autres est dit…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> convergent</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> parallèle</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> divergent</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> rectiligne</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est la définition d'un faisceau divergent.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « divergent » : les rayons partent d'un même point et s'écartent.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Une source ponctuelle produit à la fois une ombre et une pénombre, alors qu'une source étendue ne produit qu'une ombre.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact — c'est même l'inverse : une source ponctuelle ne produit qu'une ombre franche, alors qu'une source étendue produit une ombre et une pénombre.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux — c'est l'inverse : la source ponctuelle ne produit qu'une ombre, tandis que la source étendue produit une ombre ET une pénombre.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">La condition λ &lt;&lt; d, essentielle à la validité de l'optique géométrique, signifie que…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> la longueur d'onde doit être très grande par rapport aux obstacles</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> la longueur d'onde doit être très petite par rapport aux obstacles ou ouvertures</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> la vitesse de la lumière doit être très petite</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> la distance entre la source et l'écran doit être très grande</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est cette condition qui rend valide l'hypothèse de propagation rectiligne — la base de l'optique géométrique.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est B : λ doit être très petite par rapport aux dimensions des obstacles ou des ouvertures pour que l'optique géométrique s'applique.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-card" id="section-4">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 4</span>
+          <span class="section-title">Les chiffres significatifs</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <p>Tu l'as peut-être remarqué à la section 2 : la réponse « 500 nm » à la question sur la longueur d'onde pouvait sembler étrange à écrire telle quelle. Combien de ces zéros sont « vrais », et combien ne servent qu'à placer la virgule? C'est exactement à cette question que répondent les <strong>chiffres significatifs</strong> — une façon de communiquer, avec un nombre, à quel point une mesure ou un résultat de calcul est précis.</p>
+
+        <div class="def-box">
+          <div class="def-label">Définition</div>
+          <p><strong>Chiffres significatifs (CS) :</strong> l'ensemble des chiffres d'une valeur numérique connus avec certitude, plus un dernier chiffre estimé. Plus une valeur compte de chiffres significatifs, plus elle est précise.</p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Compter les chiffres significatifs</div>
+          <p>Quelques règles simples permettent de déterminer, pour n'importe quelle valeur, combien de ses chiffres sont significatifs.</p>
+
+          <ul class="content-list">
+            <li>Tout chiffre non nul (1 à 9) est toujours significatif. Ex. : 247 → 3 CS.</li>
+            <li>Un zéro placé <strong>entre</strong> deux chiffres significatifs est significatif. Ex. : 205 → 3 CS.</li>
+            <li>Un zéro à <strong>gauche</strong> du premier chiffre non nul n'est jamais significatif — il ne fait que placer la virgule. Ex. : 0,0034 → 2 CS (seuls le 3 et le 4 comptent).</li>
+            <li>Un zéro à <strong>droite</strong>, après la virgule, est significatif. Ex. : 2,50 → 3 CS.</li>
+            <li>Un zéro à droite d'un nombre entier écrit sans virgule est <strong>ambigu</strong> : impossible de savoir s'il est significatif. Ex. : 500 pourrait avoir 1, 2 ou 3 CS.</li>
+          </ul>
+
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Lever l'ambiguïté avec la notation scientifique</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body">
+              <p>C'est justement le problème rencontré à la section 2 : le calcul λ = c / f donnait 500 nm, mais cette écriture ne précise pas combien de chiffres sont significatifs. La notation scientifique règle le problème, puisque seuls les chiffres écrits dans le coefficient comptent. Comme f = 6,0 × 10¹⁴ Hz n'a que 2 CS, la réponse précise s'écrit <strong>5,0 × 10² nm</strong> — exactement 2 chiffres significatifs, sans ambiguïté possible.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Les chiffres significatifs dans un calcul</div>
+          <p>Un résultat de calcul ne peut jamais être plus précis que la moins précise des valeurs utilisées pour l'obtenir. Deux règles s'appliquent, selon l'opération effectuée.</p>
+
+          <div class="def-box">
+            <div class="def-label">Règles de calcul</div>
+            <p><strong>Multiplication et division :</strong> le résultat s'arrondit pour avoir le même nombre de chiffres significatifs que la donnée qui en compte le moins.</p>
+            <p><strong>Addition et soustraction :</strong> le résultat s'arrondit pour avoir le même nombre de décimales que la donnée qui en compte le moins.</p>
+          </div>
+
+          <p>Reprenons c = 3,00 × 10⁸ m/s (3 CS) et f = 6,0 × 10¹⁴ Hz (2 CS) : puisqu'il s'agit d'une division, le résultat doit être exprimé avec seulement 2 CS — d'où λ = 5,0 × 10² nm, et non 500 nm ni 5,00 × 10² nm.</p>
+        </div>
+
+        <div class="quiz-block" data-quiz="s4">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 4<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Un zéro situé à gauche du premier chiffre non nul (comme dans 0,0034) est toujours significatif.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Ces zéros ne font que placer la virgule; ils ne comptent jamais comme chiffres significatifs. Dans 0,0034, seuls le 3 et le 4 sont significatifs (2 CS).</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : les zéros à gauche du premier chiffre non nul ne sont jamais significatifs. Dans 0,0034, seuls le 3 et le 4 comptent (2 CS).</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Combien de chiffres significatifs contient la valeur 0,0450?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 2</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> 3</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 4</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 5</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Les deux zéros de gauche ne comptent pas, mais le zéro final, après la virgule, est significatif : restent 4, 5 et 0 → 3 CS.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 3 CS : les zéros de gauche ne comptent pas, mais le zéro final (après la virgule) est significatif — restent 4, 5 et 0.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Combien de chiffres significatifs contient la valeur c = 3,00 × 10⁸ m/s utilisée dans ce cours?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 1</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 2</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> 3</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 9</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le 3 et les deux zéros après la virgule sont tous significatifs : 3,00 compte 3 CS. L'exposant (10⁸) n'entre jamais dans le compte.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 3 CS : dans 3,00, le 3 et les deux zéros après la virgule sont tous significatifs. L'exposant ne compte jamais.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Laquelle de ces écritures exprime 500 nm avec exactement 2 chiffres significatifs, sans ambiguïté?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 500 nm</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> 5,0 × 10² nm</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 5,00 × 10² nm</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 0,50 × 10³ nm</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. En notation scientifique, seuls les chiffres du coefficient comptent : 5,0 × 10² nm en contient exactement 2.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 5,0 × 10² nm : 500 nm reste ambigu, 5,00 × 10² nm compte 3 CS, et 0,50 × 10³ nm n'est pas écrit sous une forme scientifique standard.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">On multiplie 2,50 cm (3 CS) par 4,2 cm (2 CS). Combien de chiffres significatifs devrait avoir le résultat final?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 2</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 3</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 5</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 6</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. En multiplication, le résultat ne peut pas être plus précis que la donnée la moins précise — ici 4,2 cm, avec 2 CS.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 2 CS : le résultat d'une multiplication est limité par la donnée la moins précise, soit 4,2 cm (2 CS).</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SYNTHÈSE -->
+    <div id="notions-recap" class="section-card">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Révision</span>
+          <span class="section-title">Synthèse — Notions de base</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div class="def-box">
+          <div class="def-label">L'essentiel à retenir</div>
+          <p><strong>T</strong> = temps total ÷ nombre de cycles &nbsp;·&nbsp; <strong>f</strong> = 1 / T &nbsp;·&nbsp; <strong>λ</strong> = v × T &nbsp;·&nbsp; <strong>v</strong> = λ × f</p>
+          <p>Onde mécanique → besoin d'un milieu &nbsp;·&nbsp; onde électromagnétique → se propage aussi dans le vide &nbsp;·&nbsp; c = 3,00 × 10⁸ m/s &nbsp;·&nbsp; condition de l'optique géométrique : λ ≪ d &nbsp;·&nbsp; en notation scientifique, seuls les chiffres du coefficient sont significatifs</p>
+        </div>
+
+        <div class="quiz-block" data-quiz="recap">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices de synthèse<span class="quiz-block-subtitle">Les quatre sections mélangées</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 6</span>
+            <progress class="quiz-progress" value="0" max="6"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Le son est un exemple de…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> onde mécanique</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> onde électromagnétique</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> rayon lumineux</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> front d'onde stationnaire</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le son a besoin d'un milieu matériel (l'air, par exemple) pour se propager : c'est une onde mécanique.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « onde mécanique » : le son a besoin d'un milieu matériel pour se propager, contrairement à une onde électromagnétique.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Une onde à la surface de l'eau a une longueur d'onde de 2 m et une fréquence de 0,5 Hz. Quelle est sa vitesse de propagation?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 1 m/s</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 4 m/s</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 0,25 m/s</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 2,5 m/s</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. v = λ × f = 2 × 0,5 = 1 m/s.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 1 m/s : v = λ × f = 2 × 0,5 = 1 m/s.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Laquelle de ces radiations n'est PAS visible à l'œil humain?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Vert</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Jaune</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> Infrarouge</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Orange</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. L'infrarouge se situe juste en dehors du spectre visible, du côté des grandes longueurs d'onde.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « infrarouge » : vert, jaune et orange font partie du spectre visible; l'infrarouge, non.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Les rayons du Soleil, qui nous parviennent d'une source extrêmement éloignée, forment un faisceau…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> divergent</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> convergent</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> parallèle</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> aucun de ces choix</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. À grande distance, la courbure des fronts d'onde devient négligeable : les rayons sont pratiquement parallèles.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « parallèle » : une source extrêmement éloignée, comme le Soleil, produit des fronts d'onde presque plats et des rayons parallèles.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Lors d'une éclipse solaire partielle, un observateur situé dans la ________ voit une partie seulement du Soleil masquée par la Lune.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> ombre</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> pénombre</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> zone de convergence</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> zone rectiligne</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Dans la pénombre, seule une partie de la source (le Soleil, ici, qui est une source étendue) est bloquée par l'obstacle.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « pénombre » : c'est la zone où seule une partie de la source lumineuse (ici le Soleil) est masquée.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="5">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Une onde a une longueur d'onde mesurée à 0,020 m. Combien de chiffres significatifs cette mesure compte-t-elle?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 2</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 3</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 4</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 5</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Les zéros à gauche (avant le 2) ne comptent pas, mais celui à droite, après la virgule, est significatif : restent 2 et 0 → 2 CS.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 2 CS : les zéros à gauche du 2 ne comptent pas, mais le zéro à droite, après la virgule, est significatif — restent 2 et 0.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<button id="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+<script>
+// ── Toggle sections ────────────────────────────────────────
+function toggleSection(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  btn.parentElement.querySelector('.section-body').classList.toggle('open', !expanded);
+}
+
+// ── Toggle bulles de note ────────────────────────────────────
+function toggleNote(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Toggle blocs d'exercices ────────────────────────────────
+function toggleQuiz(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Sidebar active link ────────────────────────────────────
+const tocLinks = document.querySelectorAll('.toc-link');
+const sectionIds = ['intro','section-1','section-2','section-3','section-4','notions-recap'];
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 130) current = id;
+  });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+  document.getElementById('to-top').classList.toggle('visible', window.scrollY > 300);
+}, {passive: true});
+
+// ── Smooth scroll from TOC ─────────────────────────────────
+tocLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const toggle = target.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// Ouvre automatiquement la bonne section si on arrive via une ancre (#section-1, etc.)
+if (location.hash) {
+  const target = document.getElementById(location.hash.slice(1));
+  if (target) {
+    const toggle = target.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
+}
+
+// ── Search ─────────────────────────────────────────────────
+const contentEl = document.querySelector('.content');
+const originalHTML = contentEl.innerHTML;
+
+let lastQuery = '';
+let matchIndex = -1;
+
+function doSearch(query) {
+  contentEl.innerHTML = originalHTML;
+  const countEl = document.getElementById('search-count');
+  matchIndex = -1;
+  lastQuery = query;
+
+  if (!query.trim()) { countEl.textContent = ''; return 0; }
+
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  let count = 0;
+  nodes.forEach(node => {
+    if (!re.test(node.textContent)) return;
+    re.lastIndex = 0;
+    const span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(re, m => { count++; return `<mark class="sh">${m}</mark>`; });
+    node.parentNode.replaceChild(span, node);
+  });
+
+  countEl.textContent = count ? `${count} résultat${count>1?'s':''}` : 'Aucun résultat';
+
+  document.querySelectorAll('.section-card').forEach(card => {
+    if (card.querySelector('mark.sh')) {
+      const t = card.querySelector('.section-toggle');
+      if (t && t.getAttribute('aria-expanded') === 'false') toggleSection(t);
+    }
+  });
+
+  return count;
+}
+
+function goToMatch(step) {
+  const marks = contentEl.querySelectorAll('mark.sh');
+  if (!marks.length) return;
+  if (matchIndex >= 0 && marks[matchIndex]) marks[matchIndex].classList.remove('current');
+  matchIndex = (matchIndex + step + marks.length) % marks.length;
+  const m = marks[matchIndex];
+  m.classList.add('current');
+  m.scrollIntoView({behavior:'smooth', block:'center'});
+  const countEl = document.getElementById('search-count');
+  countEl.textContent = `${matchIndex+1} / ${marks.length} résultats`;
+}
+
+function runSearchAndJump(query, step) {
+  if (query !== lastQuery || !contentEl.querySelector('mark.sh')) {
+    const count = doSearch(query);
+    if (count > 0) goToMatch(0);
+  } else {
+    goToMatch(step);
+  }
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAndJump(e.target.value, e.shiftKey ? -1 : 1);
+  }
+});
+
+// Ctrl+F → recherche interne
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    const inp = document.getElementById('search-input');
+    inp.focus(); inp.select();
+  }
+});
+
+// Fermer la bulle d'attribution au clic à l'extérieur
+document.addEventListener('click', e => {
+  const pop = document.getElementById('attrib-pop');
+  if (pop && !pop.contains(e.target) && !e.target.closest('.sidebar-footer button')) {
+    pop.classList.remove('visible');
+  }
+});
+
+// === MOTEUR DE QUIZ INTERACTIFS ===
+function initQuizBlock(block) {
+  const questions = Array.from(block.querySelectorAll('.quiz-q'));
+  const total = questions.length;
+  const scoreLabel = block.querySelector('.quiz-score-label');
+  const progressBar = block.querySelector('.quiz-progress');
+  const resultMsg = block.querySelector('.quiz-result-msg');
+  const resetBtn = block.querySelector('.quiz-reset');
+  progressBar.max = total;
+
+  function updateScore() {
+    const answered = questions.filter(q => q.classList.contains('answered'));
+    const correct = answered.filter(q => q.dataset.gotCorrect === 'true').length;
+    scoreLabel.textContent = `${correct} / ${total}`;
+    progressBar.value = answered.length;
+
+    if (answered.length === total) {
+      resultMsg.classList.add('show');
+      const pct = Math.round((correct / total) * 100);
+      resultMsg.classList.remove('great', 'good', 'poor');
+      const starIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 16.9 6.5 19.7l1.4-6.1-4.7-4.2 6.2-.6Z"/></svg>';
+      const upIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13l3-3 2 2 3-3.5"/></svg>';
+      const bookIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg>';
+      let icon, msg, variant;
+      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — la section est maîtrisée.`; variant = 'great'; }
+      else if (pct >= 70) { icon = upIcon; msg = `Bon travail : ${correct} / ${total}. Relis les explications des questions manquées.`; variant = 'good'; }
+      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de revoir cette section avant de continuer.`; variant = 'poor'; }
+      resultMsg.classList.add(variant);
+      resultMsg.innerHTML = `${icon}<span>${msg}</span>`;
+      resetBtn.style.display = 'inline-block';
+    } else {
+      resultMsg.classList.remove('show', 'great', 'good', 'poor');
+      resetBtn.style.display = 'none';
+    }
+  }
+
+  questions.forEach(q => {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    const fbOk = q.querySelector('.quiz-feedback.ok');
+    const fbKo = q.querySelector('.quiz-feedback.ko');
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (q.classList.contains('answered')) return;
+
+        const isCorrect = opt.dataset.correct === 'true';
+        q.classList.add('answered');
+        q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
+
+        options.forEach(o => {
+          o.disabled = true;
+          if (o.dataset.correct === 'true') {
+            o.classList.add(o === opt ? 'correct' : 'reveal');
+          } else if (o === opt) {
+            o.classList.add('wrong');
+          }
+        });
+
+        (isCorrect ? fbOk : fbKo).classList.add('show');
+        updateScore();
+      });
+    });
+  });
+
+  block.addEventListener('reset-quiz', () => {
+    questions.forEach(q => {
+      q.classList.remove('answered');
+      delete q.dataset.gotCorrect;
+      q.querySelectorAll('.quiz-option').forEach(o => {
+        o.disabled = false;
+        o.classList.remove('correct', 'wrong', 'reveal');
+      });
+      q.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+    });
+    updateScore();
+  });
+
+  updateScore();
+}
+
+document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+</script>
+</body>
+</html>
