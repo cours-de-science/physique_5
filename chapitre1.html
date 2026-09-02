@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1 — La réflexion de la lumière — Physique Sec. 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette "banc d'optique" — bleu nuit + cyan laser, distincte de la
+       palette indigo/ambre du cours de chimie. */
+    --indigo-dark: #0d1b2e;
+    --indigo-mid:  #163a5c;
+    --indigo-light:#4f90b8;
+    --amber:       #2bc4d4;
+    --amber-dim:   #1f8fa0;
+    --flame:       #dd4a3a;
+    --bg:          #eef2f5;
+    --surface:     #ffffff;
+    --text:        #16212c;
+    --muted:       #5c6b78;
+    --border:      #d7e0e6;
+    --sidebar-w:   268px;
+    --mono:        'JetBrains Mono', monospace;
+    /* Motif signature : le spectre visible, utilisé avec parcimonie */
+    --spectre:        linear-gradient(90deg, #6a4fd0 0%, #3f7fd6 20%, #2fa9a0 40%, #d9c93f 60%, #e8863b 80%, #dd4a3a 100%);
+    --spectre-pastel: linear-gradient(100deg, #b9a8e8 0%, #9dc8ec 20%, #9de0c4 40%, #ecdd8f 60%, #f0c890 80%, #eba393 100%);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar { width: var(--sidebar-w); background: var(--indigo-dark); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; display: flex; flex-direction: column; z-index: 100; transition: transform .3s ease; }
+  .sidebar-header { background: var(--spectre-pastel); padding: 20px 18px 16px; flex-shrink: 0; }
+  .back-to-index { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--indigo-dark); text-decoration: none; opacity: .65; margin-bottom: 12px; transition: opacity .15s; }
+  .back-to-index:hover { opacity: 1; text-decoration: underline; }
+  .sidebar-header .label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-dark); }
+  .sidebar-header .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 800; line-height: 1; color: var(--indigo-dark); }
+  .sidebar-header .chap-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-dark); margin-top: 4px; }
+  .toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--indigo-light); padding: 20px 18px 8px; }
+  #sidebar nav ul { list-style: none; }
+  #sidebar nav ul li a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; border-left: 3px solid transparent; transition: background .15s, color .15s, border-color .15s; line-height: 1.35; }
+  #sidebar nav ul li a:hover, #sidebar nav ul li a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--amber); }
+  #sidebar nav ul li a .num { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+  .sidebar-footer { margin-top: auto; padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
+  .sidebar-footer button { background: none; border: none; cursor: pointer; font-size: 11px; color: rgba(255,255,255,.3); padding: 0; text-align: left; width: 100%; transition: color .15s; }
+  .sidebar-footer button:hover { color: rgba(255,255,255,.6); }
+  .attrib-popover { display: none; position: absolute; bottom: 60px; left: 14px; width: 230px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.18); padding: 14px 16px; font-size: 12px; color: var(--text); line-height: 1.6; z-index: 200; }
+  .attrib-popover::after { content: ''; position: absolute; bottom: -7px; left: 20px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 2px 2px 4px rgba(0,0,0,.08); }
+  .attrib-popover.visible { display: block; }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+  .hero { background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-mid) 60%, var(--indigo-light) 100%); padding: 60px 56px 48px; color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: 'θ'; position: absolute; right: 40px; top: -30px; font-family: 'Barlow Condensed', sans-serif; font-size: 260px; font-weight: 800; color: rgba(255,255,255,.07); line-height: 1; pointer-events: none; }
+  .hero .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px, 5vw, 56px); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 20px; }
+  .hero p { max-width: 600px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.82); }
+
+  .search-bar-wrap { background: var(--indigo-dark); padding: 14px 56px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid var(--amber); }
+  .search-bar-wrap label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.5); white-space: nowrap; letter-spacing: .06em; text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif; }
+  #search-input { flex: 1; max-width: 440px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 8px 14px; font-size: 14px; color: #fff; font-family: 'Inter', sans-serif; outline: none; transition: background .2s, border-color .2s; }
+  #search-input::placeholder { color: rgba(255,255,255,.4); }
+  #search-input:focus { background: rgba(255,255,255,.16); border-color: var(--amber); }
+  #search-count { font-size: 12px; color: var(--amber); font-family: var(--mono); min-width: 90px; }
+
+  .content { padding: 48px 56px 80px; max-width: 880px; }
+
+  /* Carte d'introduction */
+  .intro-card { background: linear-gradient(120deg, var(--indigo-dark), var(--indigo-mid)); border-radius: 10px; padding: 24px 28px; color: rgba(255,255,255,.88); margin-bottom: 24px; }
+  .intro-card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--amber); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; }
+  .intro-card h2 svg { margin-top: 3px; flex-shrink: 0; }
+  .intro-card p { color: rgba(255,255,255,.82); font-size: 14px; margin-bottom: 10px; line-height: 1.65; }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .intro-card a { color: var(--amber); }
+
+  .section-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .section-toggle { width: 100%; background: none; border: none; cursor: pointer; padding: 0; text-align: left; display: block; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; background: var(--surface); transition: background .15s; border-bottom: 1px solid transparent; }
+  .section-toggle:hover .section-header, .section-toggle[aria-expanded="true"] .section-header { background: #f0f4f6; border-bottom-color: var(--border); }
+  .section-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 4px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; margin-top: 2px; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--indigo-dark); flex: 1; }
+  .chevron { width: 20px; height: 20px; color: var(--muted); transition: transform .25s ease; flex-shrink: 0; margin-top: 2px; }
+  .section-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .section-body { display: none; padding: 28px 28px 32px; border-top: 3px solid; border-image: var(--spectre) 1; }
+  .section-body.open { display: block; }
+
+  .subsection { margin-bottom: 32px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--indigo-mid); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .subsection-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--amber); border-radius: 2px; flex-shrink: 0; }
+
+  p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul.content-list { padding-left: 20px; margin-bottom: 14px; }
+  ul.content-list li { font-size: 15px; line-height: 1.7; margin-bottom: 6px; }
+  .content a.xref { color: var(--indigo-mid); font-weight: 600; text-decoration: underline; text-decoration-color: var(--amber-dim); text-underline-offset: 2px; }
+  .content a.xref:hover { color: var(--indigo-dark); }
+
+  .def-box { background: linear-gradient(135deg, #eef2fa, #f2f6fb); border-left: 4px solid var(--indigo-light); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .def-box .def-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 6px; }
+  .def-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
+  .def-box p:last-child { margin: 0; }
+  .def-box strong { color: var(--indigo-dark); font-weight: 600; }
+
+  .note-box { margin: 20px 0; border: 1.5px solid var(--amber-dim); border-radius: 10px; overflow: hidden; background: #eaf8fa; }
+  .note-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: rgba(43,196,212,.22); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .note-bar:hover { background: rgba(43,196,212,.32); }
+  .note-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #0d5a66; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .note-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .note-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: #2a7d8a; }
+  .note-bar .chevron-n { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #0d5a66; margin-top: 1px; }
+  .note-bar[aria-expanded="true"] .chevron-n { transform: rotate(180deg); }
+  .note-body { display: none; padding: 14px 18px 18px; font-size: 14px; color: #0d3a42; line-height: 1.65; }
+  .note-bar[aria-expanded="true"] + .note-body { display: block; }
+
+  /* === RAPPEL (encadré non repliable) === */
+  .rappel-box { background: #eef1f4; border-left: 4px solid var(--muted); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 4px 0 20px; }
+  .rappel-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .rappel-box p { font-size: 14px; color: var(--text); margin: 0; }
+
+  /* === ZOOM (encadré historique repliable) === */
+  .zoom-box { margin: 20px 0; border: 1.5px solid var(--indigo-mid); border-radius: 10px; overflow: hidden; background: #eef2f7; }
+  .zoom-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: var(--indigo-dark); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .zoom-bar:hover { background: var(--indigo-mid); }
+  .zoom-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .zoom-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .zoom-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.65); }
+  .zoom-bar .chevron-z { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .zoom-bar[aria-expanded="true"] .chevron-z { transform: rotate(180deg); }
+  .zoom-body { display: none; padding: 16px 18px 18px; font-size: 14px; color: var(--text); line-height: 1.65; }
+  .zoom-bar[aria-expanded="true"] + .zoom-body { display: block; }
+
+  /* === À QUOI ÇA SERT (encadré application repliable) === */
+  .apply-box { margin: 20px 0; border: 1.5px solid var(--flame); border-radius: 10px; overflow: hidden; background: #fdf5f4; }
+  .apply-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: linear-gradient(120deg, var(--flame), #b8362a); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: #fff; transition: filter .15s; }
+  .apply-bar:hover { filter: brightness(1.08); }
+  .apply-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .apply-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .apply-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.8); }
+  .apply-bar .chevron-ap { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .apply-bar[aria-expanded="true"] .chevron-ap { transform: rotate(180deg); }
+  .apply-body { display: none; padding: 16px 18px 18px; font-size: 14px; color: var(--text); line-height: 1.65; }
+  .apply-bar[aria-expanded="true"] + .apply-body { display: block; }
+
+  /* === TABLE DES MATIÈRES (index des notions, repliable, en tête de page) === */
+  .page-toc { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .page-toc-bar { width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 56px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+  .page-toc-bar:hover { background: #f4f6f8; }
+  .page-toc-icon { width: 17px; height: 17px; color: var(--amber-dim); flex-shrink: 0; }
+  .page-toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--indigo-dark); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 2px; }
+  .page-toc-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .page-toc-bar .chevron-toc { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--muted); }
+  .page-toc-bar[aria-expanded="true"] .chevron-toc { transform: rotate(180deg); }
+  .page-toc-body { display: none; padding: 4px 56px 22px; }
+  .page-toc-bar[aria-expanded="true"] + .page-toc-body { display: block; }
+  .page-toc-group { margin-top: 14px; }
+  .page-toc-group-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+  .page-toc-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .page-toc-pills a { font-size: 13px; font-weight: 600; color: var(--indigo-mid); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 5px 13px 5px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: background .15s, color .15s, border-color .15s; }
+  .page-toc-pills a .toc-num { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--indigo-light); border-radius: 8px; padding: 1px 6px; }
+  .page-toc-pills a:hover { background: var(--indigo-dark); color: #fff; border-color: var(--indigo-dark); }
+  .page-toc-pills a:hover .toc-num { background: var(--amber); color: var(--indigo-dark); }
+
+  .formula { font-family: var(--mono); background: var(--indigo-dark); color: var(--amber); padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 16px 0; letter-spacing: .04em; text-align: center; overflow-x: auto; }
+  .formula-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: -10px; margin-bottom: 14px; }
+
+  .kw { background: rgba(43,196,212,.22); color: var(--indigo-dark); padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+  mark.sh { background: #cdeef1; color: var(--text); border-radius: 2px; padding: 0 2px; }
+  mark.sh.current { background: var(--flame); color: #fff; box-shadow: 0 0 0 2px var(--flame); }
+
+  .fig-block { margin: 18px 0; background: #f8fafb; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-align: center; }
+  .fig-block .fig-inner { padding: 20px; }
+  .fig-block figcaption { font-size: 12.5px; color: var(--muted); padding: 10px 16px 14px; border-top: 1px solid var(--border); line-height: 1.5; font-style: italic; text-align: left; }
+
+  .data-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  .data-table th { background: var(--indigo-dark); color: var(--amber); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; padding: 10px 14px; text-align: left; }
+  .data-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f2f6f8; }
+  .data-table td strong { color: var(--indigo-dark); }
+
+  #to-top { position: fixed; bottom: 28px; right: 28px; width: 42px; height: 42px; background: var(--indigo-dark); color: var(--amber); border: 2px solid var(--amber); border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 200; }
+  #to-top.visible { opacity: 1; pointer-events: auto; }
+
+  #menu-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 150; background: var(--indigo-dark); border: 2px solid var(--amber); color: var(--amber); width: 40px; height: 40px; border-radius: 8px; font-size: 20px; cursor: pointer; align-items: center; justify-content: center; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: flex; }
+    .hero { padding: 60px 24px 36px; }
+    .search-bar-wrap { padding: 12px 24px; }
+    .content { padding: 28px 20px 60px; }
+    .page-toc-bar { padding: 12px 24px; }
+    .page-toc-body { padding: 4px 24px 20px; }
+  }
+
+  /* ── QUIZ ── */
+  .quiz-block { margin-top: 36px; margin-bottom: 32px; border-top: 2px solid var(--amber); border-bottom: 2px solid var(--amber); padding-top: 24px; padding-bottom: 24px; }
+  .quiz-block-bar { width: 100%; display: flex; align-items: flex-start; gap: 10px; background: var(--indigo-dark); border: none; border-radius: 10px; cursor: pointer; padding: 14px 18px; margin-bottom: 6px; text-align: left; transition: background .15s; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .quiz-block-bar:hover { background: var(--indigo-mid); }
+  .quiz-block-bar .quiz-block-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--amber); margin-top: 2px; }
+  .quiz-block-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .quiz-block-subtitle { font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); margin-left: 2px; }
+  .quiz-block-bar .chevron-q { margin-left: auto; width: 20px; height: 20px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 2px; }
+  .quiz-block-bar[aria-expanded="true"] .chevron-q { transform: rotate(180deg); }
+  .quiz-body { display: none; }
+  .quiz-block-bar[aria-expanded="true"] + .quiz-body { display: block; padding-top: 14px; }
+  .quiz-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 13px; color: var(--muted); }
+  .quiz-score-bar progress { flex: 1; height: 6px; border-radius: 3px; appearance: none; -webkit-appearance: none; }
+  .quiz-score-bar progress::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  .quiz-score-bar progress::-webkit-progress-value { background: var(--indigo-mid); border-radius: 3px; transition: width .4s; }
+
+  .quiz-q { background: var(--bg); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; border: 1.5px solid var(--border); transition: border-color .2s; }
+  .quiz-q.answered { border-color: transparent; }
+  .quiz-q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 14px; }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background .15s, border-color .15s; text-align: left; width: 100%; line-height: 1.45; }
+  .quiz-option:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-option .opt-letter { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-option.correct { background: #e8f8ef; border-color: #2da262; color: #1a6640; }
+  .quiz-option.correct .opt-letter { color: #2da262; }
+  .quiz-option.wrong { background: #fdecea; border-color: #d94f3d; color: #8b2218; }
+  .quiz-option.wrong .opt-letter { color: #d94f3d; }
+  .quiz-option.reveal { background: #e8f8ef; border-color: #2da262; color: #1a6640; opacity: .7; }
+  .quiz-option.reveal .opt-letter { color: #2da262; }
+
+  .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13.5px; line-height: 1.55; display: none; }
+  .quiz-feedback.show { display: flex; gap: 8px; align-items: flex-start; }
+  .quiz-feedback .icon-sm { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+  .quiz-feedback.ok { background: #e8f8ef; color: #1a6640; }
+  .quiz-feedback.ko { background: #fdecea; color: #8b2218; }
+  .quiz-result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; text-align: center; display: none; align-items: center; justify-content: center; gap: 8px; }
+  .quiz-result-msg.show { display: flex; }
+  .quiz-result-msg .icon-sm { width: 18px; height: 18px; flex-shrink: 0; }
+  .quiz-result-msg.great { background: #e8f8ef; color: #1a6640; }
+  .quiz-result-msg.good { background: #fdf6e3; color: #7a5c00; }
+  .quiz-result-msg.poor { background: #fdecea; color: #8b2218; }
+
+  .quiz-reset { margin-top: 20px; padding: 9px 20px; border-radius: 8px; border: 1.5px solid var(--indigo-mid); background: #fff; color: var(--indigo-dark); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; display: none; }
+  .quiz-reset:hover { background: #eef2fa; }
+
+  .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<button id="menu-toggle" aria-label="Menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<aside id="sidebar" role="navigation" aria-label="Table des matières">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-to-index" title="Retour à la table des matières du cours">
+      <svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Tous les chapitres
+    </a>
+    <div class="label">Physique Sec. 5 · Module 1</div>
+    <div class="chap-num">1</div>
+    <div class="chap-title">La réflexion de la lumière</div>
+  </div>
+  <div class="toc-label">Table des matières</div>
+  <nav>
+    <ul>
+      <li><a href="#intro" class="toc-link"><span class="num">—</span> Avant de commencer</a></li>
+      <li><a href="#section-1" class="toc-link"><span class="num">Section 1</span> Les types de réflexion</a></li>
+      <li><a href="#section-2" class="toc-link"><span class="num">Section 2</span> La géométrie de la réflexion</a></li>
+      <li><a href="#section-3" class="toc-link"><span class="num">Section 3</span> Les lois de la réflexion</a></li>
+      <li><a href="#chap1-recap" class="toc-link"><span class="num">Chapitre 1</span> Exercices de synthèse</a></li>
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <button onclick="document.getElementById('attrib-pop').classList.toggle('visible')" title="À propos de ce document" style="display:flex;align-items:center;gap:6px;"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg> À propos de ce document</button>
+    <div class="attrib-popover" id="attrib-pop">
+      Matériel préparé par M. Raphaël Sylvestre Bouchard, à l'aide du manuel <em>Delta</em>, Secondaire 5 (TC Média Livres inc.).
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="hero">
+    <div class="eyebrow">Physique · Secondaire 5 · Module 1 — Optique géométrique</div>
+    <h1>La réflexion de la lumière</h1>
+    <p>La réflexion est un phénomène qu'on côtoie tous les jours : on se regarde dans un miroir, une étendue d'eau calme reflète le paysage qui l'entoure, certaines surfaces paraissent plus lustrées que d'autres. Ce chapitre revient d'abord sur les différents types de réflexion, explore ensuite la géométrie qui les décrit, puis énonce les deux lois qui gouvernent ce phénomène.</p>
+  </div>
+
+  <div class="page-toc">
+    <button class="page-toc-bar" aria-expanded="false" onclick="toggleNote(this)">
+      <svg class="page-toc-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="page-toc-label">Table des matières<span class="page-toc-subtitle">Accès direct à chaque notion</span></span>
+      <svg class="chevron-toc" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="page-toc-body">
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 1 — Les types de réflexion</div>
+        <div class="page-toc-pills">
+          <a href="#reflexion-speculaire"><span class="toc-num">1.1</span>Réflexion spéculaire</a>
+          <a href="#reflexion-diffuse"><span class="toc-num">1.2</span>Réflexion diffuse</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 2 — La géométrie de la réflexion</div>
+        <div class="page-toc-pills">
+          <a href="#rayons-incident-reflechi"><span class="toc-num">2.1</span>Rayons incident et réfléchi</a>
+          <a href="#angles-incidence-reflexion"><span class="toc-num">2.2</span>Angles d'incidence et de réflexion</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 3 — Les lois de la réflexion</div>
+        <div class="page-toc-pills">
+          <a href="#premiere-loi-reflexion"><span class="toc-num">3.1</span>Première loi de la réflexion</a>
+          <a href="#seconde-loi-reflexion"><span class="toc-num">3.2</span>Seconde loi de la réflexion</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Synthèse</div>
+        <div class="page-toc-pills">
+          <a href="#chap1-recap"><span class="toc-num">✓</span>Exercices de synthèse</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-bar-wrap">
+    <label for="search-input">🔍 Recherche rapide</label>
+    <input type="text" id="search-input" placeholder="Ex : réflexion spéculaire, angle d'incidence, normale, lois de la réflexion…" oninput="doSearch(this.value)">
+    <span id="search-count"></span>
+  </div>
+
+  <div class="content">
+
+    <!-- INTRO -->
+    <div id="intro" class="intro-card">
+      <h2><svg aria-hidden="true" style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18L10 12L4 6"/><path d="M20 18L14 12L20 6"/><line x1="12" y1="4" x2="12" y2="20"/></svg> La réflexion, un phénomène qu'on croise partout</h2>
+      <p>La propagation rectiligne de la lumière, vue au chapitre de <a class="xref" href="notions_de_base.html#section-3">révision sur la propagation</a>, permet de représenter un rayon lumineux par une simple flèche droite — jusqu'à ce que ce rayon rencontre une nouvelle surface. Lorsqu'il revient alors dans le milieu d'où il provient, plutôt que de continuer sa route, on dit qu'il y a réflexion. C'est ce changement de direction qui permet de voir, dans un miroir ou sur une eau calme, une image plus ou moins nette des objets environnants — et qui, plus largement, nous permet de voir tout ce qui nous entoure, puisque c'est la lumière réfléchie par les objets qui atteint nos yeux.</p>
+      <p>Tu verras d'abord pourquoi certaines surfaces produisent une image nette et d'autres non (section 1), puis le vocabulaire géométrique nécessaire pour analyser précisément une réflexion (section 2), et enfin les deux lois, très simples, qui permettent de prédire exactement où ira un rayon réfléchi (section 3).</p>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-card" id="section-1">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 1</span>
+          <span class="section-title">Les types de réflexion</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div class="rappel-box">
+          <div class="rappel-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Rappel — La réflexion de la lumière</div>
+          <p>Tu as vu en 3<sup>e</sup> secondaire que la lumière, qui voyage en ligne droite dans un milieu homogène, peut « rebondir » lorsqu'elle rencontre une surface réfléchissante — ce phénomène s'appelle la réflexion. Le rayon qui provient de la source et qui frappe la surface se nomme <strong>rayon incident</strong>; celui qui s'en éloigne ensuite se nomme <strong>rayon réfléchi</strong>. C'est d'ailleurs la lumière réfléchie par les objets environnants, et qui parvient à nos yeux, qui nous permet de les voir.</p>
+        </div>
+
+        <p>La réflexion ne se produit que si un nouveau milieu se trouve sur le chemin de la lumière : tant qu'aucun obstacle n'est rencontré, la propagation demeure rectiligne. On peut donc définir la réflexion ainsi :</p>
+
+        <div class="def-box">
+          <div class="def-label">Définition</div>
+          <p><strong>Réflexion :</strong> le changement de direction de la lumière à la suite de sa rencontre avec une surface qui la renvoie dans le milieu d'où elle provient.</p>
+        </div>
+
+        <p>Toutes les surfaces ne réfléchissent cependant pas la lumière de la même façon : une surface métallique polie ne la réfléchit pas comme une surface rugueuse, telle qu'une brique. On distingue ainsi deux types de réflexion.</p>
+
+        <div class="subsection" id="reflexion-speculaire">
+          <div class="subsection-title">1.1 La réflexion spéculaire</div>
+          <p>Vue au microscope, aucune surface — même la plus lisse en apparence — n'est parfaitement plane à l'échelle atomique. Mais lorsque les irrégularités d'une surface sont nettement plus petites que la longueur d'onde (λ) de la lumière, ces irrégularités n'ont pratiquement aucun effet sur la réflexion : des rayons incidents parallèles restent alors parallèles après la réflexion. On appelle ce comportement la <strong>réflexion spéculaire</strong> (du latin <em>speculum</em>, « miroir »), aussi dite régulière. Les miroirs, les étendues d'eau calmes et les surfaces métalliques polies en sont des exemples : ce sont les seules surfaces sur lesquelles on peut observer une image nette des objets environnants.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 400 170" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Des rayons parallèles frappent une surface lisse et repartent parallèles : réflexion spéculaire">
+                <line x1="40" y1="125" x2="360" y2="125" stroke="var(--indigo-dark)" stroke-width="3"/>
+                <line x1="60" y1="125" x2="52" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="100" y1="125" x2="92" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="140" y1="125" x2="132" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="180" y1="125" x2="172" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="220" y1="125" x2="212" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="260" y1="125" x2="252" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="300" y1="125" x2="292" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="340" y1="125" x2="332" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="65" y1="50" x2="100" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="100" y1="125" x2="135" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <line x1="135" y1="50" x2="170" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="170" y1="125" x2="205" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <line x1="205" y1="50" x2="240" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="240" y1="125" x2="275" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <line x1="275" y1="50" x2="310" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="310" y1="125" x2="345" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <text x="65" y="42" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">rayons incidents</text>
+                <text x="255" y="42" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">rayons réfléchis</text>
+              </svg>
+            </div>
+            <figcaption>La réflexion spéculaire : des rayons incidents parallèles (en bleu) restent parallèles une fois réfléchis (en cyan) — ce qui permet de former une image nette des objets environnants.</figcaption>
+          </div>
+        </div>
+
+        <div class="subsection" id="reflexion-diffuse">
+          <div class="subsection-title">1.2 La réflexion diffuse</div>
+          <p>La situation change lorsque la taille des irrégularités d'une surface avoisine ou dépasse la longueur d'onde de la lumière. Même si les rayons incidents sont parallèles, leur parallélisme n'est plus conservé après la réflexion : les rayons repartent dans des directions désordonnées. On dit alors que la réflexion est <strong>diffuse</strong>, ou irrégulière. C'est le cas des surfaces rugueuses, mates ou ternes — un mur de béton, un tronc d'arbre, un tissu de laine ou de coton. Puisque les rayons s'y réfléchissent de manière désordonnée, on ne peut pas observer sur ce type de surface une image discernable des objets extérieurs.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 400 170" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Des rayons parallèles frappent une surface rugueuse et repartent dans des directions désordonnées : réflexion diffuse">
+                <path d="M40,125 L70,118 L100,130 L130,115 L160,128 L190,120 L220,132 L250,117 L280,127 L310,121 L340,129 L360,124" fill="none" stroke="var(--indigo-dark)" stroke-width="3" stroke-linejoin="round"/>
+                <line x1="65" y1="48" x2="100" y2="130" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="100" y1="130" x2="58" y2="62" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <line x1="135" y1="48" x2="170" y2="123" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="170" y1="123" x2="232" y2="38" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <line x1="205" y1="48" x2="240" y2="130" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="240" y1="130" x2="198" y2="56" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <line x1="275" y1="48" x2="310" y2="122" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <line x1="310" y1="122" x2="358" y2="45" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <text x="65" y="40" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">rayons incidents</text>
+                <text x="140" y="150" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">rayons réfléchis, désordonnés</text>
+              </svg>
+            </div>
+            <figcaption>La réflexion diffuse : les rayons incidents (en bleu) restent parallèles, mais les rayons réfléchis (en cyan) repartent dans des directions désordonnées — aucune image nette ne peut s'y former.</figcaption>
+          </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s1">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 1<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">La réflexion diffuse se produit sur des surfaces parfaitement lisses, comme les miroirs.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est l'inverse : les surfaces lisses (miroirs, eau calme) produisent une réflexion spéculaire; les surfaces rugueuses produisent une réflexion diffuse.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : les surfaces lisses produisent une réflexion spéculaire. La réflexion diffuse, elle, se produit sur des surfaces rugueuses.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Qu'est-ce qui distingue la réflexion spéculaire de la réflexion diffuse?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> La couleur de la lumière réfléchie</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Le parallélisme conservé, ou non, des rayons réfléchis</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> La vitesse de la lumière après la réflexion</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Le nombre de rayons incidents</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. En réflexion spéculaire, des rayons parallèles le restent après la réflexion; en réflexion diffuse, ils repartent dans des directions désordonnées.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse concerne le parallélisme des rayons réfléchis : conservé en spéculaire, perdu en diffuse.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Le rayon incident est celui qui s'éloigne de la surface réfléchissante après la réflexion.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est le rayon réfléchi qui s'éloigne de la surface; le rayon incident, lui, se dirige vers elle.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : le rayon incident se dirige vers la surface. C'est le rayon réfléchi qui s'en éloigne.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Laquelle de ces surfaces produit typiquement une réflexion diffuse?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Un miroir</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> La surface calme d'un lac</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> Un mur de béton</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Une plaque de métal poli</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Un mur de béton est rugueux à une échelle comparable ou supérieure à λ : la réflexion y est diffuse.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est le mur de béton : les trois autres surfaces sont lisses et produisent une réflexion spéculaire.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Pourquoi une surface rugueuse produit-elle une réflexion diffuse plutôt que spéculaire?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Parce qu'elle absorbe toute la lumière</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Parce que ses irrégularités sont de taille comparable ou supérieure à la longueur d'onde de la lumière</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Parce qu'elle ne réfléchit que certaines couleurs</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Parce que la lumière y voyage plus lentement</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Quand les irrégularités approchent ou dépassent λ, elles perturbent l'alignement des rayons réfléchis, qui repartent alors dans des directions désordonnées.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse porte sur la taille des irrégularités : lorsqu'elle égale ou dépasse λ, le parallélisme des rayons réfléchis n'est plus conservé.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-card" id="section-2">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 2</span>
+          <span class="section-title">La géométrie de la réflexion</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <p>Qu'elle soit spéculaire ou diffuse, la réflexion de la lumière obéit toujours aux mêmes lois. La réflexion spéculaire se prête cependant beaucoup mieux à une analyse géométrique, puisqu'elle est régulière : c'est donc uniquement ce type de réflexion qui sera utilisé dans le reste de ce chapitre. Mais avant d'énoncer les lois qui la gouvernent, il faut d'abord se donner un vocabulaire précis pour la décrire.</p>
+
+        <div class="subsection" id="rayons-incident-reflechi">
+          <div class="subsection-title">2.1 Les rayons incidents et réfléchis</div>
+
+          <div class="def-box">
+            <div class="def-label">Définitions</div>
+            <p><strong>Rayon incident :</strong> le rayon lumineux qui se dirige vers la surface réfléchissante.</p>
+            <p><strong>Rayon réfléchi :</strong> le rayon qui s'en éloigne après la réflexion.</p>
+            <p><strong>Point d'incidence :</strong> l'intersection entre le rayon incident et la surface réfléchissante.</p>
+            <p><strong>Normale :</strong> une droite perpendiculaire à la surface réfléchissante, au point d'incidence.</p>
+            <p><strong>Plan d'incidence :</strong> le plan contenant le rayon incident et la normale.</p>
+          </div>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 400 210" style="width:100%;max-width:460px;height:auto;" role="img" aria-label="Rayon incident et rayon réfléchi de part et d'autre de la normale, au point d'incidence sur une surface réfléchissante">
+                <polygon points="145,165 255,165 225,45 175,45" fill="var(--indigo-light)" fill-opacity="0.14"/>
+                <line x1="50" y1="150" x2="350" y2="150" stroke="var(--indigo-dark)" stroke-width="3"/>
+                <line x1="70" y1="150" x2="62" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="110" y1="150" x2="102" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="290" y1="150" x2="282" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="330" y1="150" x2="322" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="200" y1="150" x2="200" y2="62" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <polygon points="200,60 204,70 196,70" fill="var(--muted)"/>
+                <line x1="140" y1="70" x2="200" y2="150" stroke="var(--indigo-mid)" stroke-width="2.4"/>
+                <polygon points="200,150 190.8,144.4 197.2,139.6" fill="var(--indigo-mid)"/>
+                <line x1="200" y1="150" x2="260" y2="70" stroke="var(--amber-dim)" stroke-width="2.4"/>
+                <polygon points="260,70 257.2,80.4 250.8,75.6" fill="var(--amber-dim)"/>
+                <circle cx="200" cy="150" r="3.5" fill="var(--flame)"/>
+                <text x="132" y="62" text-anchor="end" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)">Rayon incident</text>
+                <text x="268" y="62" text-anchor="start" font-family="Inter, sans-serif" font-size="12" fill="var(--amber-dim)">Rayon réfléchi</text>
+                <text x="207" y="50" text-anchor="start" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">Normale</text>
+                <text x="200" y="176" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-style="italic" fill="var(--text)">Point d'incidence</text>
+                <text x="200" y="196" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-style="italic" fill="var(--muted)">Surface réfléchissante</text>
+              </svg>
+            </div>
+            <figcaption>Le rayon incident et la normale, au point d'incidence, définissent le plan d'incidence (zone teintée).</figcaption>
+          </div>
+        </div>
+
+        <div class="subsection" id="angles-incidence-reflexion">
+          <div class="subsection-title">2.2 Les angles d'incidence et de réflexion</div>
+
+          <div class="def-box">
+            <div class="def-label">Définitions</div>
+            <p><strong>Angle d'incidence (θᵢ) :</strong> l'angle formé par le rayon incident et la normale.</p>
+            <p><strong>Angle de réflexion (θᵣ) :</strong> l'angle formé par la normale et le rayon réfléchi.</p>
+          </div>
+
+          <p>Ces deux angles se mesurent toujours par rapport à la <strong>normale</strong> — jamais par rapport à la surface elle-même.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 400 210" style="width:100%;max-width:460px;height:auto;" role="img" aria-label="L'angle d'incidence et l'angle de réflexion, mesurés de part et d'autre de la normale">
+                <line x1="50" y1="150" x2="350" y2="150" stroke="var(--indigo-dark)" stroke-width="3"/>
+                <line x1="70" y1="150" x2="62" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="110" y1="150" x2="102" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="290" y1="150" x2="282" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="330" y1="150" x2="322" y2="163" stroke="#b9c3ca" stroke-width="1.4"/>
+                <line x1="200" y1="150" x2="200" y2="62" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <polygon points="200,60 204,70 196,70" fill="var(--muted)"/>
+                <line x1="140" y1="70" x2="200" y2="150" stroke="var(--indigo-mid)" stroke-width="2.4"/>
+                <polygon points="200,150 190.8,144.4 197.2,139.6" fill="var(--indigo-mid)"/>
+                <line x1="200" y1="150" x2="260" y2="70" stroke="var(--amber-dim)" stroke-width="2.4"/>
+                <polygon points="260,70 257.2,80.4 250.8,75.6" fill="var(--amber-dim)"/>
+                <circle cx="200" cy="150" r="3.5" fill="var(--flame)"/>
+                <polyline points="182,126 190.5,121.5 200,120" fill="none" stroke="var(--indigo-mid)" stroke-width="1.6"/>
+                <polyline points="200,120 209.5,121.5 218,126" fill="none" stroke="var(--amber-dim)" stroke-width="1.6"/>
+                <text x="172" y="132" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="15" font-weight="700" fill="var(--indigo-mid)">θᵢ</text>
+                <text x="228" y="132" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="15" font-weight="700" fill="var(--amber-dim)">θᵣ</text>
+                <text x="207" y="50" text-anchor="start" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">Normale</text>
+                <text x="200" y="196" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-style="italic" fill="var(--muted)">Surface réfléchissante</text>
+              </svg>
+            </div>
+            <figcaption>L'angle d'incidence (θᵢ) et l'angle de réflexion (θᵣ) se mesurent tous deux par rapport à la normale, de part et d'autre de celle-ci.</figcaption>
+          </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s2">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 2<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Le plan d'incidence est le plan qui contient le rayon incident et la normale.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est précisément la définition du plan d'incidence.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : le plan d'incidence est défini comme le plan contenant le rayon incident et la normale.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Comment nomme-t-on le point où le rayon incident touche la surface réfléchissante?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Le foyer</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Le point d'incidence</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Le point focal</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Le point de réflexion</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est l'intersection entre le rayon incident et la surface réfléchissante.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « point d'incidence » : les autres termes appartiennent au vocabulaire des lentilles et miroirs courbes, vus plus loin dans le cours.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">La normale, en un point donné d'une surface réfléchissante, est…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> parallèle à la surface</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> une droite perpendiculaire à la surface en ce point</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> toujours horizontale</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> un rayon lumineux particulier</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La normale est perpendiculaire à la surface au point d'incidence — son orientation dépend donc de celle de la surface, pas d'une direction fixe.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : la normale est une droite perpendiculaire à la surface réfléchissante, au point d'incidence — ce n'est pas un rayon lumineux.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">L'angle d'incidence se mesure entre le rayon incident et la surface réfléchissante.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. L'angle d'incidence se mesure par rapport à la normale, pas par rapport à la surface.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : les angles d'incidence et de réflexion se mesurent tous deux par rapport à la normale, pas à la surface.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">L'angle de réflexion (θᵣ) est formé par…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> le rayon incident et la surface</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> le rayon incident et le rayon réfléchi</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> la normale et le rayon réfléchi</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> la normale et la surface</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. L'angle de réflexion est formé par la normale et le rayon réfléchi.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : l'angle de réflexion est formé par la normale et le rayon réfléchi, pas par la surface.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-card" id="section-3">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 3</span>
+          <span class="section-title">Les lois de la réflexion</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <p>Lorsqu'un rayon lumineux atteint une surface réfléchissante lisse, il subit une réflexion spéculaire. Pour se représenter sa trajectoire, on peut avoir recours à une analogie mécanique : le rayon lumineux qui se réfléchit sur un miroir peut être vu comme une boule de billard qui frappe la bande d'une table. L'analogie n'est évidemment pas parfaite sur le plan physique, mais elle montre bien que le rayon, tout comme la boule, est renvoyé après la « collision » dans une direction bien précise — ce qui laisse présager que la réflexion obéit à des lois bien précises.</p>
+
+        <div class="fig-block">
+          <div class="fig-inner">
+            <svg viewBox="0 0 400 210" style="width:100%;max-width:460px;height:auto;" role="img" aria-label="Analogie mécanique de la réflexion : une boule de billard frappe la bande d'une table selon un angle et repart selon le même angle">
+              <rect x="20" y="15" width="360" height="170" rx="6" fill="#e3f0e8" stroke="var(--indigo-dark)" stroke-width="2"/>
+              <line x1="20" y1="185" x2="380" y2="185" stroke="var(--indigo-dark)" stroke-width="5"/>
+              <line x1="200" y1="185" x2="200" y2="110" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="4 3"/>
+              <line x1="135" y1="60" x2="200" y2="185" stroke="var(--indigo-mid)" stroke-width="2" stroke-dasharray="5 4"/>
+              <line x1="200" y1="185" x2="265" y2="60" stroke="var(--amber-dim)" stroke-width="2" stroke-dasharray="5 4"/>
+              <circle cx="135" cy="60" r="9" fill="var(--flame)" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="265" cy="60" r="9" fill="var(--flame)" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="200" cy="185" r="3" fill="var(--indigo-dark)"/>
+              <text x="135" y="42" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="12" font-weight="700" fill="var(--indigo-mid)">AVANT</text>
+              <text x="265" y="42" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="12" font-weight="700" fill="var(--amber-dim)">APRÈS</text>
+            </svg>
+          </div>
+          <figcaption>L'analogie mécanique : comme une boule de billard qui frappe la bande d'une table, un rayon lumineux est renvoyé après la « collision » avec un angle égal à celui de son approche.</figcaption>
+        </div>
+
+        <div class="subsection" id="premiere-loi-reflexion">
+          <div class="subsection-title">3.1 La première loi de la réflexion</div>
+
+          <div class="def-box">
+            <div class="def-label">Première loi de la réflexion</div>
+            <p>Le rayon incident, le rayon réfléchi et la normale appartiennent tous au même plan.</p>
+          </div>
+
+          <p>C'est le rayon incident qui détermine ce plan : si on fait pivoter le rayon incident autour de la normale, qui sert alors d'axe de rotation, le rayon réfléchi — et donc le plan tout entier — pivote avec lui, d'un même angle. L'analogie du billard reste valide dans le cadre de cette première loi : toute la trajectoire de la boule qui frappe la bande demeure entièrement contenue dans le plan formé par la surface de la table.</p>
+
+          <div class="zoom-box">
+            <button class="zoom-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="zoom-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg> Zoom<span class="zoom-subtitle">La loi de la réflexion dans l'Antiquité</span></span>
+              <svg class="chevron-z" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="zoom-body">
+              <p>La loi de la réflexion est connue depuis l'Antiquité : on en attribue l'étude à des savants grecs célèbres comme Euclide (3<sup>e</sup> siècle av. J.-C.), Héron d'Alexandrie (1<sup>er</sup> siècle apr. J.-C.) et Ptolémée (2<sup>e</sup> siècle apr. J.-C.). Héron avait fondé son étude de ce phénomène optique sur l'idée que la lumière emprunte toujours le chemin le plus court. Ptolémée, s'appuyant sur cette base, avait construit sa propre théorie optique autour d'un énoncé équivalent à la seconde loi de la réflexion : selon lui, le rayon visuel incident et le rayon visuel réfléchi forment des angles égaux avec la normale élevée au miroir, au point de réflexion.</p>
+              <p>Cet énoncé est géométriquement conforme à la loi telle qu'on la connaît aujourd'hui, à une différence près : la notion de « rayon visuel » suppose que c'est l'œil qui émet la lumière — une conception erronée qui n'était d'ailleurs pas propre à Ptolémée, mais partagée par tous ses prédécesseurs. Il aura fallu attendre environ huit siècles, et les travaux de savants arabes comme Ibn al-Haytham (965-1039) — connu en Occident sous le nom d'Alhazen — pour corriger cette erreur conceptuelle : l'œil n'est pas un émetteur de lumière, mais un récepteur.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" id="seconde-loi-reflexion">
+          <div class="subsection-title">3.2 La seconde loi de la réflexion</div>
+
+          <div class="def-box">
+            <div class="def-label">Seconde loi de la réflexion</div>
+            <p>L'angle d'incidence est égal à l'angle de réflexion.</p>
+          </div>
+
+          <div class="formula">θᵢ = θᵣ</div>
+          <p class="formula-caption">où θᵢ et θᵣ se mesurent tous deux par rapport à la normale.</p>
+
+          <p>Cette loi est valable quelle que soit la valeur de l'angle d'incidence. Lorsque cet angle est nul, le rayon incident frappe la surface bien perpendiculairement — le long de la normale elle-même : le rayon réfléchi revient alors exactement par le chemin emprunté par le rayon incident, les deux rayons étant confondus avec la normale.</p>
+
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Une loi facile à vérifier</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body">
+              <p>La seconde loi de la réflexion se vérifie facilement en laboratoire : à l'aide d'un disque gradué et d'un rayon laser, on peut mesurer directement l'angle d'incidence et l'angle de réflexion, et constater qu'ils sont toujours égaux, peu importe l'angle choisi. L'analogie du billard présentée plus haut est également conforme à cette seconde loi : l'angle formé par la normale et la trajectoire de la boule avant la collision est égal à celui formé par la normale et sa trajectoire après la collision.</p>
+            </div>
+          </div>
+
+          <div class="apply-box">
+            <button class="apply-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="apply-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.8" fill="currentColor" stroke="none"/></svg> À quoi ça sert?<span class="apply-subtitle">La mesure de la distance Terre-Lune</span></span>
+              <svg class="chevron-ap" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="apply-body">
+              <p>Une des méthodes les plus précises pour mesurer la distance qui sépare la Lune de la Terre, la <strong>télémétrie laser-Lune</strong>, repose directement sur les lois de la réflexion. Elle consiste à envoyer un rayon laser vers la Lune, à le faire rebondir à l'aide de dispositifs réfléchissants installés à sa surface, puis à mesurer le temps de l'aller-retour. Comme la vitesse de la lumière est connue, ce temps permet de déduire la distance Terre-Lune, dont la valeur moyenne est d'environ 384 400 km.</p>
+              <p>Cinq de ces dispositifs se trouvent actuellement sur la Lune, déposés par des missions spatiales américaines et soviétiques entre 1969 et 1973 — le plus grand réseau, déposé par la mission Apollo 15 en 1971, reste le plus utilisé. Ces réflecteurs sont constitués de « coins de cube » : trois miroirs plans perpendiculaires entre eux, une configuration qui leur donne la propriété de toujours renvoyer un rayon lumineux exactement dans sa direction de provenance, peu importe l'angle sous lequel il les frappe. C'est justement grâce à cette méthode qu'on a pu déterminer que la Lune s'éloigne de la Terre d'environ 3,8 cm par année.</p>
+
+              <div class="fig-block" style="background:#fff;">
+                <div class="fig-inner">
+                  <svg viewBox="0 0 340 235" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Vue 2D simplifiée d'un réflecteur en coin : le rayon sortant est parallèle et opposé au rayon entrant, peu importe l'angle d'entrée">
+                    <line x1="60" y1="30" x2="60" y2="210" stroke="var(--indigo-dark)" stroke-width="4"/>
+                    <line x1="60" y1="210" x2="260" y2="210" stroke="var(--indigo-dark)" stroke-width="4"/>
+                    <line x1="60" y1="40" x2="50" y2="48" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="60" y1="70" x2="50" y2="78" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="60" y1="100" x2="50" y2="108" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="60" y1="130" x2="50" y2="138" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="60" y1="160" x2="50" y2="168" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="60" y1="190" x2="50" y2="198" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="80" y1="210" x2="88" y2="220" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="110" y1="210" x2="118" y2="220" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="140" y1="210" x2="148" y2="220" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="170" y1="210" x2="178" y2="220" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="200" y1="210" x2="208" y2="220" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="230" y1="210" x2="238" y2="220" stroke="var(--muted)" stroke-width="1.2"/>
+                    <line x1="220" y1="60" x2="60" y2="150" stroke="var(--indigo-mid)" stroke-width="2.4"/>
+                    <polygon points="60,150 66.75,141.6 70.67,148.6" fill="var(--indigo-mid)"/>
+                    <line x1="60" y1="150" x2="166.7" y2="210" stroke="var(--amber-dim)" stroke-width="2.4"/>
+                    <polygon points="166.7,210 156,208.6 160,201.6" fill="var(--amber-dim)"/>
+                    <line x1="166.7" y1="210" x2="327" y2="120" stroke="var(--flame)" stroke-width="2.4"/>
+                    <polygon points="327,120 320.3,128.4 316.3,121.4" fill="var(--flame)"/>
+                    <text x="222" y="52" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">rayon entrant</text>
+                    <text x="332" y="112" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)">rayon sortant</text>
+                  </svg>
+                </div>
+                <figcaption>Vue 2D simplifiée d'un réflecteur en coin : après deux réflexions sur des miroirs perpendiculaires, le rayon ressort exactement dans la direction d'où il est venu. Le dispositif réel, comme ceux déposés sur la Lune, utilise trois miroirs perpendiculaires formant un coin de cube en trois dimensions.</figcaption>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s3">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 3<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Selon la première loi de la réflexion, le rayon incident, le rayon réfléchi et la normale appartiennent tous au même plan.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est exactement l'énoncé de la première loi de la réflexion.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : la première loi stipule que ces trois éléments sont toujours coplanaires.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Que stipule la seconde loi de la réflexion?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> L'angle d'incidence est toujours de 45°</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> L'angle d'incidence est égal à l'angle de réflexion</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Le rayon réfléchi est toujours perpendiculaire à la surface</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> L'angle de réflexion dépend de la couleur de la lumière</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. θᵢ = θᵣ, quelle que soit la valeur de l'angle.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est θᵢ = θᵣ : l'angle d'incidence est toujours égal à l'angle de réflexion.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un rayon lumineux frappe un miroir avec un angle d'incidence de 30°. Quel est l'angle de réflexion?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 15°</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> 30°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 60°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 90°</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Par la seconde loi, θᵣ = θᵢ = 30°.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 30° : l'angle de réflexion est toujours égal à l'angle d'incidence.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Lorsque l'angle d'incidence est nul, le rayon réfléchi revient exactement par le chemin emprunté par le rayon incident.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Les deux rayons sont alors confondus avec la normale.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : à angle nul, le rayon incident suit la normale, et le rayon réfléchi revient exactement par le même chemin.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Selon Ptolémée, quelle était l'origine des rayons visuels impliqués dans la vision?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Le Soleil uniquement</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Les objets observés</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> L'œil lui-même, considéré comme émetteur de lumière</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Les miroirs</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Ptolémée croyait que l'œil émettait un rayon visuel — une erreur corrigée bien plus tard par Ibn al-Haytham.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « l'œil lui-même » : Ptolémée, comme ses prédécesseurs, croyait que l'œil émettait la lumière plutôt que de la recevoir.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SYNTHÈSE -->
+    <div id="chap1-recap" class="section-card">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Chapitre 1</span>
+          <span class="section-title">Synthèse — La réflexion de la lumière</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div class="def-box">
+          <div class="def-label">L'essentiel à retenir</div>
+          <p>Réflexion spéculaire → rayons réfléchis parallèles, image nette &nbsp;·&nbsp; réflexion diffuse → rayons réfléchis désordonnés, aucune image nette</p>
+          <p>θᵢ et θᵣ se mesurent par rapport à la <strong>normale</strong>, jamais par rapport à la surface &nbsp;·&nbsp; 1<sup>re</sup> loi : rayon incident, rayon réfléchi et normale sont coplanaires &nbsp;·&nbsp; 2<sup>e</sup> loi : <strong>θᵢ = θᵣ</strong></p>
+        </div>
+
+        <div class="quiz-block" data-quiz="recap">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices de synthèse<span class="quiz-block-subtitle">Les trois sections mélangées</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 6</span>
+            <progress class="quiz-progress" value="0" max="6"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Une surface qui conserve le parallélisme des rayons réfléchis produit une réflexion…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> diffuse</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> spéculaire</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> totale</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> polychromatique</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est la définition même de la réflexion spéculaire.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « spéculaire » : c'est le type de réflexion où le parallélisme des rayons est conservé.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">La droite perpendiculaire à une surface réfléchissante, au point d'incidence, se nomme…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> le rayon incident</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> le plan d'incidence</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> la normale</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> le rayon réfléchi</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La normale est la droite perpendiculaire à la surface, au point d'incidence.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est « la normale ».</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un rayon incident frappe un miroir plan avec un angle de 52° par rapport à la normale. Quel angle le rayon réfléchi forme-t-il avec la surface du miroir (et non avec la normale)?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 38°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 52°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 90°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 26°</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le rayon réfléchi forme 52° avec la normale (θᵣ = θᵢ), donc 90° − 52° = 38° avec la surface elle-même.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 38° : le rayon réfléchi forme 52° avec la normale, donc 90° − 52° = 38° avec la surface.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Le rayon incident, le rayon réfléchi et la normale sont toujours coplanaires.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est la première loi de la réflexion.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : la première loi de la réflexion garantit que ces trois éléments sont coplanaires.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Un réflecteur en « coin de cube », comme ceux déposés sur la Lune, a la particularité de…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> absorber toute la lumière incidente</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> renvoyer le rayon incident dans sa direction d'origine, peu importe l'angle d'incidence</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> transformer la lumière visible en rayons X</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> fonctionner uniquement avec un angle d'incidence de 45°</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est cette propriété de rétroréflexion, indépendante de l'angle, qui rend la télémétrie laser-Lune possible.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : le réflecteur en coin de cube renvoie toujours le rayon incident dans sa direction de provenance, quel que soit l'angle d'incidence.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="5">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Qui a corrigé, environ huit siècles après Ptolémée, l'idée que l'œil serait un émetteur de lumière?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Euclide</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Héron d'Alexandrie</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> Ibn al-Haytham (Alhazen)</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Isaac Newton</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Ibn al-Haytham (965-1039), connu en Occident sous le nom d'Alhazen, a établi que l'œil est un récepteur, et non un émetteur, de lumière.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est Ibn al-Haytham (Alhazen), savant du 10<sup>e</sup>-11<sup>e</sup> siècle.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<button id="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+<script>
+// ── Toggle sections ────────────────────────────────────────
+function toggleSection(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  btn.parentElement.querySelector('.section-body').classList.toggle('open', !expanded);
+}
+
+// ── Toggle bulles de note ────────────────────────────────────
+function toggleNote(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Toggle blocs d'exercices ────────────────────────────────
+function toggleQuiz(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Sidebar active link ────────────────────────────────────
+const tocLinks = document.querySelectorAll('.toc-link');
+const sectionIds = ['intro','section-1','section-2','section-3','chap1-recap'];
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 130) current = id;
+  });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+  document.getElementById('to-top').classList.toggle('visible', window.scrollY > 300);
+}, {passive: true});
+
+// ── Smooth scroll from TOC ─────────────────────────────────
+tocLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const toggle = target.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ── Table des matières (page-toc) : ouvre la bonne section, puis défile ────
+document.querySelectorAll('.page-toc-pills a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const card = target.closest('.section-card');
+    const toggle = card ? card.querySelector('.section-toggle') : null;
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// Ouvre automatiquement la bonne section si on arrive via une ancre (#section-1, etc.)
+if (location.hash) {
+  const target = document.getElementById(location.hash.slice(1));
+  if (target) {
+    const card = target.closest('.section-card') || target;
+    const toggle = card.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
+}
+
+// ── Search ─────────────────────────────────────────────────
+const contentEl = document.querySelector('.content');
+const originalHTML = contentEl.innerHTML;
+
+let lastQuery = '';
+let matchIndex = -1;
+
+function doSearch(query) {
+  contentEl.innerHTML = originalHTML;
+  const countEl = document.getElementById('search-count');
+  matchIndex = -1;
+  lastQuery = query;
+
+  if (!query.trim()) { countEl.textContent = ''; return 0; }
+
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  let count = 0;
+  nodes.forEach(node => {
+    if (!re.test(node.textContent)) return;
+    re.lastIndex = 0;
+    const span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(re, m => { count++; return `<mark class="sh">${m}</mark>`; });
+    node.parentNode.replaceChild(span, node);
+  });
+
+  countEl.textContent = count ? `${count} résultat${count>1?'s':''}` : 'Aucun résultat';
+
+  document.querySelectorAll('.section-card').forEach(card => {
+    if (card.querySelector('mark.sh')) {
+      const t = card.querySelector('.section-toggle');
+      if (t && t.getAttribute('aria-expanded') === 'false') toggleSection(t);
+    }
+  });
+
+  return count;
+}
+
+function goToMatch(step) {
+  const marks = contentEl.querySelectorAll('mark.sh');
+  if (!marks.length) return;
+  if (matchIndex >= 0 && marks[matchIndex]) marks[matchIndex].classList.remove('current');
+  matchIndex = (matchIndex + step + marks.length) % marks.length;
+  const m = marks[matchIndex];
+  m.classList.add('current');
+  m.scrollIntoView({behavior:'smooth', block:'center'});
+  const countEl = document.getElementById('search-count');
+  countEl.textContent = `${matchIndex+1} / ${marks.length} résultats`;
+}
+
+function runSearchAndJump(query, step) {
+  if (query !== lastQuery || !contentEl.querySelector('mark.sh')) {
+    const count = doSearch(query);
+    if (count > 0) goToMatch(0);
+  } else {
+    goToMatch(step);
+  }
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAndJump(e.target.value, e.shiftKey ? -1 : 1);
+  }
+});
+
+// Ctrl+F → recherche interne
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    const inp = document.getElementById('search-input');
+    inp.focus(); inp.select();
+  }
+});
+
+// Fermer la bulle d'attribution au clic à l'extérieur
+document.addEventListener('click', e => {
+  const pop = document.getElementById('attrib-pop');
+  if (pop && !pop.contains(e.target) && !e.target.closest('.sidebar-footer button')) {
+    pop.classList.remove('visible');
+  }
+});
+
+// === MOTEUR DE QUIZ INTERACTIFS ===
+function initQuizBlock(block) {
+  const questions = Array.from(block.querySelectorAll('.quiz-q'));
+  const total = questions.length;
+  const scoreLabel = block.querySelector('.quiz-score-label');
+  const progressBar = block.querySelector('.quiz-progress');
+  const resultMsg = block.querySelector('.quiz-result-msg');
+  const resetBtn = block.querySelector('.quiz-reset');
+  progressBar.max = total;
+
+  function updateScore() {
+    const answered = questions.filter(q => q.classList.contains('answered'));
+    const correct = answered.filter(q => q.dataset.gotCorrect === 'true').length;
+    scoreLabel.textContent = `${correct} / ${total}`;
+    progressBar.value = answered.length;
+
+    if (answered.length === total) {
+      resultMsg.classList.add('show');
+      const pct = Math.round((correct / total) * 100);
+      resultMsg.classList.remove('great', 'good', 'poor');
+      const starIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 16.9 6.5 19.7l1.4-6.1-4.7-4.2 6.2-.6Z"/></svg>';
+      const upIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13l3-3 2 2 3-3.5"/></svg>';
+      const bookIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg>';
+      let icon, msg, variant;
+      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — la section est maîtrisée.`; variant = 'great'; }
+      else if (pct >= 70) { icon = upIcon; msg = `Bon travail : ${correct} / ${total}. Relis les explications des questions manquées.`; variant = 'good'; }
+      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de revoir cette section avant de continuer.`; variant = 'poor'; }
+      resultMsg.classList.add(variant);
+      resultMsg.innerHTML = `${icon}<span>${msg}</span>`;
+      resetBtn.style.display = 'inline-block';
+    } else {
+      resultMsg.classList.remove('show', 'great', 'good', 'poor');
+      resetBtn.style.display = 'none';
+    }
+  }
+
+  questions.forEach(q => {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    const fbOk = q.querySelector('.quiz-feedback.ok');
+    const fbKo = q.querySelector('.quiz-feedback.ko');
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (q.classList.contains('answered')) return;
+
+        const isCorrect = opt.dataset.correct === 'true';
+        q.classList.add('answered');
+        q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
+
+        options.forEach(o => {
+          o.disabled = true;
+          if (o.dataset.correct === 'true') {
+            o.classList.add(o === opt ? 'correct' : 'reveal');
+          } else if (o === opt) {
+            o.classList.add('wrong');
+          }
+        });
+
+        (isCorrect ? fbOk : fbKo).classList.add('show');
+        updateScore();
+      });
+    });
+  });
+
+  block.addEventListener('reset-quiz', () => {
+    questions.forEach(q => {
+      q.classList.remove('answered');
+      delete q.dataset.gotCorrect;
+      q.querySelectorAll('.quiz-option').forEach(o => {
+        o.disabled = false;
+        o.classList.remove('correct', 'wrong', 'reveal');
+      });
+      q.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+    });
+    updateScore();
+  });
+
+  updateScore();
+}
+
+document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+</script>
+</body>
+</html>
