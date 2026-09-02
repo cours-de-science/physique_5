@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 2 — Les miroirs — Physique Sec. 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette "banc d'optique" — bleu nuit + cyan laser, distincte de la
+       palette indigo/ambre du cours de chimie. */
+    --indigo-dark: #0d1b2e;
+    --indigo-mid:  #163a5c;
+    --indigo-light:#4f90b8;
+    --amber:       #2bc4d4;
+    --amber-dim:   #1f8fa0;
+    --flame:       #dd4a3a;
+    --bg:          #eef2f5;
+    --surface:     #ffffff;
+    --text:        #16212c;
+    --muted:       #5c6b78;
+    --border:      #d7e0e6;
+    --sidebar-w:   268px;
+    --mono:        'JetBrains Mono', monospace;
+    /* Motif signature : le spectre visible, utilisé avec parcimonie */
+    --spectre:        linear-gradient(90deg, #6a4fd0 0%, #3f7fd6 20%, #2fa9a0 40%, #d9c93f 60%, #e8863b 80%, #dd4a3a 100%);
+    --spectre-pastel: linear-gradient(100deg, #b9a8e8 0%, #9dc8ec 20%, #9de0c4 40%, #ecdd8f 60%, #f0c890 80%, #eba393 100%);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar { width: var(--sidebar-w); background: var(--indigo-dark); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; display: flex; flex-direction: column; z-index: 100; transition: transform .3s ease; }
+  .sidebar-header { background: var(--spectre-pastel); padding: 20px 18px 16px; flex-shrink: 0; }
+  .back-to-index { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--indigo-dark); text-decoration: none; opacity: .65; margin-bottom: 12px; transition: opacity .15s; }
+  .back-to-index:hover { opacity: 1; text-decoration: underline; }
+  .sidebar-header .label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-dark); }
+  .sidebar-header .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 800; line-height: 1; color: var(--indigo-dark); }
+  .sidebar-header .chap-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-dark); margin-top: 4px; }
+  .toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--indigo-light); padding: 20px 18px 8px; }
+  #sidebar nav ul { list-style: none; }
+  #sidebar nav ul li a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; border-left: 3px solid transparent; transition: background .15s, color .15s, border-color .15s; line-height: 1.35; }
+  #sidebar nav ul li a:hover, #sidebar nav ul li a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--amber); }
+  #sidebar nav ul li a .num { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+  .sidebar-footer { margin-top: auto; padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
+  .sidebar-footer button { background: none; border: none; cursor: pointer; font-size: 11px; color: rgba(255,255,255,.3); padding: 0; text-align: left; width: 100%; transition: color .15s; }
+  .sidebar-footer button:hover { color: rgba(255,255,255,.6); }
+  .attrib-popover { display: none; position: absolute; bottom: 60px; left: 14px; width: 230px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.18); padding: 14px 16px; font-size: 12px; color: var(--text); line-height: 1.6; z-index: 200; }
+  .attrib-popover::after { content: ''; position: absolute; bottom: -7px; left: 20px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 2px 2px 4px rgba(0,0,0,.08); }
+  .attrib-popover.visible { display: block; }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+  .hero { background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-mid) 60%, var(--indigo-light) 100%); padding: 60px 56px 48px; color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: 'F'; position: absolute; right: 40px; top: -30px; font-family: 'Barlow Condensed', sans-serif; font-size: 260px; font-weight: 800; color: rgba(255,255,255,.07); line-height: 1; pointer-events: none; }
+  .hero .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px, 5vw, 56px); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 20px; }
+  .hero p { max-width: 600px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.82); }
+
+  .search-bar-wrap { background: var(--indigo-dark); padding: 14px 56px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid var(--amber); }
+  .search-bar-wrap label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.5); white-space: nowrap; letter-spacing: .06em; text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif; }
+  #search-input { flex: 1; max-width: 440px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 8px 14px; font-size: 14px; color: #fff; font-family: 'Inter', sans-serif; outline: none; transition: background .2s, border-color .2s; }
+  #search-input::placeholder { color: rgba(255,255,255,.4); }
+  #search-input:focus { background: rgba(255,255,255,.16); border-color: var(--amber); }
+  #search-count { font-size: 12px; color: var(--amber); font-family: var(--mono); min-width: 90px; }
+
+  .content { padding: 48px 56px 80px; max-width: 880px; }
+
+  /* Carte d'introduction */
+  .intro-card { background: linear-gradient(120deg, var(--indigo-dark), var(--indigo-mid)); border-radius: 10px; padding: 24px 28px; color: rgba(255,255,255,.88); margin-bottom: 24px; }
+  .intro-card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--amber); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; }
+  .intro-card h2 svg { margin-top: 3px; flex-shrink: 0; }
+  .intro-card p { color: rgba(255,255,255,.82); font-size: 14px; margin-bottom: 10px; line-height: 1.65; }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .intro-card a { color: var(--amber); }
+  .intro-card .wip-note { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.18); font-size: 12.5px; color: rgba(255,255,255,.65); font-style: italic; }
+
+  .section-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .section-toggle { width: 100%; background: none; border: none; cursor: pointer; padding: 0; text-align: left; display: block; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; background: var(--surface); transition: background .15s; border-bottom: 1px solid transparent; }
+  .section-toggle:hover .section-header, .section-toggle[aria-expanded="true"] .section-header { background: #f0f4f6; border-bottom-color: var(--border); }
+  .section-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 4px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; margin-top: 2px; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--indigo-dark); flex: 1; }
+  .chevron { width: 20px; height: 20px; color: var(--muted); transition: transform .25s ease; flex-shrink: 0; margin-top: 2px; }
+  .section-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .section-body { display: none; padding: 28px 28px 32px; border-top: 3px solid; border-image: var(--spectre) 1; }
+  .section-body.open { display: block; }
+
+  .subsection { margin-bottom: 32px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--indigo-mid); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .subsection-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--amber); border-radius: 2px; flex-shrink: 0; }
+
+  /* Sous-en-tête de troisième niveau (une notion précise à l'intérieur d'une sous-section) */
+  .subhead { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-mid); margin: 22px 0 10px; display: flex; align-items: center; gap: 7px; scroll-margin-top: 12px; }
+  .subhead::before { content: ''; width: 3px; height: 14px; background: var(--amber-dim); border-radius: 2px; flex-shrink: 0; }
+  .subhead:first-child { margin-top: 0; }
+
+  p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul.content-list { padding-left: 20px; margin-bottom: 14px; }
+  ul.content-list li { font-size: 15px; line-height: 1.7; margin-bottom: 6px; }
+  .content a.xref { color: var(--indigo-mid); font-weight: 600; text-decoration: underline; text-decoration-color: var(--amber-dim); text-underline-offset: 2px; }
+  .content a.xref:hover { color: var(--indigo-dark); }
+
+  .def-box { background: linear-gradient(135deg, #eef2fa, #f2f6fb); border-left: 4px solid var(--indigo-light); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .def-box .def-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 6px; }
+  .def-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
+  .def-box p:last-child { margin: 0; }
+  .def-box strong { color: var(--indigo-dark); font-weight: 600; }
+
+  .note-box { margin: 20px 0; border: 1.5px solid var(--amber-dim); border-radius: 10px; overflow: hidden; background: #eaf8fa; }
+  .note-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: rgba(43,196,212,.22); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .note-bar:hover { background: rgba(43,196,212,.32); }
+  .note-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #0d5a66; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .note-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .note-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: #2a7d8a; }
+  .note-bar .chevron-n { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #0d5a66; margin-top: 1px; }
+  .note-bar[aria-expanded="true"] .chevron-n { transform: rotate(180deg); }
+  .note-body { display: none; padding: 14px 18px 18px; font-size: 14px; color: #0d3a42; line-height: 1.65; }
+  .note-bar[aria-expanded="true"] + .note-body { display: block; }
+
+  /* === RAPPEL (encadré non repliable) === */
+  .rappel-box { background: #eef1f4; border-left: 4px solid var(--muted); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 4px 0 20px; }
+  .rappel-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .rappel-box p { font-size: 14px; color: var(--text); margin: 0; }
+
+  /* === TABLE DES MATIÈRES (index des notions, repliable, en tête de page) === */
+  .page-toc { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .page-toc-bar { width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 56px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+  .page-toc-bar:hover { background: #f4f6f8; }
+  .page-toc-icon { width: 17px; height: 17px; color: var(--amber-dim); flex-shrink: 0; }
+  .page-toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--indigo-dark); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 2px; }
+  .page-toc-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .page-toc-bar .chevron-toc { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--muted); }
+  .page-toc-bar[aria-expanded="true"] .chevron-toc { transform: rotate(180deg); }
+  .page-toc-body { display: none; padding: 4px 56px 22px; }
+  .page-toc-bar[aria-expanded="true"] + .page-toc-body { display: block; }
+  .page-toc-group { margin-top: 14px; }
+  .page-toc-group-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+  .page-toc-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .page-toc-pills a { font-size: 13px; font-weight: 600; color: var(--indigo-mid); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 5px 13px 5px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: background .15s, color .15s, border-color .15s; }
+  .page-toc-pills a .toc-num { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--indigo-light); border-radius: 8px; padding: 1px 6px; }
+  .page-toc-pills a:hover { background: var(--indigo-dark); color: #fff; border-color: var(--indigo-dark); }
+  .page-toc-pills a:hover .toc-num { background: var(--amber); color: var(--indigo-dark); }
+
+  .formula { font-family: var(--mono); background: var(--indigo-dark); color: var(--amber); padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 16px 0; letter-spacing: .04em; text-align: center; overflow-x: auto; }
+  .formula-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: -10px; margin-bottom: 14px; }
+
+  .kw { background: rgba(43,196,212,.22); color: var(--indigo-dark); padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+  mark.sh { background: #cdeef1; color: var(--text); border-radius: 2px; padding: 0 2px; }
+  mark.sh.current { background: var(--flame); color: #fff; box-shadow: 0 0 0 2px var(--flame); }
+
+  .fig-block { margin: 18px 0; background: #f8fafb; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-align: center; }
+  .fig-block .fig-inner { padding: 20px; }
+  .fig-block figcaption { font-size: 12.5px; color: var(--muted); padding: 10px 16px 14px; border-top: 1px solid var(--border); line-height: 1.5; font-style: italic; text-align: left; }
+
+  .fig-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 18px 0; }
+  .fig-row .fig-block { flex: 1 1 220px; margin: 0; }
+
+  #to-top { position: fixed; bottom: 28px; right: 28px; width: 42px; height: 42px; background: var(--indigo-dark); color: var(--amber); border: 2px solid var(--amber); border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 200; }
+  #to-top.visible { opacity: 1; pointer-events: auto; }
+
+  #menu-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 150; background: var(--indigo-dark); border: 2px solid var(--amber); color: var(--amber); width: 40px; height: 40px; border-radius: 8px; font-size: 20px; cursor: pointer; align-items: center; justify-content: center; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: flex; }
+    .hero { padding: 60px 24px 36px; }
+    .search-bar-wrap { padding: 12px 24px; }
+    .content { padding: 28px 20px 60px; }
+    .page-toc-bar { padding: 12px 24px; }
+    .page-toc-body { padding: 4px 24px 20px; }
+    .fig-row { flex-direction: column; }
+  }
+
+  /* ── QUIZ ── */
+  .quiz-block { margin-top: 36px; margin-bottom: 32px; border-top: 2px solid var(--amber); border-bottom: 2px solid var(--amber); padding-top: 24px; padding-bottom: 24px; }
+  .quiz-block-bar { width: 100%; display: flex; align-items: flex-start; gap: 10px; background: var(--indigo-dark); border: none; border-radius: 10px; cursor: pointer; padding: 14px 18px; margin-bottom: 6px; text-align: left; transition: background .15s; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .quiz-block-bar:hover { background: var(--indigo-mid); }
+  .quiz-block-bar .quiz-block-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--amber); margin-top: 2px; }
+  .quiz-block-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .quiz-block-subtitle { font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); margin-left: 2px; }
+  .quiz-block-bar .chevron-q { margin-left: auto; width: 20px; height: 20px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 2px; }
+  .quiz-block-bar[aria-expanded="true"] .chevron-q { transform: rotate(180deg); }
+  .quiz-body { display: none; }
+  .quiz-block-bar[aria-expanded="true"] + .quiz-body { display: block; padding-top: 14px; }
+  .quiz-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 13px; color: var(--muted); }
+  .quiz-score-bar progress { flex: 1; height: 6px; border-radius: 3px; appearance: none; -webkit-appearance: none; }
+  .quiz-score-bar progress::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  .quiz-score-bar progress::-webkit-progress-value { background: var(--indigo-mid); border-radius: 3px; transition: width .4s; }
+
+  .quiz-q { background: var(--bg); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; border: 1.5px solid var(--border); transition: border-color .2s; }
+  .quiz-q.answered { border-color: transparent; }
+  .quiz-q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 14px; }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background .15s, border-color .15s; text-align: left; width: 100%; line-height: 1.45; }
+  .quiz-option:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-option .opt-letter { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-option.correct { background: #e8f8ef; border-color: #2da262; color: #1a6640; }
+  .quiz-option.correct .opt-letter { color: #2da262; }
+  .quiz-option.wrong { background: #fdecea; border-color: #d94f3d; color: #8b2218; }
+  .quiz-option.wrong .opt-letter { color: #d94f3d; }
+  .quiz-option.reveal { background: #e8f8ef; border-color: #2da262; color: #1a6640; opacity: .7; }
+  .quiz-option.reveal .opt-letter { color: #2da262; }
+
+  .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13.5px; line-height: 1.55; display: none; }
+  .quiz-feedback.show { display: flex; gap: 8px; align-items: flex-start; }
+  .quiz-feedback .icon-sm { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+  .quiz-feedback.ok { background: #e8f8ef; color: #1a6640; }
+  .quiz-feedback.ko { background: #fdecea; color: #8b2218; }
+  .quiz-result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; text-align: center; display: none; align-items: center; justify-content: center; gap: 8px; }
+  .quiz-result-msg.show { display: flex; }
+  .quiz-result-msg .icon-sm { width: 18px; height: 18px; flex-shrink: 0; }
+  .quiz-result-msg.great { background: #e8f8ef; color: #1a6640; }
+  .quiz-result-msg.good { background: #fdf6e3; color: #7a5c00; }
+  .quiz-result-msg.poor { background: #fdecea; color: #8b2218; }
+
+  .quiz-reset { margin-top: 20px; padding: 9px 20px; border-radius: 8px; border: 1.5px solid var(--indigo-mid); background: #fff; color: var(--indigo-dark); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; display: none; }
+  .quiz-reset:hover { background: #eef2fa; }
+
+  .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<button id="menu-toggle" aria-label="Menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<aside id="sidebar" role="navigation" aria-label="Table des matières">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-to-index" title="Retour à la table des matières du cours">
+      <svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Tous les chapitres
+    </a>
+    <div class="label">Physique Sec. 5 · Module 1</div>
+    <div class="chap-num">2</div>
+    <div class="chap-title">Les miroirs</div>
+  </div>
+  <div class="toc-label">Table des matières</div>
+  <nav>
+    <ul>
+      <li><a href="#intro" class="toc-link"><span class="num">—</span> Avant de commencer</a></li>
+      <li><a href="#section-1" class="toc-link"><span class="num">Section 1</span> La réflexion sur les miroirs sphériques</a></li>
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <button onclick="document.getElementById('attrib-pop').classList.toggle('visible')" title="À propos de ce document" style="display:flex;align-items:center;gap:6px;"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg> À propos de ce document</button>
+    <div class="attrib-popover" id="attrib-pop">
+      Matériel préparé par M. Raphaël Sylvestre Bouchard, à l'aide du manuel <em>Delta</em>, Secondaire 5 (TC Média Livres inc.).
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+
+  <div class="hero">
+    <div class="eyebrow">Physique · Secondaire 5 · Module 1 — Optique géométrique</div>
+    <h1>Les miroirs</h1>
+    <p>On se regarde tous les jours dans un miroir plan — celui de la salle de bain — sans plus y penser. Mais dès qu'un miroir devient courbe, son comportement change complètement : c'est ce genre de miroir qu'on retrouve dans un rétroviseur, un télescope ou une lampe de poche. Ce chapitre explique comment un miroir courbe réfléchit la lumière, et comment prédire précisément l'image qu'il produit.</p>
+  </div>
+
+  <div class="page-toc">
+    <button class="page-toc-bar" aria-expanded="false" onclick="toggleNote(this)">
+      <svg class="page-toc-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="page-toc-label">Table des matières<span class="page-toc-subtitle">Accès direct à chaque notion</span></span>
+      <svg class="chevron-toc" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="page-toc-body">
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 1 — La réflexion sur les miroirs sphériques</div>
+        <div class="page-toc-pills">
+          <a href="#types-miroirs-courbes"><span class="toc-num">—</span>Types de miroirs courbes</a>
+          <a href="#geometrie-foyer-concave"><span class="toc-num">1.1</span>Miroir concave : géométrie et foyer</a>
+          <a href="#points-principaux-grandeurs"><span class="toc-num">1.1</span>Points principaux et grandeurs</a>
+          <a href="#rayons-principaux-concave"><span class="toc-num">1.1</span>Les rayons principaux</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-bar-wrap">
+    <label for="search-input">🔍 Recherche rapide</label>
+    <input type="text" id="search-input" placeholder="Ex : miroir concave, foyer, centre de courbure, rayon principal…" oninput="doSearch(this.value)">
+    <span id="search-count"></span>
+  </div>
+
+  <div class="content">
+
+    <!-- INTRO -->
+    <div id="intro" class="intro-card">
+      <h2><svg aria-hidden="true" style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18L10 12L4 6"/><path d="M20 18L14 12L20 6"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Des miroirs plans aux miroirs courbes</h2>
+      <p>Les lois de la réflexion, vues au <a class="xref" href="chapitre1.html#section-3">chapitre précédent</a>, s'appliquent à toutes les surfaces réfléchissantes — planes ou courbes. Mais un miroir courbe ne se comporte pas comme un miroir plan : puisque son orientation change d'un point à l'autre de sa surface, il peut faire converger ou diverger les rayons qu'il réfléchit, et donc produire des images très différentes de l'objet réel (plus grandes, plus petites, inversées, etc.).</p>
+      <p>Ce chapitre étudie d'abord comment les miroirs sphériques — concaves et convexes — réfléchissent la lumière (section 1), puis comment on y forme et calcule les caractéristiques des images obtenues (section 2).</p>
+      <div class="wip-note">Ce chapitre est en cours de rédaction. Cette version couvre les miroirs concaves (section 1.1) à partir des pages du manuel reçues jusqu'ici; les miroirs convexes (1.2) et la formation des images (section 2) suivront.</div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-card" id="section-1">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 1</span>
+          <span class="section-title">La réflexion sur les miroirs sphériques</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div id="types-miroirs-courbes">
+          <p>En optique, on distingue plusieurs sortes de miroirs courbes selon la forme géométrique de leur surface :</p>
+
+          <ul class="content-list">
+            <li><strong>Le miroir parabolique</strong> — une surface engendrée par une parabole; utilisé notamment dans les phares, les télescopes et les antennes paraboliques.</li>
+            <li><strong>Le miroir cylindrique</strong> — une surface courbe dans une seule direction, plane dans l'autre.</li>
+            <li><strong>Le miroir elliptique</strong> — une surface engendrée par une ellipse.</li>
+            <li><strong>Le miroir hyperbolique</strong> — une surface engendrée par une hyperbole; souvent combiné à un miroir parabolique dans les télescopes.</li>
+            <li><strong>Le miroir sphérique</strong> — une surface engendrée par une sphère; c'est le type de miroir courbe le plus simple à analyser mathématiquement, et celui sur lequel porte tout ce chapitre.</li>
+          </ul>
+
+          <p>Un miroir sphérique correspond à une portion de sphère creuse, obtenue en tronquant la sphère selon un plan. Cette portion de sphère se nomme <strong>calotte sphérique</strong>.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 420 150" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Une sphère creuse tronquée selon un plan produit une calotte sphérique">
+                <circle cx="80" cy="75" r="55" fill="#eef2f7" stroke="var(--indigo-mid)" stroke-width="2"/>
+                <circle cx="80" cy="75" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="88" y="72" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Centre</text>
+                <line x1="80" y1="24" x2="80" y2="126" stroke="var(--flame)" stroke-width="2" stroke-dasharray="4 3"/>
+                <text x="60" y="18" font-family="Inter, sans-serif" font-size="10.5" fill="var(--flame)" text-anchor="middle">Plan de troncature</text>
+                <path d="M215,140 L165,10 L365,10 L315,140 Z" fill="none" stroke="none"/>
+                <text x="205" y="79" font-family="Inter, sans-serif" font-size="22" fill="var(--muted)" text-anchor="middle">→</text>
+                <path d="M300,26 A55,55 0 0 0 300,124 A18,55 0 0 0 300,26 Z" fill="#cdeef1" stroke="var(--amber-dim)" stroke-width="2"/>
+                <text x="300" y="146" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-dark)" text-anchor="middle">Calotte sphérique</text>
+              </svg>
+            </div>
+            <figcaption>Une calotte sphérique s'obtient en tronquant une sphère creuse selon un plan.</figcaption>
+          </div>
+
+          <p>Une calotte sphérique possède deux surfaces : une surface intérieure (creuse) et une surface extérieure (bombée). Ces deux surfaces constituent les deux faces possibles du miroir sphérique — mais une seule à la fois est réfléchissante.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 420 140" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Un miroir concave a sa surface creuse réfléchissante; un miroir convexe a sa surface bombée réfléchissante">
+                <path d="M95,25 A75,75 0 0 0 95,115" fill="none" stroke="var(--amber-dim)" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="95" cy="70" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="105" y="74" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Centre (C)</text>
+                <text x="95" y="132" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">MIROIR CONCAVE</text>
+                <text x="95" y="18" font-family="Inter, sans-serif" font-size="10.5" fill="var(--amber-dim)" text-anchor="middle">surface creuse réfléchissante</text>
+
+                <path d="M325,25 A75,75 0 0 1 325,115" fill="none" stroke="var(--muted)" stroke-width="5" stroke-linecap="round"/>
+                <path d="M325,25 A75,75 0 0 0 325,115" fill="none" stroke="var(--amber-dim)" stroke-width="5" stroke-linecap="round" stroke-dasharray="0" transform="translate(0,0)"/>
+                <circle cx="325" cy="70" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="335" y="74" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Centre (C)</text>
+                <text x="325" y="132" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">MIROIR CONVEXE</text>
+                <text x="325" y="18" font-family="Inter, sans-serif" font-size="10.5" fill="var(--amber-dim)" text-anchor="middle">surface bombée réfléchissante</text>
+              </svg>
+            </div>
+            <figcaption>Un miroir concave a sa surface creuse (intérieure) réfléchissante; un miroir convexe a sa surface bombée (extérieure) réfléchissante. Dans les deux cas, le centre (C) de la sphère d'origine reste un point de référence.</figcaption>
+          </div>
+        </div>
+
+        <div class="subsection" id="miroirs-concaves">
+          <div class="subsection-title">1.1 Les miroirs concaves</div>
+
+          <p>Les lois de la réflexion s'appliquent autant aux miroirs courbes qu'aux miroirs plans : il faut donc, ici aussi, utiliser la normale pour déterminer les rayons incident et réfléchi. Mais il y a une différence importante. Dans un miroir plan, toutes les normales sont parallèles entre elles. Ce n'est plus le cas pour un miroir sphérique, concave ou convexe : la normale change de direction à chaque point de la surface.</p>
+
+          <div class="subhead" id="geometrie-foyer-concave">Géométrie de la réflexion et foyer</div>
+
+          <p>Pour tracer la normale en un point précis d'un miroir sphérique, la procédure est la suivante :</p>
+          <ul class="content-list">
+            <li>Tracer la <strong>tangente</strong> au miroir en ce point.</li>
+            <li>Tracer la <strong>normale</strong>, une droite perpendiculaire à la tangente qui passe par ce même point.</li>
+          </ul>
+          <p>Une fois la normale définie, il devient possible de représenter les rayons incident et réfléchi en respectant les lois de la réflexion vues au chapitre précédent. Si la surface réfléchissante se trouve à l'intérieur de la sphère — c'est-à-dire s'il s'agit d'un miroir concave — le rayon incident, le rayon réfléchi et la normale sont tous situés à l'intérieur de la sphère.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 380 190" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Construction de la tangente et de la normale en un point d'un miroir concave, avec le rayon incident et le rayon réfléchi">
+                <path d="M245,40 Q280,95 245,150" fill="none" stroke="var(--amber-dim)" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="130" cy="95" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="130" y="112" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)" text-anchor="middle">C</text>
+
+                <line x1="256.5" y1="43.3" x2="265.5" y2="112.7" stroke="var(--flame)" stroke-width="2.2"/>
+                <text x="272" y="45" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)">Tangente</text>
+
+                <line x1="130" y1="95" x2="286" y2="75" stroke="var(--muted)" stroke-width="1.8" stroke-dasharray="4 3"/>
+                <text x="185" y="70" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">Normale</text>
+
+                <line x1="140" y1="55" x2="261" y2="78" stroke="var(--indigo-mid)" stroke-width="2.2"/>
+                <text x="145" y="45" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Rayon incident</text>
+
+                <line x1="261" y1="78" x2="135" y2="139" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <text x="130" y="158" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">Rayon réfléchi</text>
+
+                <circle cx="261" cy="78" r="3" fill="var(--indigo-dark)"/>
+                <text x="266" y="82" font-family="Inter, sans-serif" font-size="10.5" fill="var(--indigo-dark)">Point du miroir</text>
+              </svg>
+            </div>
+            <figcaption>La géométrie de la réflexion dans un miroir concave : on trace d'abord la tangente au point d'incidence, puis la normale (perpendiculaire à la tangente, passant par le centre C), et enfin les rayons incident et réfléchi de part et d'autre de cette normale.</figcaption>
+          </div>
+
+          <p>En répétant cette procédure pour l'ensemble des points d'un miroir concave, on remarque que si les rayons incidents sont parallèles à l'axe de symétrie du miroir — appelé <strong>axe principal</strong> et noté AP — les rayons réfléchis passent tous par un même point de cet axe, appelé le <strong>foyer (F)</strong> du miroir.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 380 190" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Des rayons parallèles à l'axe principal convergent vers le foyer après réflexion sur un miroir concave">
+                <path d="M245,40 Q280,95 245,150" fill="none" stroke="var(--amber-dim)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="15" y1="95" x2="280" y2="95" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="18" y="88" font-family="Inter, sans-serif" font-size="10.5" fill="var(--muted)">AP</text>
+
+                <circle cx="130" cy="95" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="130" y="112" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)" text-anchor="middle">C</text>
+                <circle cx="205" cy="95" r="2.5" fill="var(--flame)"/>
+                <text x="205" y="112" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)" text-anchor="middle">F</text>
+
+                <line x1="20" y1="50" x2="251" y2="50" stroke="var(--indigo-mid)" stroke-width="2"/>
+                <line x1="251" y1="50" x2="205" y2="95" stroke="var(--amber-dim)" stroke-width="2"/>
+                <line x1="205" y1="95" x2="159" y2="140" stroke="var(--amber-dim)" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+                <line x1="20" y1="70" x2="258" y2="70" stroke="var(--indigo-mid)" stroke-width="2"/>
+                <line x1="258" y1="70" x2="205" y2="95" stroke="var(--amber-dim)" stroke-width="2"/>
+                <line x1="205" y1="95" x2="152" y2="120" stroke="var(--amber-dim)" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+                <line x1="20" y1="120" x2="258" y2="120" stroke="var(--indigo-mid)" stroke-width="2"/>
+                <line x1="258" y1="120" x2="205" y2="95" stroke="var(--amber-dim)" stroke-width="2"/>
+                <line x1="205" y1="95" x2="152" y2="70" stroke="var(--amber-dim)" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+                <line x1="20" y1="140" x2="251" y2="140" stroke="var(--indigo-mid)" stroke-width="2"/>
+                <line x1="251" y1="140" x2="205" y2="95" stroke="var(--amber-dim)" stroke-width="2"/>
+                <line x1="205" y1="95" x2="159" y2="50" stroke="var(--amber-dim)" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+                <text x="20" y="42" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Rayons incidents</text>
+                <text x="60" y="170" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">Rayons réfléchis, convergeant en F</text>
+              </svg>
+            </div>
+            <figcaption>Un miroir concave fait converger vers son foyer (F) tous les rayons incidents parallèles à son axe principal (AP). Cette convergence n'est parfaite que pour un miroir dont l'ouverture est petite par rapport à son rayon de courbure.</figcaption>
+          </div>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Miroir concave :</strong> un miroir dont la surface a la propriété de faire converger les rayons lumineux parallèles à son axe principal (AP) vers un point situé à l'intérieur de sa courbure, appelé foyer (F). C'est pour cette raison que les miroirs concaves sont dits « miroirs convergents ».</p>
+          </div>
+
+          <div class="subhead" id="points-principaux-grandeurs">Points principaux et grandeurs caractéristiques</div>
+
+          <p>Pour analyser le comportement des rayons lumineux réfléchis par un miroir sphérique, il faut connaître ses trois points principaux et ses deux grandeurs caractéristiques.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 380 190" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Les points principaux (C, F, S) et les grandeurs caractéristiques (R, f) d'un miroir concave">
+                <path d="M245,40 Q280,95 245,150" fill="none" stroke="var(--amber-dim)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="15" y1="95" x2="290" y2="95" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="18" y="88" font-family="Inter, sans-serif" font-size="10.5" fill="var(--muted)">AP</text>
+
+                <circle cx="130" cy="95" r="3" fill="var(--indigo-mid)"/>
+                <text x="130" y="70" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle" font-weight="600">C</text>
+                <circle cx="205" cy="95" r="3" fill="var(--flame)"/>
+                <text x="205" y="70" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle" font-weight="600">F</text>
+                <circle cx="280" cy="95" r="3" fill="var(--indigo-dark)"/>
+                <text x="280" y="70" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)" text-anchor="middle" font-weight="600">S</text>
+
+                <line x1="130" y1="120" x2="280" y2="120" stroke="var(--indigo-mid)" stroke-width="1.4"/>
+                <line x1="130" y1="114" x2="130" y2="126" stroke="var(--indigo-mid)" stroke-width="1.4"/>
+                <line x1="280" y1="114" x2="280" y2="126" stroke="var(--indigo-mid)" stroke-width="1.4"/>
+                <text x="205" y="138" font-family="var(--mono)" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">R</text>
+
+                <line x1="205" y1="150" x2="280" y2="150" stroke="var(--flame)" stroke-width="1.4"/>
+                <line x1="205" y1="144" x2="205" y2="156" stroke="var(--flame)" stroke-width="1.4"/>
+                <line x1="280" y1="144" x2="280" y2="156" stroke="var(--flame)" stroke-width="1.4"/>
+                <text x="242" y="168" font-family="var(--mono)" font-size="12" fill="var(--flame)" text-anchor="middle">f</text>
+              </svg>
+            </div>
+            <figcaption>Les trois points principaux (centre de courbure C, foyer F, sommet S) et les deux grandeurs caractéristiques (rayon de courbure R, distance focale f) d'un miroir sphérique concave.</figcaption>
+          </div>
+
+          <div class="def-box">
+            <div class="def-label">Points principaux</div>
+            <p><strong>Centre de courbure (C) :</strong> le point qui correspond au centre de la sphère dont provient le miroir sphérique.</p>
+            <p><strong>Foyer (F) :</strong> le point de convergence des rayons lumineux parallèles à l'axe principal, une fois réfléchis sur un miroir concave.</p>
+            <p><strong>Sommet (S) :</strong> le centre géométrique de la surface du miroir sphérique.</p>
+          </div>
+
+          <div class="def-box">
+            <div class="def-label">Grandeurs caractéristiques</div>
+            <p><strong>Distance focale (f) :</strong> la distance qui sépare le sommet (S) du miroir de son foyer (F).</p>
+            <p><strong>Rayon de courbure (R) :</strong> la distance entre le sommet (S) et le centre de courbure (C).</p>
+          </div>
+
+          <p>La distance entre tout point du miroir et le centre de courbure (C) est égale au rayon de courbure (R) — la normale en un point du miroir sphérique relie d'ailleurs toujours ce point au centre de courbure. Le foyer (F) se trouve exactement à mi-chemin entre le sommet (S) et le centre de courbure (C), ce qui donne la relation mathématique suivante entre le rayon de courbure et la distance focale d'un miroir sphérique :</p>
+
+          <div class="formula">f = R / 2</div>
+          <p class="formula-caption">La distance focale (f) d'un miroir sphérique vaut toujours la moitié de son rayon de courbure (R).</p>
+
+          <div class="subhead" id="rayons-principaux-concave">Les rayons principaux d'un miroir concave</div>
+
+          <p>La connaissance des points principaux d'un miroir sphérique permet de définir trois rayons principaux d'un miroir concave — trois rayons dont on connaît toujours le comportement à l'avance, et qui suffisent, comme on le verra à la section 2, à construire l'image formée par un miroir concave.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 380 170" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Premier rayon principal : un rayon incident parallèle à l'axe principal est réfléchi en passant par le foyer">
+                <path d="M245,30 Q280,85 245,140" fill="none" stroke="var(--amber-dim)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="15" y1="85" x2="280" y2="85" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="18" y="78" font-family="Inter, sans-serif" font-size="10.5" fill="var(--muted)">AP</text>
+                <circle cx="130" cy="85" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="130" y="102" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)" text-anchor="middle">C</text>
+                <circle cx="205" cy="85" r="2.5" fill="var(--flame)"/>
+                <text x="205" y="102" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)" text-anchor="middle">F</text>
+
+                <line x1="20" y1="55" x2="255" y2="55" stroke="var(--indigo-mid)" stroke-width="2.4"/>
+                <line x1="255" y1="55" x2="205" y2="85" stroke="var(--amber-dim)" stroke-width="2.4"/>
+                <line x1="205" y1="85" x2="150" y2="118" stroke="var(--amber-dim)" stroke-width="1.6" stroke-dasharray="3 2"/>
+
+                <text x="20" y="47" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Rayon incident, parallèle à AP</text>
+                <text x="205" y="140" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)" text-anchor="middle">Rayon réfléchi, passe par F</text>
+              </svg>
+            </div>
+            <figcaption>A. Le premier rayon principal : tout rayon incident parallèle à l'axe principal (AP) est réfléchi en passant par le foyer (F). Ce comportement correspond à la définition même du foyer d'un miroir concave.</figcaption>
+          </div>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 380 170" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Deuxième rayon principal : un rayon incident passant par le foyer est réfléchi parallèlement à l'axe principal">
+                <path d="M245,30 Q280,85 245,140" fill="none" stroke="var(--amber-dim)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="15" y1="85" x2="280" y2="85" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="18" y="78" font-family="Inter, sans-serif" font-size="10.5" fill="var(--muted)">AP</text>
+                <circle cx="130" cy="85" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="130" y="102" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)" text-anchor="middle">C</text>
+                <circle cx="205" cy="85" r="2.5" fill="var(--flame)"/>
+                <text x="205" y="102" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)" text-anchor="middle">F</text>
+
+                <line x1="45" y1="25" x2="255" y2="105" stroke="var(--indigo-mid)" stroke-width="2.4"/>
+                <line x1="255" y1="105" x2="20" y2="105" stroke="var(--amber-dim)" stroke-width="2.4"/>
+
+                <text x="45" y="18" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Rayon incident, passe par F</text>
+                <text x="20" y="120" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">Rayon réfléchi, parallèle à AP</text>
+              </svg>
+            </div>
+            <figcaption>B. Le deuxième rayon principal : tout rayon incident passant par le foyer (F) est réfléchi parallèlement à l'axe principal (AP). Ce comportement suit le principe de réciprocité appliqué au premier rayon principal.</figcaption>
+          </div>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 380 170" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Troisième rayon principal : un rayon incident passant par le centre de courbure est réfléchi sur lui-même">
+                <path d="M245,30 Q280,85 245,140" fill="none" stroke="var(--amber-dim)" stroke-width="4" stroke-linecap="round"/>
+                <line x1="15" y1="85" x2="280" y2="85" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="18" y="78" font-family="Inter, sans-serif" font-size="10.5" fill="var(--muted)">AP</text>
+                <circle cx="130" cy="85" r="2.5" fill="var(--indigo-mid)"/>
+                <text x="130" y="102" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)" text-anchor="middle">C</text>
+                <circle cx="205" cy="85" r="2.5" fill="var(--flame)"/>
+                <text x="205" y="102" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)" text-anchor="middle">F</text>
+
+                <line x1="66" y1="107.5" x2="258" y2="70" stroke="var(--indigo-mid)" stroke-width="2.4"/>
+                <path d="M235,74 l7,-9 l7,9" fill="none" stroke="var(--amber-dim)" stroke-width="2"/>
+
+                <text x="66" y="122" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">Rayon incident, passe par C</text>
+                <text x="150" y="55" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">Réfléchi sur lui-même</text>
+              </svg>
+            </div>
+            <figcaption>C. Le troisième rayon principal : tout rayon incident passant par le centre de courbure (C) est réfléchi sur lui-même. Le rayon de courbure en ce point est en effet aussi une normale — et selon la seconde loi de la réflexion, tout rayon qui atteint un miroir avec un angle d'incidence nul est réfléchi sur lui-même.</figcaption>
+          </div>
+
+        </div>
+
+        <div class="quiz-block" data-quiz="s1">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 1<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 6</span>
+            <progress class="quiz-progress" value="0" max="6"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Sur un miroir sphérique, toutes les normales sont parallèles entre elles, comme c'est le cas sur un miroir plan.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est justement ce qui distingue un miroir sphérique d'un miroir plan : la normale change de direction à chaque point de la surface, puisqu'elle relie toujours ce point au centre de courbure (C).</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : c'est vrai pour un miroir plan, mais pas pour un miroir sphérique, où chaque point de la surface a sa propre normale (dirigée vers le centre de courbure C).</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Dans un miroir concave, quelle surface de la calotte sphérique est réfléchissante?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> La surface bombée (extérieure)</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> La surface creuse (intérieure)</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Les deux surfaces également</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Aucune : seul le pourtour du miroir réfléchit</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Dans un miroir concave, c'est la surface creuse (intérieure) de la calotte sphérique qui est réfléchissante — l'inverse d'un miroir convexe, dont c'est la surface bombée qui réfléchit.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : c'est la surface creuse (intérieure) qui est réfléchissante dans un miroir concave.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Un rayon incident parallèle à l'axe principal (AP) d'un miroir concave est réfléchi…</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> parallèlement à l'axe principal, de l'autre côté</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> en passant par le centre de courbure (C)</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> en passant par le foyer (F)</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> perpendiculairement à l'axe principal</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact — c'est le premier rayon principal, et c'est exactement la définition du foyer d'un miroir concave.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : il passe par le foyer (F) — c'est le premier rayon principal.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Le foyer (F) d'un miroir sphérique se trouve exactement à mi-chemin entre le sommet (S) et le centre de courbure (C).</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. C'est la relation f = R / 2 : la distance focale vaut toujours la moitié du rayon de courbure.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : le foyer est toujours à mi-chemin entre S et C, d'où la relation f = R / 2.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Lequel des trois rayons principaux d'un miroir concave est réfléchi sur lui-même?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Celui parallèle à l'axe principal</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Celui qui passe par le foyer</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> Celui qui passe par le centre de courbure</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Aucun des trois n'est réfléchi sur lui-même</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact — c'est le troisième rayon principal, celui qui passe par le centre de courbure (C).</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : celui qui passe par le centre de courbure (C) — le troisième rayon principal.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="5">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Pourquoi un rayon incident passant par le centre de courbure (C) est-il réfléchi sur lui-même?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Parce qu'il ne touche jamais le miroir</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Parce que le rayon de courbure, en ce point, est aussi une normale — et l'angle d'incidence y est nul</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Parce que le centre de courbure se trouve toujours sur la surface du miroir</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Parce que ce rayon voyage plus vite que les autres</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Puisque le rayon de courbure en tout point du miroir est aussi une normale, un rayon passant par C atteint la surface avec un angle d'incidence nul — et selon la seconde loi de la réflexion, il est alors réfléchi sur lui-même.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : le rayon de courbure en ce point est aussi une normale, ce qui donne un angle d'incidence nul — le rayon est donc réfléchi sur lui-même.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<button id="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+<script>
+// ── Toggle sections ────────────────────────────────────────
+function toggleSection(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  btn.parentElement.querySelector('.section-body').classList.toggle('open', !expanded);
+}
+
+// ── Toggle bulles de note ────────────────────────────────────
+function toggleNote(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Toggle blocs d'exercices ────────────────────────────────
+function toggleQuiz(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Sidebar active link ────────────────────────────────────
+const tocLinks = document.querySelectorAll('.toc-link');
+const sectionIds = ['intro','section-1'];
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 130) current = id;
+  });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+  document.getElementById('to-top').classList.toggle('visible', window.scrollY > 300);
+}, {passive: true});
+
+// ── Smooth scroll from TOC ─────────────────────────────────
+tocLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const toggle = target.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ── Table des matières (page-toc) : ouvre la bonne section, puis défile ────
+document.querySelectorAll('.page-toc-pills a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const card = target.closest('.section-card');
+    const toggle = card ? card.querySelector('.section-toggle') : null;
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// Ouvre automatiquement la bonne section si on arrive via une ancre (#section-1, etc.)
+if (location.hash) {
+  const target = document.getElementById(location.hash.slice(1));
+  if (target) {
+    const card = target.closest('.section-card') || target;
+    const toggle = card.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
+}
+
+// ── Search ─────────────────────────────────────────────────
+const contentEl = document.querySelector('.content');
+const originalHTML = contentEl.innerHTML;
+
+let lastQuery = '';
+let matchIndex = -1;
+
+function doSearch(query) {
+  contentEl.innerHTML = originalHTML;
+  const countEl = document.getElementById('search-count');
+  matchIndex = -1;
+  lastQuery = query;
+
+  if (!query.trim()) { countEl.textContent = ''; return 0; }
+
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  let count = 0;
+  nodes.forEach(node => {
+    if (!re.test(node.textContent)) return;
+    re.lastIndex = 0;
+    const span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(re, m => { count++; return `<mark class="sh">${m}</mark>`; });
+    node.parentNode.replaceChild(span, node);
+  });
+
+  countEl.textContent = count ? `${count} résultat${count>1?'s':''}` : 'Aucun résultat';
+
+  document.querySelectorAll('.section-card').forEach(card => {
+    if (card.querySelector('mark.sh')) {
+      const t = card.querySelector('.section-toggle');
+      if (t && t.getAttribute('aria-expanded') === 'false') toggleSection(t);
+    }
+  });
+
+  return count;
+}
+
+function goToMatch(step) {
+  const marks = contentEl.querySelectorAll('mark.sh');
+  if (!marks.length) return;
+  if (matchIndex >= 0 && marks[matchIndex]) marks[matchIndex].classList.remove('current');
+  matchIndex = (matchIndex + step + marks.length) % marks.length;
+  const m = marks[matchIndex];
+  m.classList.add('current');
+  m.scrollIntoView({behavior:'smooth', block:'center'});
+  const countEl = document.getElementById('search-count');
+  countEl.textContent = `${matchIndex+1} / ${marks.length} résultats`;
+}
+
+function runSearchAndJump(query, step) {
+  if (query !== lastQuery || !contentEl.querySelector('mark.sh')) {
+    const count = doSearch(query);
+    if (count > 0) goToMatch(0);
+  } else {
+    goToMatch(step);
+  }
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAndJump(e.target.value, e.shiftKey ? -1 : 1);
+  }
+});
+
+// Ctrl+F → recherche interne
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    const inp = document.getElementById('search-input');
+    inp.focus(); inp.select();
+  }
+});
+
+// Fermer la bulle d'attribution au clic à l'extérieur
+document.addEventListener('click', e => {
+  const pop = document.getElementById('attrib-pop');
+  if (pop && !pop.contains(e.target) && !e.target.closest('.sidebar-footer button')) {
+    pop.classList.remove('visible');
+  }
+});
+
+// === MOTEUR DE QUIZ INTERACTIFS ===
+function initQuizBlock(block) {
+  const questions = Array.from(block.querySelectorAll('.quiz-q'));
+  const total = questions.length;
+  const scoreLabel = block.querySelector('.quiz-score-label');
+  const progressBar = block.querySelector('.quiz-progress');
+  const resultMsg = block.querySelector('.quiz-result-msg');
+  const resetBtn = block.querySelector('.quiz-reset');
+  progressBar.max = total;
+
+  function updateScore() {
+    const answered = questions.filter(q => q.classList.contains('answered'));
+    const correct = answered.filter(q => q.dataset.gotCorrect === 'true').length;
+    scoreLabel.textContent = `${correct} / ${total}`;
+    progressBar.value = answered.length;
+
+    if (answered.length === total) {
+      resultMsg.classList.add('show');
+      const pct = Math.round((correct / total) * 100);
+      resultMsg.classList.remove('great', 'good', 'poor');
+      const starIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 16.9 6.5 19.7l1.4-6.1-4.7-4.2 6.2-.6Z"/></svg>';
+      const upIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13l3-3 2 2 3-3.5"/></svg>';
+      const bookIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg>';
+      let icon, msg, variant;
+      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — la section est maîtrisée.`; variant = 'great'; }
+      else if (pct >= 70) { icon = upIcon; msg = `Bon travail : ${correct} / ${total}. Relis les explications des questions manquées.`; variant = 'good'; }
+      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de revoir cette section avant de continuer.`; variant = 'poor'; }
+      resultMsg.classList.add(variant);
+      resultMsg.innerHTML = `${icon}<span>${msg}</span>`;
+      resetBtn.style.display = 'inline-block';
+    } else {
+      resultMsg.classList.remove('show', 'great', 'good', 'poor');
+      resetBtn.style.display = 'none';
+    }
+  }
+
+  questions.forEach(q => {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    const fbOk = q.querySelector('.quiz-feedback.ok');
+    const fbKo = q.querySelector('.quiz-feedback.ko');
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (q.classList.contains('answered')) return;
+
+        const isCorrect = opt.dataset.correct === 'true';
+        q.classList.add('answered');
+        q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
+
+        options.forEach(o => {
+          o.disabled = true;
+          if (o.dataset.correct === 'true') {
+            o.classList.add(o === opt ? 'correct' : 'reveal');
+          } else if (o === opt) {
+            o.classList.add('wrong');
+          }
+        });
+
+        (isCorrect ? fbOk : fbKo).classList.add('show');
+        updateScore();
+      });
+    });
+  });
+
+  block.addEventListener('reset-quiz', () => {
+    questions.forEach(q => {
+      q.classList.remove('answered');
+      delete q.dataset.gotCorrect;
+      q.querySelectorAll('.quiz-option').forEach(o => {
+        o.disabled = false;
+        o.classList.remove('correct', 'wrong', 'reveal');
+      });
+      q.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+    });
+    updateScore();
+  });
+
+  updateScore();
+}
+
+document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+</script>
+</body>
+</html>
