@@ -112,6 +112,25 @@
   .note-body { display: none; padding: 14px 18px 18px; font-size: 14px; color: #0d3a42; line-height: 1.65; }
   .note-bar[aria-expanded="true"] + .note-body { display: block; }
 
+  /* === TABLE DES MATIÈRES (index des notions, repliable, en tête de page) === */
+  .page-toc { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .page-toc-bar { width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 56px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+  .page-toc-bar:hover { background: #f4f6f8; }
+  .page-toc-icon { width: 17px; height: 17px; color: var(--amber-dim); flex-shrink: 0; }
+  .page-toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--indigo-dark); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 2px; }
+  .page-toc-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .page-toc-bar .chevron-toc { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--muted); }
+  .page-toc-bar[aria-expanded="true"] .chevron-toc { transform: rotate(180deg); }
+  .page-toc-body { display: none; padding: 4px 56px 22px; }
+  .page-toc-bar[aria-expanded="true"] + .page-toc-body { display: block; }
+  .page-toc-group { margin-top: 14px; }
+  .page-toc-group-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+  .page-toc-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .page-toc-pills a { font-size: 13px; font-weight: 600; color: var(--indigo-mid); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 5px 13px 5px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: background .15s, color .15s, border-color .15s; }
+  .page-toc-pills a .toc-num { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--indigo-light); border-radius: 8px; padding: 1px 6px; }
+  .page-toc-pills a:hover { background: var(--indigo-dark); color: #fff; border-color: var(--indigo-dark); }
+  .page-toc-pills a:hover .toc-num { background: var(--amber); color: var(--indigo-dark); }
+
   .formula { font-family: var(--mono); background: var(--indigo-dark); color: var(--amber); padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 16px 0; letter-spacing: .04em; text-align: center; overflow-x: auto; }
   .formula-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: -10px; margin-bottom: 14px; }
 
@@ -162,6 +181,8 @@
     .hero { padding: 60px 24px 36px; }
     .search-bar-wrap { padding: 12px 24px; }
     .content { padding: 28px 20px 60px; }
+    .page-toc-bar { padding: 12px 24px; }
+    .page-toc-body { padding: 4px 24px 20px; }
     .compare-block { flex-direction: column; }
   }
 
@@ -270,6 +291,52 @@
     <p>Avant d'attaquer l'optique géométrique, un court détour par les fondations : ce qu'est une onde, ce qui distingue le son ou une vague de la lumière, comment le spectre électromagnétique se découpe, pourquoi ce cours peut se permettre de traiter la lumière comme si elle voyageait toujours en ligne droite, et comment exprimer un résultat numérique avec la bonne précision.</p>
   </div>
 
+  <div class="page-toc">
+    <button class="page-toc-bar" aria-expanded="false" onclick="toggleNote(this)">
+      <svg class="page-toc-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="page-toc-label">Table des matières<span class="page-toc-subtitle">Accès direct à chaque notion</span></span>
+      <svg class="chevron-toc" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="page-toc-body">
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 1 — Les caractéristiques des ondes</div>
+        <div class="page-toc-pills">
+          <a href="#onde-mecanique-electromagnetique"><span class="toc-num">1.1</span>Onde mécanique et électromagnétique</a>
+          <a href="#periodicite-longueur-onde"><span class="toc-num">1.2</span>Périodicité, longueur d'onde, période</a>
+          <a href="#amplitude-frequence"><span class="toc-num">1.3</span>Amplitude et fréquence</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 2 — Le spectre de la lumière</div>
+        <div class="page-toc-pills">
+          <a href="#vitesse-lumiere-equation-ondes"><span class="toc-num">2.1</span>Vitesse de la lumière</a>
+          <a href="#spectre-electromagnetique"><span class="toc-num">2.2</span>Spectre électromagnétique</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 3 — La propagation de la lumière</div>
+        <div class="page-toc-pills">
+          <a href="#front-onde-train-rayon"><span class="toc-num">3.1</span>Front d'onde, train d'ondes, rayon</a>
+          <a href="#types-faisceaux-lumineux"><span class="toc-num">3.2</span>Types de faisceaux lumineux</a>
+          <a href="#propagation-rectiligne"><span class="toc-num">3.3</span>Propagation rectiligne</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 4 — Les chiffres significatifs</div>
+        <div class="page-toc-pills">
+          <a href="#compter-chiffres-significatifs"><span class="toc-num">4.1</span>Compter les chiffres significatifs</a>
+          <a href="#chiffres-significatifs-calcul"><span class="toc-num">4.2</span>Chiffres significatifs dans un calcul</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Synthèse</div>
+        <div class="page-toc-pills">
+          <a href="#notions-recap"><span class="toc-num">✓</span>Exercices de synthèse</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="search-bar-wrap">
     <label for="search-input">🔍 Recherche rapide</label>
     <input type="text" id="search-input" placeholder="Ex : longueur d'onde, fréquence, spectre, rayon lumineux…" oninput="doSearch(this.value)">
@@ -303,8 +370,8 @@
           <p><strong>Onde :</strong> une perturbation dont la propagation permet un transport d'énergie, sans déplacement net de matière.</p>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">Onde mécanique et onde électromagnétique</div>
+        <div class="subsection" id="onde-mecanique-electromagnetique">
+          <div class="subsection-title">1.1 Onde mécanique et onde électromagnétique</div>
           <p>Toutes les ondes ne se propagent pas de la même façon. Certaines ont besoin d'un support matériel pour exister; d'autres s'en passent très bien.</p>
 
           <div class="compare-block">
@@ -329,8 +396,8 @@
           </div>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">La périodicité, la longueur d'onde et la période</div>
+        <div class="subsection" id="periodicite-longueur-onde">
+          <div class="subsection-title">1.2 La périodicité, la longueur d'onde et la période</div>
           <p>Lorsqu'une perturbation se répète de façon rigoureusement régulière, on dit que l'onde est périodique. Une corde secouée de haut en bas à intervalles réguliers, par exemple, adopte un profil qui se répète indéfiniment — un motif que trois grandeurs suffisent à décrire complètement.</p>
 
           <div class="fig-block">
@@ -365,8 +432,8 @@
           <p class="formula-caption">où v est la vitesse de propagation de l'onde (m/s), λ sa longueur d'onde (m) et T sa période (s).</p>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">L'amplitude et la fréquence</div>
+        <div class="subsection" id="amplitude-frequence">
+          <div class="subsection-title">1.3 L'amplitude et la fréquence</div>
           <div class="def-box">
             <div class="def-label">Définition</div>
             <p><strong>Amplitude (A) :</strong> déplacement maximal d'un point de l'onde par rapport à sa position d'équilibre (voir le graphique ci-dessus). L'unité dépend de la nature de l'onde.</p>
@@ -491,8 +558,8 @@
           <p><strong>Onde lumineuse :</strong> une perturbation électromagnétique dont la propagation permet un transport d'énergie lumineuse.</p>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">La vitesse de la lumière et l'équation universelle des ondes</div>
+        <div class="subsection" id="vitesse-lumiere-equation-ondes">
+          <div class="subsection-title">2.1 La vitesse de la lumière et l'équation universelle des ondes</div>
           <p>Dans le vide, la lumière se propage à une vitesse constante, notée c. Sa valeur exacte est de 299 792 458 m/s, mais on utilise presque toujours l'approximation suivante.</p>
           <div class="formula">c = 3,00 × 10⁸ m/s</div>
 
@@ -501,8 +568,8 @@
           <p class="formula-caption">L'équation universelle des ondes — pour la lumière se propageant dans le vide, v devient c, et l'équation s'écrit λ = c / f.</p>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">Le spectre électromagnétique</div>
+        <div class="subsection" id="spectre-electromagnetique">
+          <div class="subsection-title">2.2 Le spectre électromagnétique</div>
           <p>En faisant varier la fréquence (ou la longueur d'onde) d'une onde électromagnétique, on balaie tout un spectre — des ondes radio, de basse fréquence et grande longueur d'onde, jusqu'aux rayons gamma, à l'autre extrémité. Entre les deux se trouvent, dans l'ordre, les micro-ondes, le rayonnement infrarouge, la lumière visible, le rayonnement ultraviolet et les rayons X.</p>
 
           <div class="fig-block">
@@ -673,8 +740,8 @@
 
         <p>Les ondes mécaniques qui parcourent la surface d'un lac ont un avantage sur la lumière : on les voit directement, et on peut facilement les reproduire en laboratoire. Même si elles ne sont pas électromagnétiques, leur comportement présente d'étroites analogies avec celui de la lumière — c'est cette analogie qu'on exploite dans cette section. En laboratoire, on utilise par exemple un vibreur qui frappe la surface de l'eau à une fréquence fixe; comme cette oscillation est sinusoïdale, les ondes créées à la surface le sont aussi.</p>
 
-        <div class="subsection">
-          <div class="subsection-title">Front d'onde, train d'ondes et rayon d'onde</div>
+        <div class="subsection" id="front-onde-train-rayon">
+          <div class="subsection-title">3.1 Front d'onde, train d'ondes et rayon d'onde</div>
           <p>Lorsque le vibreur frappe la surface de l'eau, la perturbation se propage sur toute la surface. Après un certain temps, elle atteint un point qui fait partie d'un cercle centré sur la source — ce cercle est appelé « front d'onde ». Comme le vibreur continue de frapper l'eau, de nouveaux fronts d'onde sont créés en continu.</p>
 
           <div class="def-box">
@@ -707,8 +774,8 @@
           </div>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">Les types de faisceaux lumineux</div>
+        <div class="subsection" id="types-faisceaux-lumineux">
+          <div class="subsection-title">3.2 Les types de faisceaux lumineux</div>
           <p>Un ensemble de rayons lumineux forme un <strong>faisceau</strong>. Selon la position de la source par rapport aux rayons considérés, ce faisceau peut prendre trois formes.</p>
 
           <div class="cause-grid">
@@ -730,8 +797,8 @@
           </div>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">La propagation rectiligne de la lumière</div>
+        <div class="subsection" id="propagation-rectiligne">
+          <div class="subsection-title">3.3 La propagation rectiligne de la lumière</div>
           <p>De nombreuses observations quotidiennes confirment que la lumière voyage en ligne droite — la formation d'une ombre en est l'exemple le plus convaincant. Si la lumière suivait des courbes plutôt que des lignes droites, aucune ombre ne pourrait se former.</p>
 
           <div class="compare-block">
@@ -874,8 +941,8 @@
           <p><strong>Chiffres significatifs (CS) :</strong> l'ensemble des chiffres d'une valeur numérique connus avec certitude, plus un dernier chiffre estimé. Plus une valeur compte de chiffres significatifs, plus elle est précise.</p>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">Compter les chiffres significatifs</div>
+        <div class="subsection" id="compter-chiffres-significatifs">
+          <div class="subsection-title">4.1 Compter les chiffres significatifs</div>
           <p>Quelques règles simples permettent de déterminer, pour n'importe quelle valeur, combien de ses chiffres sont significatifs.</p>
 
           <ul class="content-list">
@@ -897,8 +964,8 @@
           </div>
         </div>
 
-        <div class="subsection">
-          <div class="subsection-title">Les chiffres significatifs dans un calcul</div>
+        <div class="subsection" id="chiffres-significatifs-calcul">
+          <div class="subsection-title">4.2 Les chiffres significatifs dans un calcul</div>
           <p>Un résultat de calcul ne peut jamais être plus précis que la moins précise des valeurs utilisées pour l'obtenir. Deux règles s'appliquent, selon l'opération effectuée.</p>
 
           <div class="def-box">
@@ -1163,11 +1230,26 @@ tocLinks.forEach(link => {
   });
 });
 
+// ── Table des matières (page-toc) : ouvre la bonne section, puis défile ────
+document.querySelectorAll('.page-toc-pills a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const card = target.closest('.section-card');
+    const toggle = card ? card.querySelector('.section-toggle') : null;
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
 // Ouvre automatiquement la bonne section si on arrive via une ancre (#section-1, etc.)
 if (location.hash) {
   const target = document.getElementById(location.hash.slice(1));
   if (target) {
-    const toggle = target.querySelector('.section-toggle');
+    const card = target.closest('.section-card') || target;
+    const toggle = card.querySelector('.section-toggle');
     if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
     setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 60);
   }
