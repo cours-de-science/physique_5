@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physique — Secondaire 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo-dark: #241b45;
+    --indigo-mid:  #3d2d72;
+    --indigo-light:#7d63b8;
+    --amber:       #e8a93b;
+    --amber-dim:   #b8842a;
+    --flame:       #d5472d;
+    --bg:          #f6f3ee;
+    --surface:     #ffffff;
+    --text:        #221c33;
+    --muted:       #6f6480;
+    --border:      #ddd6e6;
+    --mono:        'JetBrains Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-mid) 55%, var(--indigo-light) 100%); padding: 72px 56px 56px; color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: '5'; position: absolute; right: 40px; top: -30px; font-family: 'Barlow Condensed', sans-serif; font-size: 320px; font-weight: 800; color: rgba(255,255,255,.06); line-height: 1; pointer-events: none; }
+  .hero .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(38px, 5.5vw, 60px); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 18px; }
+  .hero p { max-width: 620px; font-size: 15px; line-height: 1.75; color: rgba(255,255,255,.85); margin-bottom: 26px; }
+
+  .progress-wrap { max-width: 420px; }
+  .progress-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .progress-label span:last-child { color: var(--amber); font-family: var(--mono); }
+  .progress-bar { height: 8px; background: rgba(255,255,255,.18); border-radius: 5px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--amber); border-radius: 5px; width: 0%; }
+
+  /* Content */
+  .content { padding: 48px 56px 90px; max-width: 980px; margin: 0 auto; }
+
+  .module-block { margin-bottom: 44px; }
+  .module-block:last-child { margin-bottom: 0; }
+  .module-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+  .module-header .m-icon { font-size: 20px; }
+  .module-header h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--indigo-dark); }
+  .module-header .m-count { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: auto; }
+
+  .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+
+  .chap-card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.05); transition: transform .15s, box-shadow .15s, border-color .15s; }
+
+  a.chap-card { text-decoration: none; color: inherit; }
+  a.chap-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(36,27,69,.16); border-color: var(--indigo-light); }
+
+  .chap-card.soon { opacity: .55; cursor: default; }
+  .chap-card.soon:hover { transform: none; box-shadow: 0 1px 4px rgba(0,0,0,.05); border-color: var(--border); }
+
+  .chap-top { display: flex; align-items: center; gap: 10px; }
+  .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 3px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; }
+  .chap-card.soon .chap-num { background: var(--muted); color: #fff; }
+  .status-badge { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-left: auto; }
+  .status-badge.dispo { background: rgba(232,169,59,.28); color: var(--indigo-dark); }
+  .status-badge.wip { background: rgba(213,71,45,.16); color: var(--flame); }
+  .status-badge.soon-badge { background: rgba(111,100,128,.15); color: var(--muted); }
+
+  .chap-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--indigo-dark); line-height: 1.3; text-transform: uppercase; letter-spacing: .01em; }
+  .chap-card.soon .chap-title { color: var(--muted); }
+  .chap-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+  .chap-arrow { position: absolute; right: 16px; bottom: 14px; color: var(--indigo-light); font-size: 16px; opacity: 0; transition: opacity .15s; }
+  a.chap-card:hover .chap-arrow { opacity: 1; }
+
+  .module-note { font-size: 13px; color: var(--muted); line-height: 1.6; font-style: italic; }
+
+  footer { text-align: center; padding: 30px 20px 50px; font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 768px) {
+    .hero { padding: 56px 24px 40px; }
+    .content { padding: 32px 20px 70px; }
+    .module-header .m-count { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">Physique · Secondaire 5 · Québec</div>
+  <h1>Notes de cours<br>Physique Sec. 5</h1>
+  <p>Notes de cours basées sur le manuel <em>Delta</em>. Un bloc de révision pour retrouver les acquis du secondaire 4, puis deux grands modules : l'optique géométrique — de la réflexion jusqu'aux lentilles — et la mécanique.</p>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progression</span><span>0 / 4 chapitres</span></div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- RÉVISION -->
+  <div class="module-block">
+    <div class="module-header">
+      <span class="m-icon">📚</span>
+      <h2>Révision — Notions de base</h2>
+      <span class="m-count">Avant le module 1</span>
+    </div>
+    <div class="chapter-grid">
+
+      <div class="chap-card soon">
+        <div class="chap-top">
+          <span class="chap-num">R.1</span>
+          <span class="status-badge soon-badge">À venir</span>
+        </div>
+        <div class="chap-title">Les caractéristiques des ondes</div>
+        <div class="chap-desc">Période, fréquence, longueur d'onde et amplitude — les grandeurs de base pour décrire une onde.</div>
+      </div>
+
+      <div class="chap-card soon">
+        <div class="chap-top">
+          <span class="chap-num">R.2</span>
+          <span class="status-badge soon-badge">À venir</span>
+        </div>
+        <div class="chap-title">Le spectre de la lumière</div>
+        <div class="chap-desc">Le spectre électromagnétique et la place de la lumière visible.</div>
+      </div>
+
+      <div class="chap-card soon">
+        <div class="chap-top">
+          <span class="chap-num">R.3</span>
+          <span class="status-badge soon-badge">À venir</span>
+        </div>
+        <div class="chap-title">La propagation de la lumière</div>
+        <div class="chap-desc">La propagation rectiligne de la lumière et sa vitesse.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODULE 1 -->
+  <div class="module-block">
+    <div class="module-header">
+      <span class="m-icon">🔎</span>
+      <h2>Module 1 — L'optique géométrique</h2>
+      <span class="m-count">Chapitres 1–4</span>
+    </div>
+    <div class="chapter-grid">
+
+      <div class="chap-card soon">
+        <div class="chap-top">
+          <span class="chap-num">1</span>
+          <span class="status-badge soon-badge">À venir</span>
+        </div>
+        <div class="chap-title">La réflexion de la lumière</div>
+        <div class="chap-desc">Types de réflexion, géométrie des rayons et lois de la réflexion.</div>
+      </div>
+
+      <div class="chap-card soon">
+        <div class="chap-top">
+          <span class="chap-num">2</span>
+          <span class="status-badge soon-badge">À venir</span>
+        </div>
+        <div class="chap-title">Les miroirs</div>
+        <div class="chap-desc">Miroirs sphériques concaves et convexes, formation des images, formalisme mathématique.</div>
+      </div>
+
+      <div class="chap-card soon">
+        <div class="chap-top">
+          <span class="chap-num">3</span>
+          <span class="status-badge soon-badge">À venir</span>
+        </div>
+        <div class="chap-title">La réfraction de la lumière</div>
+        <div class="chap-desc">Le phénomène de réfraction, ses lois et la réflexion totale interne.</div>
+      </div>
+
+      <div class="chap-card soon">
+        <div class="chap-top">
+          <span class="chap-num">4</span>
+          <span class="status-badge soon-badge">À venir</span>
+        </div>
+        <div class="chap-title">Les lentilles</div>
+        <div class="chap-desc">Types de lentilles, vergence, formation des images et formalisme mathématique.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODULE 2 -->
+  <div class="module-block">
+    <div class="module-header">
+      <span class="m-icon">⚙️</span>
+      <h2>Module 2 — Mécanique</h2>
+      <span class="m-count">Chapitres à venir</span>
+    </div>
+    <p class="module-note">Cette section sera ajoutée une fois la table des matières de la mécanique déterminée.</p>
+  </div>
+
+</div>
+
+<footer>M. Raphaël Sylvestre Bouchard · Notes de cours Physique Sec. 5 · basé sur le manuel Delta</footer>
+
+</body>
+</html>
