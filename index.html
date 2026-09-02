@@ -7,17 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --indigo-dark: #241b45;
-    --indigo-mid:  #3d2d72;
-    --indigo-light:#7d63b8;
-    --amber:       #e8a93b;
-    --amber-dim:   #b8842a;
-    --flame:       #d5472d;
-    --bg:          #f6f3ee;
+    /* Palette "banc d'optique" — bleu nuit + cyan laser, identique à celle
+       établie dans notions_de_base.html et chapitre1.html, distincte de la
+       palette indigo/ambre du cours de chimie. */
+    --indigo-dark: #0d1b2e;
+    --indigo-mid:  #163a5c;
+    --indigo-light:#4f90b8;
+    --amber:       #2bc4d4;
+    --amber-dim:   #1f8fa0;
+    --flame:       #dd4a3a;
+    --bg:          #eef2f5;
     --surface:     #ffffff;
-    --text:        #221c33;
-    --muted:       #6f6480;
-    --border:      #ddd6e6;
+    --text:        #16212c;
+    --muted:       #5c6b78;
+    --border:      #d7e0e6;
     --mono:        'JetBrains Mono', monospace;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,7 +54,7 @@
   .chap-card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.05); transition: transform .15s, box-shadow .15s, border-color .15s; }
 
   a.chap-card { text-decoration: none; color: inherit; }
-  a.chap-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(36,27,69,.16); border-color: var(--indigo-light); }
+  a.chap-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(13,27,46,.16); border-color: var(--indigo-light); }
 
   .chap-card.soon { opacity: .55; cursor: default; }
   .chap-card.soon:hover { transform: none; box-shadow: 0 1px 4px rgba(0,0,0,.05); border-color: var(--border); }
@@ -60,7 +63,7 @@
   .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 3px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; }
   .chap-card.soon .chap-num { background: var(--muted); color: #fff; }
   .status-badge { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-left: auto; }
-  .status-badge.dispo { background: rgba(232,169,59,.28); color: var(--indigo-dark); }
+  .status-badge.dispo { background: rgba(43,196,212,.28); color: var(--indigo-dark); }
   .status-badge.wip { background: rgba(213,71,45,.16); color: var(--flame); }
   .status-badge.soon-badge { background: rgba(111,100,128,.15); color: var(--muted); }
 
@@ -90,8 +93,8 @@
   <p>Notes de cours basées sur le manuel <em>Delta</em>. Un bloc de révision pour retrouver les acquis du secondaire 4, puis deux grands modules : l'optique géométrique — de la réflexion jusqu'aux lentilles — et la mécanique.</p>
 
   <div class="progress-wrap">
-    <div class="progress-label"><span>Progression</span><span>0 / 4 chapitres</span></div>
-    <div class="progress-bar"><div class="progress-fill"></div></div>
+    <div class="progress-label"><span>Progression</span><span>1 / 4 chapitres</span></div>
+    <div class="progress-bar"><div class="progress-fill" style="width:25%;"></div></div>
   </div>
 </div>
 
@@ -106,32 +109,15 @@
     </div>
     <div class="chapter-grid">
 
-      <div class="chap-card soon">
+      <a href="notions_de_base.html" class="chap-card">
         <div class="chap-top">
-          <span class="chap-num">R.1</span>
-          <span class="status-badge soon-badge">À venir</span>
+          <span class="chap-num">R</span>
+          <span class="status-badge dispo">Disponible</span>
         </div>
-        <div class="chap-title">Les caractéristiques des ondes</div>
-        <div class="chap-desc">Période, fréquence, longueur d'onde et amplitude — les grandeurs de base pour décrire une onde.</div>
-      </div>
-
-      <div class="chap-card soon">
-        <div class="chap-top">
-          <span class="chap-num">R.2</span>
-          <span class="status-badge soon-badge">À venir</span>
-        </div>
-        <div class="chap-title">Le spectre de la lumière</div>
-        <div class="chap-desc">Le spectre électromagnétique et la place de la lumière visible.</div>
-      </div>
-
-      <div class="chap-card soon">
-        <div class="chap-top">
-          <span class="chap-num">R.3</span>
-          <span class="status-badge soon-badge">À venir</span>
-        </div>
-        <div class="chap-title">La propagation de la lumière</div>
-        <div class="chap-desc">La propagation rectiligne de la lumière et sa vitesse.</div>
-      </div>
+        <div class="chap-title">Notions de base</div>
+        <div class="chap-desc">Les caractéristiques des ondes, le spectre de la lumière, la propagation rectiligne de la lumière et les chiffres significatifs.</div>
+        <span class="chap-arrow">→</span>
+      </a>
 
     </div>
   </div>
@@ -145,14 +131,15 @@
     </div>
     <div class="chapter-grid">
 
-      <div class="chap-card soon">
+      <a href="chapitre1.html" class="chap-card">
         <div class="chap-top">
           <span class="chap-num">1</span>
-          <span class="status-badge soon-badge">À venir</span>
+          <span class="status-badge dispo">Disponible</span>
         </div>
         <div class="chap-title">La réflexion de la lumière</div>
         <div class="chap-desc">Types de réflexion, géométrie des rayons et lois de la réflexion.</div>
-      </div>
+        <span class="chap-arrow">→</span>
+      </a>
 
       <div class="chap-card soon">
         <div class="chap-top">
