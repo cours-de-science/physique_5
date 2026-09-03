@@ -42,12 +42,27 @@
   #sidebar nav ul li a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; border-left: 3px solid transparent; transition: background .15s, color .15s, border-color .15s; line-height: 1.35; }
   #sidebar nav ul li a:hover, #sidebar nav ul li a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--amber); }
   #sidebar nav ul li a .num { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-weight: 600; }
-  .sidebar-footer { margin-top: auto; padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
+  .sidebar-footer { padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
   .sidebar-footer button { background: none; border: none; cursor: pointer; font-size: 11px; color: rgba(255,255,255,.3); padding: 0; text-align: left; width: 100%; transition: color .15s; }
   .sidebar-footer button:hover { color: rgba(255,255,255,.6); }
   .attrib-popover { display: none; position: absolute; bottom: 60px; left: 14px; width: 230px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.18); padding: 14px 16px; font-size: 12px; color: var(--text); line-height: 1.6; z-index: 200; }
   .attrib-popover::after { content: ''; position: absolute; bottom: -7px; left: 20px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 2px 2px 4px rgba(0,0,0,.08); }
   .attrib-popover.visible { display: block; }
+
+  /* ── Bloc « Les unités », dans l'espace libre de la sidebar ── */
+  .units-block { margin-top: auto; padding: 14px 18px 4px; flex-shrink: 0; }
+  .units-btn { width: 100%; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: 10px 12px; color: rgba(255,255,255,.88); font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 600; cursor: pointer; text-align: left; transition: background .15s; }
+  .units-btn:hover { background: rgba(255,255,255,.11); }
+  .units-btn .icon-sm { flex-shrink: 0; width: 16px; height: 16px; color: var(--amber); }
+  .units-btn .chevron-n { margin-left: auto; width: 15px; height: 15px; transition: transform .2s; flex-shrink: 0; color: rgba(255,255,255,.6); }
+  .units-btn[aria-expanded="true"] .chevron-n { transform: rotate(180deg); }
+  .units-panel { display: none; margin-top: 8px; background: rgba(0,0,0,.18); border-radius: 8px; padding: 2px 12px; max-height: 280px; overflow-y: auto; }
+  .units-btn[aria-expanded="true"] + .units-panel { display: block; }
+  .units-panel .unit-row { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .units-panel .unit-row:last-child { border-bottom: none; }
+  .units-panel .unit-sym { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--amber); }
+  .units-panel .unit-name { font-size: 11.5px; font-weight: 600; color: #fff; margin-left: 6px; }
+  .units-panel .unit-def { font-size: 10.5px; color: rgba(255,255,255,.55); line-height: 1.5; margin-top: 2px; }
 
   /* ── MAIN ── */
   #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
@@ -282,6 +297,22 @@
       <li><a href="#notions-recap" class="toc-link"><span class="num">Révision</span> Exercices de synthèse</a></li>
     </ul>
   </nav>
+  <div class="units-block">
+    <button class="units-btn" aria-expanded="false" onclick="toggleNote(this)">
+      <svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="1"/><line x1="6" y1="8" x2="6" y2="11"/><line x1="10" y1="8" x2="10" y2="11"/><line x1="14" y1="8" x2="14" y2="11"/><line x1="18" y1="8" x2="18" y2="11"/></svg>
+      Les unités du chapitre
+      <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="units-panel">
+      <div class="unit-row"><span class="unit-sym">λ</span><span class="unit-name">longueur d'onde</span><div class="unit-def">mètre (m) — souvent en nanomètre (nm) pour la lumière, 1 nm = 10⁻⁹ m</div></div>
+      <div class="unit-row"><span class="unit-sym">T</span><span class="unit-name">période</span><div class="unit-def">seconde (s) — temps pour effectuer un cycle complet</div></div>
+      <div class="unit-row"><span class="unit-sym">f</span><span class="unit-name">fréquence</span><div class="unit-def">hertz (Hz) — 1 Hz = 1 s⁻¹, cycles par seconde</div></div>
+      <div class="unit-row"><span class="unit-sym">A</span><span class="unit-name">amplitude</span><div class="unit-def">dépend du milieu — mètre (m) pour une corde</div></div>
+      <div class="unit-row"><span class="unit-sym">v</span><span class="unit-name">vitesse de propagation</span><div class="unit-def">mètre par seconde (m/s)</div></div>
+      <div class="unit-row"><span class="unit-sym">c</span><span class="unit-name">vitesse de la lumière (vide)</span><div class="unit-def">constante ≈ 3,00 × 10⁸ m/s</div></div>
+      <div class="unit-row"><span class="unit-sym">d</span><span class="unit-name">dimension d'un obstacle/ouverture</span><div class="unit-def">mètre (m) — comparée à λ, voir 3.3</div></div>
+    </div>
+  </div>
   <div class="sidebar-footer">
     <button onclick="document.getElementById('attrib-pop').classList.toggle('visible')" title="À propos de ce document" style="display:flex;align-items:center;gap:6px;"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg> À propos de ce document</button>
     <div class="attrib-popover" id="attrib-pop">
@@ -601,14 +632,12 @@
 
         <div class="fig-block">
           <div class="fig-inner">
-            <svg viewBox="0 0 400 190" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Schéma d'une onde électromagnétique montrant les champs électrique et magnétique perpendiculaires">
-              <line x1="15" y1="115" x2="385" y2="115" stroke="var(--muted)" stroke-width="1.5"/>
-              <polygon points="385,115 374,110 374,120" fill="var(--muted)"/>
-              <path d="M30,115 C56.7,71,83.3,71,110,115 C136.7,159,163.3,159,190,115 C216.7,71,243.3,71,270,115 C296.7,159,323.3,159,350,115" fill="none" stroke="var(--amber)" stroke-width="3"/>
-              <path d="M30,115 C56.7,95,83.3,95,110,115 C136.7,135,163.3,135,190,115 C216.7,95,243.3,95,270,115 C296.7,135,323.3,135,350,115" fill="none" stroke="var(--indigo-light)" stroke-width="2.5" stroke-dasharray="6 4"/>
-              <text x="82" y="59" font-family="'Barlow Condensed', sans-serif" font-size="17" font-weight="700" fill="var(--amber-dim)">E</text>
-              <text x="82" y="151" font-family="'Barlow Condensed', sans-serif" font-size="17" font-weight="700" fill="var(--indigo-light)">B</text>
-              <text x="345" y="130" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">propagation</text>
+            <svg viewBox="0 0 1579 672" style="width:100%;max-width:560px;height:auto;" role="img" aria-label="Onde électromagnétique en perspective montrant les champs électrique et magnétique oscillant perpendiculairement l'un à l'autre le long de l'axe de propagation">
+              <image href="images/onde-electromagnetique.jpg" x="0" y="0" width="1579" height="672" preserveAspectRatio="xMidYMid meet"/>
+              <polygon points="1570,123 1544,143 1538,120" fill="var(--indigo-dark)"/>
+              <text x="1110" y="48" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="46" font-weight="700" fill="var(--indigo-dark)">E</text>
+              <text x="1400" y="145" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="46" font-weight="700" fill="var(--amber-dim)">B</text>
+              <text x="1480" y="390" text-anchor="middle" font-family="Inter, sans-serif" font-size="34" fill="var(--muted)">propagation</text>
             </svg>
           </div>
           <figcaption>Les champs électrique (E) et magnétique (B) oscillent perpendiculairement l'un à l'autre, en phase, le long de la direction de propagation de l'onde.</figcaption>
