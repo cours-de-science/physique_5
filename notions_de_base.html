@@ -101,6 +101,12 @@
   .def-box p:last-child { margin: 0; }
   .def-box strong { color: var(--indigo-dark); font-weight: 600; }
 
+  .example-box { background: linear-gradient(135deg, #e9f9f6, #eefaf7); border-left: 4px solid var(--amber-dim); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .example-box .example-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--amber-dim); margin-bottom: 6px; }
+  .example-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
+  .example-box p:last-child { margin: 0; }
+  .example-box strong { color: var(--indigo-dark); font-weight: 600; }
+
   .note-box { margin: 20px 0; border: 1.5px solid var(--amber-dim); border-radius: 10px; overflow: hidden; background: #eaf8fa; }
   .note-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: rgba(43,196,212,.22); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
   .note-bar:hover { background: rgba(43,196,212,.32); }
@@ -398,11 +404,11 @@
 
         <div class="subsection" id="periodicite-longueur-onde">
           <div class="subsection-title">1.2 La périodicité, la longueur d'onde et la période</div>
-          <p>Lorsqu'une perturbation se répète de façon rigoureusement régulière, on dit que l'onde est périodique. Une corde secouée de haut en bas à intervalles réguliers, par exemple, adopte un profil qui se répète indéfiniment — un motif que trois grandeurs suffisent à décrire complètement.</p>
+          <p>Lorsqu'une perturbation se répète de façon rigoureusement régulière, on dit que l'onde est périodique. Si la corde de la figure précédente continue d'être secouée à vitesse constante, elle adopte un profil qui se répète indéfiniment — comme si on en prenait une photo à un instant précis.</p>
 
           <div class="fig-block">
             <div class="fig-inner">
-              <svg viewBox="0 0 400 190" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Schéma d'une onde périodique montrant l'amplitude et la longueur d'onde">
+              <svg viewBox="0 0 400 190" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Schéma d'une onde périodique montrant l'amplitude et la longueur d'onde, à un instant donné">
                 <line x1="15" y1="115" x2="385" y2="115" stroke="var(--muted)" stroke-width="1.5"/>
                 <polygon points="385,115 374,110 374,120" fill="var(--muted)"/>
                 <text x="386" y="130" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">x</text>
@@ -418,18 +424,73 @@
                 <text x="150" y="38" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="17" font-weight="700" fill="var(--text)">λ</text>
               </svg>
             </div>
-            <figcaption>Sur une onde périodique, l'amplitude (A) se mesure entre la position d'équilibre et une crête; la longueur d'onde (λ) sépare deux crêtes consécutives.</figcaption>
+            <figcaption>Une photo de la corde prise à un instant donné (variation <strong>spatiale</strong> — l'axe horizontal représente la distance x) : l'amplitude (A) se mesure entre la position d'équilibre et une crête; la longueur d'onde (λ) sépare deux crêtes consécutives.</figcaption>
           </div>
 
           <div class="def-box">
-            <div class="def-label">Définitions</div>
+            <div class="def-label">Définition</div>
             <p><strong>Longueur d'onde (λ) :</strong> distance séparant deux points consécutifs d'une onde ayant complété exactement un cycle — par exemple, deux crêtes voisines. Elle se mesure en mètres (m).</p>
+          </div>
+
+          <p>Cette photo suffit pour trouver λ, mais pas pour savoir à quelle vitesse l'onde oscille. Pour ça, il faut cette fois suivre <strong>un seul point</strong> de la corde au fil du temps, plutôt que photographier toute la corde d'un coup.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 400 190" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Schéma du déplacement d'un même point de la corde en fonction du temps, montrant l'amplitude et la période">
+                <line x1="15" y1="115" x2="385" y2="115" stroke="var(--muted)" stroke-width="1.5"/>
+                <polygon points="385,115 374,110 374,120" fill="var(--muted)"/>
+                <text x="386" y="130" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">t</text>
+                <path d="M30,115 C56.7,71,83.3,71,110,115 C136.7,159,163.3,159,190,115 C216.7,71,243.3,71,270,115 C296.7,159,323.3,159,350,115" fill="none" stroke="var(--indigo-mid)" stroke-width="3"/>
+                <line x1="70" y1="115" x2="70" y2="73" stroke="var(--amber-dim)" stroke-width="2" stroke-dasharray="3 3"/>
+                <polygon points="70,73 66,81 74,81" fill="var(--amber-dim)"/>
+                <text x="79" y="99" font-family="'Barlow Condensed', sans-serif" font-size="16" font-weight="700" fill="var(--amber-dim)">A</text>
+                <line x1="70" y1="42" x2="70" y2="113" stroke="#c7d0d6" stroke-width="1" stroke-dasharray="2 3"/>
+                <line x1="230" y1="42" x2="230" y2="113" stroke="#c7d0d6" stroke-width="1" stroke-dasharray="2 3"/>
+                <line x1="70" y1="48" x2="230" y2="48" stroke="var(--muted)" stroke-width="1.5"/>
+                <polygon points="70,48 79,44 79,52" fill="var(--muted)"/>
+                <polygon points="230,48 221,44 221,52" fill="var(--muted)"/>
+                <text x="150" y="38" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="17" font-weight="700" fill="var(--text)">T</text>
+                <line x1="30" y1="115" x2="30" y2="121" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="30" y="134" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--muted)">t₀</text>
+                <line x1="110" y1="115" x2="110" y2="121" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="110" y="134" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--muted)">t₁</text>
+                <line x1="190" y1="115" x2="190" y2="121" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="190" y="134" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--muted)">t₂</text>
+                <line x1="270" y1="115" x2="270" y2="121" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="270" y="134" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--muted)">t₃</text>
+                <line x1="350" y1="115" x2="350" y2="121" stroke="var(--muted)" stroke-width="1.5"/>
+                <text x="350" y="134" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--muted)">t₄</text>
+              </svg>
+            </div>
+            <figcaption>Le déplacement d'un même point de la corde, suivi dans le temps (variation <strong>temporelle</strong> — l'axe horizontal représente le temps t) : une période (T) sépare deux instants où ce point repasse exactement par le même état.</figcaption>
+          </div>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
             <p><strong>Période (T) :</strong> temps nécessaire à l'onde pour effectuer un cycle complet, soit pour parcourir une distance égale à sa longueur d'onde. Elle se mesure en secondes (s).</p>
+          </div>
+
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Qu'est-ce qui avance, au juste?</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body">
+              <p>Dire que « la période, c'est le temps de parcourir une distance λ » peut sembler contredire ce qu'on vient de voir : la corde ne déplace pas de matière! Mais ce n'est pas la matière qui parcourt cette distance — c'est la <strong>crête</strong>, c'est-à-dire l'endroit où la corde est, à cet instant précis, à son maximum. Exactement comme la bosse de la vague au stade fait le tour des gradins sans qu'aucun spectateur ne bouge de siège : chaque spectateur se lève un peu après son voisin, ce qui donne l'illusion d'un mouvement qui avance. La crête d'une onde, c'est pareil — ce n'est pas un bout de corde qui voyage, c'est simplement le point où le déplacement est maximal à un instant donné; et cet endroit se déplace parce que chaque point suivant atteint son maximum un peu plus tard que le précédent.</p>
+            </div>
           </div>
 
           <div class="formula">T = temps total ÷ nombre de cycles</div>
           <div class="formula">λ = v × T</div>
           <p class="formula-caption">où v est la vitesse de propagation de l'onde (m/s), λ sa longueur d'onde (m) et T sa période (s).</p>
+
+          <div class="example-box">
+            <div class="example-label">Exemple</div>
+            <p>Une corde effectue 10 cycles complets en 5 secondes. Quelle est sa période?</p>
+            <p>T = temps total ÷ nombre de cycles = 5 s ÷ 10 = <strong>0,5 s</strong> — chaque cycle dure donc une demi-seconde.</p>
+          </div>
+
+          <p>La longueur d'onde et la période reviendront très bientôt : à la section 2, c'est justement la longueur d'onde de la lumière qui détermine sa couleur — du rouge (grande λ) au violet (petite λ).</p>
         </div>
 
         <div class="subsection" id="amplitude-frequence">
@@ -742,13 +803,49 @@
 
         <div class="subsection" id="front-onde-train-rayon">
           <div class="subsection-title">3.1 Front d'onde, train d'ondes et rayon d'onde</div>
-          <p>Lorsque le vibreur frappe la surface de l'eau, la perturbation se propage sur toute la surface. Après un certain temps, elle atteint un point qui fait partie d'un cercle centré sur la source — ce cercle est appelé « front d'onde ». Comme le vibreur continue de frapper l'eau, de nouveaux fronts d'onde sont créés en continu.</p>
+          <p>Reprenons l'exemple du vibreur qui frappe la surface de l'eau. Lorsqu'il frappe l'eau une première fois au point S, la perturbation se propage sur toute la surface. Après un certain temps, elle atteint un point F — et l'ensemble des points atteints au même instant forme un cercle centré sur S.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 440 210" style="width:100%;max-width:440px;height:auto;" role="img" aria-label="Vue de côté d'un vibreur frappant la surface de l'eau, montrant le point source S, le point atteint F, la longueur d'onde entre deux fronts et le train d'ondes">
+                <rect x="58" y="15" width="24" height="16" rx="2" fill="var(--indigo-dark)"/>
+                <text x="70" y="11" text-anchor="middle" font-family="Inter, sans-serif" font-size="10.5" fill="var(--indigo-dark)">Vibreur</text>
+                <line x1="70" y1="31" x2="70" y2="148" stroke="var(--indigo-dark)" stroke-width="2.5"/>
+                <path d="M70,150 C96.7,106,123.3,106,150,150 C176.7,194,203.3,194,230,150 C256.7,106,283.3,106,310,150 C336.7,194,363.3,194,390,150" fill="none" stroke="var(--indigo-mid)" stroke-width="3"/>
+                <line x1="390" y1="150" x2="420" y2="150" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <polygon points="420,150 411,146 411,154" fill="var(--muted)"/>
+                <circle cx="70" cy="150" r="3.5" fill="var(--indigo-dark)"/>
+                <text x="70" y="169" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="14" font-weight="700" fill="var(--indigo-dark)">S</text>
+                <circle cx="390" cy="150" r="3.5" fill="var(--indigo-dark)"/>
+                <text x="390" y="169" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="14" font-weight="700" fill="var(--indigo-dark)">F</text>
+                <line x1="110" y1="74" x2="110" y2="148" stroke="#c7d0d6" stroke-width="1" stroke-dasharray="2 3"/>
+                <line x1="270" y1="74" x2="270" y2="148" stroke="#c7d0d6" stroke-width="1" stroke-dasharray="2 3"/>
+                <line x1="110" y1="80" x2="270" y2="80" stroke="var(--muted)" stroke-width="1.5"/>
+                <polygon points="110,80 119,76 119,84" fill="var(--muted)"/>
+                <polygon points="270,80 261,76 261,84" fill="var(--muted)"/>
+                <text x="190" y="70" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="16" font-weight="700" fill="var(--text)">λ</text>
+                <line x1="72" y1="45" x2="72" y2="51" stroke="var(--amber-dim)" stroke-width="1.5"/>
+                <line x1="390" y1="45" x2="390" y2="51" stroke="var(--amber-dim)" stroke-width="1.5"/>
+                <line x1="72" y1="45" x2="390" y2="45" stroke="var(--amber-dim)" stroke-width="1.5"/>
+                <text x="231" y="35" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--amber-dim)">Train d'ondes</text>
+              </svg>
+            </div>
+            <figcaption>Le vibreur frappe l'eau au point S; au bout d'un certain temps, la perturbation atteint le point F. Deux fronts d'onde consécutifs sont séparés d'une distance égale à λ; l'ensemble des ondes consécutives ainsi générées forme un train d'ondes.</figcaption>
+          </div>
 
           <div class="def-box">
-            <div class="def-label">Définitions</div>
+            <div class="def-label">Définition</div>
             <p><strong>Front d'onde :</strong> ligne imaginaire qui relie tous les points touchés par une onde au même instant.</p>
-            <p><strong>Train d'ondes :</strong> série d'ondes consécutives se propageant dans une même direction.</p>
           </div>
+
+          <p>À mesure que le vibreur continue d'osciller, de nouveaux fronts d'onde apparaissent sans arrêt, chacun séparé du précédent par une distance égale à λ.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Train d'ondes :</strong> série d'ondes consécutives, générées par une perturbation périodique, qui se propagent dans une même direction.</p>
+          </div>
+
+          <p>Vue de dessus plutôt que de côté, la propagation prend une autre forme : les fronts d'onde deviennent des cercles concentriques autour de la source. Il devient alors utile de représenter la direction de propagation par une flèche perpendiculaire à ces fronts.</p>
 
           <div class="fig-block">
             <div class="fig-inner">
@@ -770,6 +867,7 @@
           </div>
 
           <div class="def-box">
+            <div class="def-label">Définition</div>
             <p><strong>Rayon d'onde</strong> (ou <strong>rayon lumineux</strong>, dans le cas de la lumière) : flèche perpendiculaire aux fronts d'onde, indiquant la direction de propagation de l'onde.</p>
           </div>
         </div>
@@ -782,12 +880,12 @@
             <div class="cause-card">
               <svg class="cause-icon" aria-hidden="true" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 15L27 4M3 15L27 10M3 15L27 15M3 15L27 20M3 15L27 26"/></svg>
               <div class="cause-title">Divergent</div>
-              <p>Les rayons proviennent d'un même point et s'écartent les uns des autres.</p>
+              <p>Les rayons proviennent d'un même point et s'écartent les uns des autres — comme la lumière d'une lampe de poche ou d'une ampoule nue.</p>
             </div>
             <div class="cause-card">
               <svg class="cause-icon" aria-hidden="true" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M27 15L3 4M27 15L3 10M27 15L3 15M27 15L3 20M27 15L3 26"/></svg>
               <div class="cause-title">Convergent</div>
-              <p>Les rayons se dirigent tous vers un même point.</p>
+              <p>Les rayons se dirigent tous vers un même point — comme la lumière du Soleil concentrée par une loupe.</p>
             </div>
             <div class="cause-card">
               <svg class="cause-icon" aria-hidden="true" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4L27 4M3 10L27 10M3 15L27 15M3 20L27 20M3 26L27 26"/></svg>
