@@ -507,7 +507,7 @@
               <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="note-body">
-              <p>Dire que « la période, c'est le temps de parcourir une distance λ » peut sembler contredire ce qu'on vient de voir : la corde ne déplace pas de matière! Mais ce n'est pas la matière qui parcourt cette distance — c'est la <strong>crête</strong>, c'est-à-dire l'endroit où la corde est, à cet instant précis, à son maximum. Exactement comme la bosse de la vague au stade fait le tour des gradins sans qu'aucun spectateur ne bouge de siège : chaque spectateur se lève un peu après son voisin, ce qui donne l'illusion d'un mouvement qui avance. La crête d'une onde, c'est pareil — ce n'est pas un bout de corde qui voyage, c'est simplement le point où le déplacement est maximal à un instant donné; et cet endroit se déplace parce que chaque point suivant atteint son maximum un peu plus tard que le précédent.</p>
+              <p>Dire que « la période, c'est le temps de parcourir une distance λ » peut sembler contredire ce qu'on a établi plus haut avec la vague au stade : la corde ne déplace pas de matière! Mais ce n'est pas la matière qui parcourt cette distance — c'est la <strong>crête</strong>, l'endroit où la corde est, à un instant précis, à son maximum. Comme dans les gradins, où aucun spectateur ne bouge de siège, chaque point de la corde atteint simplement son maximum un peu plus tard que son voisin, ce qui donne l'impression que la crête « avance » le long de la corde.</p>
             </div>
           </div>
 
@@ -532,8 +532,21 @@
           </div>
           <p>La <strong>fréquence (f)</strong> correspond plutôt au nombre de cycles complets effectués par l'onde en une seconde. Comme elle est inversement proportionnelle au temps, son unité est l'inverse de la seconde (s⁻¹), qu'on appelle le hertz (Hz).</p>
           <div class="formula">f = nombre de cycles ÷ temps total</div>
+
+          <div class="example-box">
+            <div class="example-label">Exemple</div>
+            <p>Une corde secouée effectue 15 cycles complets en 3 secondes. Quelle est sa fréquence?</p>
+            <p>f = nombre de cycles ÷ temps total = 15 ÷ 3 s = <strong>5 Hz</strong> — la corde effectue donc 5 cycles chaque seconde.</p>
+          </div>
+
           <div class="formula">f = 1 / T&nbsp;&nbsp;&nbsp;&nbsp;ou&nbsp;&nbsp;&nbsp;&nbsp;T = 1 / f</div>
           <p class="formula-caption">1 Hz = 1 s⁻¹ — fréquence et période sont toujours inverses l'une de l'autre.</p>
+
+          <div class="example-box">
+            <div class="example-label">Exemple</div>
+            <p>Si on secoue cette même corde plus rapidement, sa période passe à 0,1 s. Quelle est alors sa nouvelle fréquence?</p>
+            <p>f = 1 / T = 1 ÷ 0,1 s = <strong>10 Hz</strong>.</p>
+          </div>
         </div>
 
         <div class="quiz-block" data-quiz="s1">
@@ -656,6 +669,12 @@
           <p>En combinant la relation λ = v × T, vue à la section précédente, avec T = 1/f, on obtient une équation qui relie directement la longueur d'onde et la fréquence d'une onde à sa vitesse de propagation. Comme elle s'applique aussi bien aux ondes mécaniques qu'aux ondes électromagnétiques, on la qualifie d'« équation universelle des ondes ».</p>
           <div class="formula">v = λ × f</div>
           <p class="formula-caption">L'équation universelle des ondes — pour la lumière se propageant dans le vide, v devient c, et l'équation s'écrit λ = c / f.</p>
+
+          <div class="example-box">
+            <div class="example-label">Exemple</div>
+            <p>Une station de radio FM émet à une fréquence de 1,00 × 10⁸ Hz. Quelle est la longueur d'onde de ce signal, dans le vide?</p>
+            <p>λ = c / f = (3,00 × 10⁸ m/s) ÷ (1,00 × 10⁸ Hz) = <strong>3,00 m</strong>.</p>
+          </div>
         </div>
 
         <div class="subsection" id="spectre-electromagnetique">
@@ -878,21 +897,29 @@
 
           <div class="fig-block">
             <div class="fig-inner">
-              <svg viewBox="0 0 400 260" style="width:100%;max-width:400px;height:auto;" role="img" aria-label="Fronts d'onde concentriques autour d'une source ponctuelle, avec un rayon d'onde perpendiculaire aux fronts">
-                <circle cx="180" cy="130" r="26" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
-                <circle cx="180" cy="130" r="52" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
-                <circle cx="180" cy="130" r="78" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
-                <circle cx="180" cy="130" r="108" fill="none" stroke="var(--indigo-mid)" stroke-width="1.8"/>
-                <circle cx="180" cy="130" r="4" fill="var(--indigo-dark)"/>
-                <text x="167" y="147" font-family="'Barlow Condensed', sans-serif" font-size="15" font-weight="700" fill="var(--indigo-dark)">S</text>
-                <line x1="180" y1="130" x2="277" y2="83" stroke="var(--amber-dim)" stroke-width="2.2"/>
-                <polygon points="277,83 266,83 273,73" fill="var(--amber-dim)"/>
-                <text x="245" y="70" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--amber-dim)">rayon d'onde</text>
-                <line x1="251" y1="200" x2="310" y2="220" stroke="var(--muted)" stroke-width="1"/>
-                <text x="313" y="224" font-family="Inter, sans-serif" font-size="12" fill="var(--text)">front d'onde</text>
+              <svg viewBox="0 0 420 260" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Vue de dessus d'une surface d'eau, montrant des fronts d'onde concentriques autour d'une source ponctuelle et un rayon d'onde perpendiculaire aux fronts">
+                <defs>
+                  <radialGradient id="waterWashTop" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="var(--indigo-light)" stop-opacity="0.22"/>
+                    <stop offset="55%" stop-color="var(--indigo-light)" stop-opacity="0.09"/>
+                    <stop offset="100%" stop-color="var(--indigo-light)" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="175" cy="130" r="95" fill="url(#waterWashTop)"/>
+                <circle cx="175" cy="130" r="20" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
+                <circle cx="175" cy="130" r="41" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
+                <circle cx="175" cy="130" r="61" fill="none" stroke="var(--indigo-light)" stroke-width="1.3"/>
+                <circle cx="175" cy="130" r="85" fill="none" stroke="var(--indigo-mid)" stroke-width="1.8"/>
+                <circle cx="175" cy="130" r="4" fill="var(--indigo-dark)"/>
+                <text x="158" y="150" font-family="'Barlow Condensed', sans-serif" font-size="15" font-weight="700" fill="var(--indigo-dark)">S</text>
+                <line x1="175" y1="130" x2="251" y2="93" stroke="var(--amber-dim)" stroke-width="2.2"/>
+                <polygon points="251,93 242,93 248,85" fill="var(--amber-dim)"/>
+                <text x="229" y="78" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--amber-dim)">rayon d'onde</text>
+                <line x1="231" y1="185" x2="277" y2="201" stroke="var(--muted)" stroke-width="1"/>
+                <text x="280" y="204" font-family="Inter, sans-serif" font-size="12" fill="var(--text)">front d'onde</text>
               </svg>
             </div>
-            <figcaption>Vue du dessus, les fronts d'onde forment des cercles concentriques autour de la source S — comme les ondulations autour du point d'impact d'une pierre dans l'eau. Le rayon d'onde indique la direction de propagation, toujours perpendiculaire aux fronts d'onde.</figcaption>
+            <figcaption>Vue du dessus (comme si le bac était observé depuis le plafond) : les fronts d'onde forment des cercles concentriques qui s'élargissent autour de la source S — exactement comme les ondulations qui s'étendent autour du point d'impact d'une pierre dans une flaque d'eau calme. Le rayon d'onde indique la direction de propagation, toujours perpendiculaire aux fronts d'onde.</figcaption>
           </div>
 
           <div class="def-box">
