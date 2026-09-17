@@ -98,6 +98,17 @@
   .content a.xref { color: var(--indigo-mid); font-weight: 600; text-decoration: underline; text-decoration-color: var(--amber-dim); text-underline-offset: 2px; }
   .content a.xref:hover { color: var(--indigo-dark); }
 
+  /* === TERME CONSULTABLE (étymologie au clic) === */
+  .term-wrap { position: relative; display: inline-block; }
+  .term { cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--amber-dim); text-decoration-thickness: 1.5px; text-underline-offset: 3px; transition: color .15s; }
+  .term:hover, .term[aria-expanded="true"] { color: var(--amber-dim); }
+  .term-pop { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 10px; width: 250px; max-width: min(250px, 80vw); background: var(--indigo-dark); border-radius: 10px; box-shadow: 0 6px 22px rgba(13,27,46,.35); padding: 12px 15px; z-index: 220; text-align: left; font-weight: 400; white-space: normal; }
+  .term-pop::before { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-bottom-color: var(--indigo-dark); }
+  .term[aria-expanded="true"] + .term-pop { display: block; }
+  .term-pop-word { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; display: block; }
+  .term-pop-ety { font-size: 12.5px; font-style: italic; color: rgba(255,255,255,.75); margin-bottom: 6px; display: block; line-height: 1.5; }
+  .term-pop-body { font-size: 13px; color: rgba(255,255,255,.92); line-height: 1.55; display: block; }
+
   .def-box { background: linear-gradient(135deg, #eef2fa, #f2f6fb); border-left: 4px solid var(--indigo-light); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
   .def-box .def-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 6px; }
   .def-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
@@ -355,7 +366,7 @@
 
         <div class="rappel-box">
           <div class="rappel-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Rappel — La réflexion de la lumière</div>
-          <p>Tu as vu en 3<sup>e</sup> secondaire que la lumière, qui voyage en ligne droite dans un milieu homogène, peut « rebondir » lorsqu'elle rencontre une surface réfléchissante — ce phénomène s'appelle la réflexion. Le rayon qui provient de la source et qui frappe la surface se nomme <strong>rayon incident</strong>; celui qui s'en éloigne ensuite se nomme <strong>rayon réfléchi</strong>. C'est d'ailleurs la lumière réfléchie par les objets environnants, et qui parvient à nos yeux, qui nous permet de les voir.</p>
+          <p>Tu as vu en 3<sup>e</sup> secondaire que la lumière, qui voyage en ligne droite dans un milieu homogène, peut « rebondir » lorsqu'elle rencontre une surface réfléchissante — ce phénomène s'appelle la réflexion. Le rayon qui provient de la source et qui frappe la surface se nomme <strong>rayon <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">incident</span><span class="term-pop" role="tooltip"><span class="term-pop-word">incident</span><span class="term-pop-ety">Du latin <em>incidere</em> (in- + <em>cadere</em>, « tomber ») — litt. « tomber sur »</span><span class="term-pop-body">Un rayon incident est celui qui « tombe sur » la surface, qui y arrive — comme un incident est un évènement qui « survient », qui « tombe » de façon imprévue.</span></span></span></strong>; celui qui s'en éloigne ensuite se nomme <strong>rayon <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">réfléchi</span><span class="term-pop" role="tooltip"><span class="term-pop-word">réfléchi</span><span class="term-pop-ety">Du latin <em>reflectere</em> (re- + <em>flectere</em>, « plier ») — litt. « plier en arrière »</span><span class="term-pop-body">Un rayon réfléchi est « replié », renvoyé en arrière par la surface. Le même verbe donne réfléchir : « tourner en arrière » sa pensée sur elle-même, d'où le sens de méditer.</span></span></span></strong>. C'est d'ailleurs la lumière réfléchie par les objets environnants, et qui parvient à nos yeux, qui nous permet de les voir.</p>
         </div>
 
         <p>La réflexion ne se produit que si un nouveau milieu se trouve sur le chemin de la lumière : tant qu'aucun obstacle n'est rencontré, la propagation demeure rectiligne. On peut donc définir la réflexion ainsi :</p>
@@ -373,7 +384,15 @@
 
           <div class="fig-block">
             <div class="fig-inner">
-              <svg viewBox="0 0 400 170" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Des rayons parallèles frappent une surface lisse et repartent parallèles : réflexion spéculaire">
+              <svg viewBox="0 0 400 170" style="width:100%;max-width:480px;height:auto;" role="img" aria-label="Quatre rayons parallèles distincts frappent une surface lisse en quatre points séparés et repartent parallèles : réflexion spéculaire">
+                <defs>
+                  <marker id="arrow-inc-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/>
+                  </marker>
+                  <marker id="arrow-ref-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/>
+                  </marker>
+                </defs>
                 <line x1="40" y1="125" x2="360" y2="125" stroke="var(--indigo-dark)" stroke-width="3"/>
                 <line x1="60" y1="125" x2="52" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
                 <line x1="100" y1="125" x2="92" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
@@ -383,19 +402,29 @@
                 <line x1="260" y1="125" x2="252" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
                 <line x1="300" y1="125" x2="292" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
                 <line x1="340" y1="125" x2="332" y2="138" stroke="#b9c3ca" stroke-width="1.4"/>
-                <line x1="65" y1="50" x2="100" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
-                <line x1="100" y1="125" x2="135" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
-                <line x1="135" y1="50" x2="170" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
-                <line x1="170" y1="125" x2="205" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
-                <line x1="205" y1="50" x2="240" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
-                <line x1="240" y1="125" x2="275" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
-                <line x1="275" y1="50" x2="310" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2"/>
-                <line x1="310" y1="125" x2="345" y2="50" stroke="var(--amber-dim)" stroke-width="2.2"/>
-                <text x="65" y="42" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">rayons incidents</text>
-                <text x="255" y="42" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">rayons réfléchis</text>
+                <line x1="54" y1="50" x2="82" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-inc-1)"/>
+                <line x1="82" y1="125" x2="110" y2="50" stroke="var(--amber-dim)" stroke-width="2.2" marker-end="url(#arrow-ref-1)"/>
+                <line x1="128" y1="50" x2="156" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-inc-1)"/>
+                <line x1="156" y1="125" x2="184" y2="50" stroke="var(--amber-dim)" stroke-width="2.2" marker-end="url(#arrow-ref-1)"/>
+                <line x1="202" y1="50" x2="230" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-inc-1)"/>
+                <line x1="230" y1="125" x2="258" y2="50" stroke="var(--amber-dim)" stroke-width="2.2" marker-end="url(#arrow-ref-1)"/>
+                <line x1="276" y1="50" x2="304" y2="125" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-inc-1)"/>
+                <line x1="304" y1="125" x2="332" y2="50" stroke="var(--amber-dim)" stroke-width="2.2" marker-end="url(#arrow-ref-1)"/>
+                <text x="46" y="42" font-family="Inter, sans-serif" font-size="11" fill="var(--indigo-mid)">rayons incidents</text>
+                <text x="238" y="42" font-family="Inter, sans-serif" font-size="11" fill="var(--amber-dim)">rayons réfléchis</text>
               </svg>
             </div>
-            <figcaption>La réflexion spéculaire : des rayons incidents parallèles (en bleu) restent parallèles une fois réfléchis (en cyan) — ce qui permet de former une image nette des objets environnants.</figcaption>
+            <figcaption>La réflexion spéculaire : quatre rayons incidents parallèles distincts (en bleu) frappent la surface en quatre points séparés, et chacun repart selon un rayon réfléchi parallèle aux autres (en cyan) — ce n'est pas un seul rayon qui rebondit plusieurs fois, mais bien quatre rayons indépendants qui, chacun, ne subit qu'une seule réflexion.</figcaption>
+          </div>
+
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Pourquoi un miroir réfléchit-il la lumière?</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body">
+              <p>Les lois de la réflexion (section 3) décrivent le comportement géométrique du rayon réfléchi, mais pas la cause physique de la réflexion elle-même. Un miroir est une fine couche de métal, dans laquelle des électrons libres peuvent se déplacer facilement. Le champ électrique oscillant de l'onde lumineuse incidente fait vibrer ces électrons, qui réémettent aussitôt une onde à la même fréquence : c'est cette réémission qui forme le rayon réfléchi. Ce mécanisme n'est pas propre à la lumière visible — c'est le même principe qui explique, par exemple, pourquoi une antenne parabolique agit comme un miroir à ondes radio.</p>
+            </div>
           </div>
         </div>
 
@@ -1005,6 +1034,25 @@ function toggleNote(btn) {
   const expanded = btn.getAttribute('aria-expanded') === 'true';
   btn.setAttribute('aria-expanded', String(!expanded));
 }
+
+// ── Termes consultables (étymologie au clic) ────────────────
+function toggleTerm(el) {
+  const expanded = el.getAttribute('aria-expanded') === 'true';
+  document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => {
+    if (t !== el) t.setAttribute('aria-expanded', 'false');
+  });
+  el.setAttribute('aria-expanded', String(!expanded));
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.term-wrap')) {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
 
 // ── Toggle blocs d'exercices ────────────────────────────────
 function toggleQuiz(btn) {
