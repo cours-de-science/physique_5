@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notions de base — Mécanique — Physique Sec. 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette "banc d'optique" — bleu nuit + cyan laser, identique à celle
+       établie dans les autres pages du cours de physique Sec. 5. */
+    --indigo-dark: #0d1b2e;
+    --indigo-mid:  #163a5c;
+    --indigo-light:#4f90b8;
+    --amber:       #2bc4d4;
+    --amber-dim:   #1f8fa0;
+    --flame:       #dd4a3a;
+    --bg:          #eef2f5;
+    --surface:     #ffffff;
+    --text:        #16212c;
+    --muted:       #5c6b78;
+    --border:      #d7e0e6;
+    --sidebar-w:   268px;
+    --mono:        'JetBrains Mono', monospace;
+    --spectre:        linear-gradient(90deg, #6a4fd0 0%, #3f7fd6 20%, #2fa9a0 40%, #d9c93f 60%, #e8863b 80%, #dd4a3a 100%);
+    --spectre-pastel: linear-gradient(100deg, #b9a8e8 0%, #9dc8ec 20%, #9de0c4 40%, #ecdd8f 60%, #f0c890 80%, #eba393 100%);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar { width: var(--sidebar-w); background: var(--indigo-dark); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; display: flex; flex-direction: column; z-index: 100; transition: transform .3s ease; }
+  .sidebar-header { background: var(--spectre-pastel); padding: 20px 18px 16px; flex-shrink: 0; }
+  .back-to-index { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--indigo-dark); text-decoration: none; opacity: .65; margin-bottom: 12px; transition: opacity .15s; }
+  .back-to-index:hover { opacity: 1; text-decoration: underline; }
+  .sidebar-header .label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-dark); }
+  .sidebar-header .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 800; line-height: 1; color: var(--indigo-dark); }
+  .sidebar-header .chap-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-dark); margin-top: 4px; }
+  .toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--indigo-light); padding: 20px 18px 8px; }
+  #sidebar nav ul { list-style: none; }
+  #sidebar nav ul li a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; border-left: 3px solid transparent; transition: background .15s, color .15s, border-color .15s; line-height: 1.35; }
+  #sidebar nav ul li a:hover, #sidebar nav ul li a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--amber); }
+  #sidebar nav ul li a .num { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+  .sidebar-footer { margin-top: auto; padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
+  .sidebar-footer button { background: none; border: none; cursor: pointer; font-size: 11px; color: rgba(255,255,255,.3); padding: 0; text-align: left; width: 100%; transition: color .15s; }
+  .sidebar-footer button:hover { color: rgba(255,255,255,.6); }
+  .attrib-popover { display: none; position: absolute; bottom: 60px; left: 14px; width: 230px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.18); padding: 14px 16px; font-size: 12px; color: var(--text); line-height: 1.6; z-index: 200; }
+  .attrib-popover::after { content: ''; position: absolute; bottom: -7px; left: 20px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 2px 2px 4px rgba(0,0,0,.08); }
+  .attrib-popover.visible { display: block; }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+  .hero { background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-mid) 60%, var(--indigo-light) 100%); padding: 60px 56px 48px; color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: 'SI'; position: absolute; right: 40px; top: -30px; font-family: 'Barlow Condensed', sans-serif; font-size: 220px; font-weight: 800; color: rgba(255,255,255,.07); line-height: 1; pointer-events: none; }
+  .hero .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px, 5vw, 56px); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 20px; }
+  .hero p { max-width: 600px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.82); }
+
+  .search-bar-wrap { background: var(--indigo-dark); padding: 14px 56px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid var(--amber); }
+  .search-bar-wrap label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.5); white-space: nowrap; letter-spacing: .06em; text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif; }
+  #search-input { flex: 1; max-width: 440px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 8px 14px; font-size: 14px; color: #fff; font-family: 'Inter', sans-serif; outline: none; transition: background .2s, border-color .2s; }
+  #search-input::placeholder { color: rgba(255,255,255,.4); }
+  #search-input:focus { background: rgba(255,255,255,.16); border-color: var(--amber); }
+  #search-count { font-size: 12px; color: var(--amber); font-family: var(--mono); min-width: 90px; }
+
+  .content { padding: 48px 56px 80px; max-width: 880px; }
+
+  .intro-card { background: linear-gradient(120deg, var(--indigo-dark), var(--indigo-mid)); border-radius: 10px; padding: 24px 28px; color: rgba(255,255,255,.88); margin-bottom: 24px; }
+  .intro-card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--amber); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; }
+  .intro-card h2 svg { margin-top: 3px; flex-shrink: 0; }
+  .intro-card p { color: rgba(255,255,255,.82); font-size: 14px; margin-bottom: 10px; line-height: 1.65; }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .intro-card a { color: var(--amber); }
+  .intro-card .wip-note { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.18); font-size: 12.5px; color: rgba(255,255,255,.65); font-style: italic; }
+
+  .section-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .section-toggle { width: 100%; background: none; border: none; cursor: pointer; padding: 0; text-align: left; display: block; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; background: var(--surface); transition: background .15s; border-bottom: 1px solid transparent; }
+  .section-toggle:hover .section-header, .section-toggle[aria-expanded="true"] .section-header { background: #f0f4f6; border-bottom-color: var(--border); }
+  .section-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 4px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; margin-top: 2px; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--indigo-dark); flex: 1; }
+  .chevron { width: 20px; height: 20px; color: var(--muted); transition: transform .25s ease; flex-shrink: 0; margin-top: 2px; }
+  .section-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .section-body { display: none; padding: 28px 28px 32px; border-top: 3px solid; border-image: var(--spectre) 1; }
+  .section-body.open { display: block; }
+
+  .subsection { margin-bottom: 32px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--indigo-mid); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .subsection-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--amber); border-radius: 2px; flex-shrink: 0; }
+
+  p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul.content-list { padding-left: 20px; margin-bottom: 14px; }
+  ul.content-list li { font-size: 15px; line-height: 1.7; margin-bottom: 6px; }
+  .content a.xref { color: var(--indigo-mid); font-weight: 600; text-decoration: underline; text-decoration-color: var(--amber-dim); text-underline-offset: 2px; }
+  .content a.xref:hover { color: var(--indigo-dark); }
+
+  /* === TERME CONSULTABLE (définition au clic) === */
+  .term-wrap { position: relative; display: inline-block; }
+  .term { cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--amber-dim); text-decoration-thickness: 1.5px; text-underline-offset: 3px; transition: color .15s; }
+  .term:hover, .term[aria-expanded="true"] { color: var(--amber-dim); }
+  .term-pop { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 10px; width: 260px; max-width: min(260px, 80vw); background: var(--indigo-dark); border-radius: 10px; box-shadow: 0 6px 22px rgba(13,27,46,.35); padding: 12px 15px; z-index: 220; text-align: left; font-weight: 400; white-space: normal; }
+  .term-pop::before { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-bottom-color: var(--indigo-dark); }
+  .term[aria-expanded="true"] + .term-pop { display: block; }
+  .term-pop-word { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; display: block; }
+  .term-pop-ety { font-size: 12.5px; font-style: italic; color: rgba(255,255,255,.75); margin-bottom: 6px; display: block; line-height: 1.5; }
+  .term-pop-body { font-size: 13px; color: rgba(255,255,255,.92); line-height: 1.55; display: block; }
+
+  .def-box { background: linear-gradient(135deg, #eef2fa, #f2f6fb); border-left: 4px solid var(--indigo-light); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .def-box .def-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 6px; }
+  .def-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
+  .def-box p:last-child { margin: 0; }
+  .def-box strong { color: var(--indigo-dark); font-weight: 600; }
+
+  /* === ZOOM (encadré historique repliable) === */
+  .zoom-box { margin: 20px 0; border: 1.5px solid var(--indigo-mid); border-radius: 10px; overflow: hidden; background: #eef2f7; }
+  .zoom-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: var(--indigo-dark); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .zoom-bar:hover { background: var(--indigo-mid); }
+  .zoom-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .zoom-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .zoom-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.65); }
+  .zoom-bar .chevron-z { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .zoom-bar[aria-expanded="true"] .chevron-z { transform: rotate(180deg); }
+  .zoom-body { display: none; padding: 16px 18px 18px; font-size: 14px; color: var(--text); line-height: 1.65; }
+  .zoom-bar[aria-expanded="true"] + .zoom-body { display: block; }
+
+  /* === TABLE DES MATIÈRES (index des notions, repliable, en tête de page) === */
+  .page-toc { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .page-toc-bar { width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 56px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+  .page-toc-bar:hover { background: #f4f6f8; }
+  .page-toc-icon { width: 17px; height: 17px; color: var(--amber-dim); flex-shrink: 0; }
+  .page-toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--indigo-dark); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 2px; }
+  .page-toc-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .page-toc-bar .chevron-toc { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--muted); }
+  .page-toc-bar[aria-expanded="true"] .chevron-toc { transform: rotate(180deg); }
+  .page-toc-body { display: none; padding: 4px 56px 22px; }
+  .page-toc-bar[aria-expanded="true"] + .page-toc-body { display: block; }
+  .page-toc-group { margin-top: 14px; }
+  .page-toc-group-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+  .page-toc-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .page-toc-pills a { font-size: 13px; font-weight: 600; color: var(--indigo-mid); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 5px 13px 5px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: background .15s, color .15s, border-color .15s; }
+  .page-toc-pills a .toc-num { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--indigo-light); border-radius: 8px; padding: 1px 6px; }
+  .page-toc-pills a:hover { background: var(--indigo-dark); color: #fff; border-color: var(--indigo-dark); }
+  .page-toc-pills a:hover .toc-num { background: var(--amber); color: var(--indigo-dark); }
+
+  .formula { font-family: var(--mono); background: var(--indigo-dark); color: var(--amber); padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 16px 0; letter-spacing: .04em; text-align: center; overflow-x: auto; }
+  .formula-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: -10px; margin-bottom: 14px; }
+
+  .kw { background: rgba(43,196,212,.22); color: var(--indigo-dark); padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+  /* === EXEMPLE RÉSOLU (données → étapes → réponse) === */
+  .example-box { margin: 20px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .example-header { background: var(--indigo-dark); color: var(--amber); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 13px; padding: 10px 18px; }
+  .example-body { padding: 18px 20px 20px; }
+  .example-body > p { font-size: 14.5px; margin-bottom: 12px; }
+  .example-body > p:last-of-type { margin-bottom: 0; }
+  .example-data { font-family: var(--mono); font-size: 12.5px; background: #f4f6f8; border-radius: 6px; padding: 10px 14px; margin-bottom: 14px; color: var(--indigo-dark); line-height: 1.75; }
+  .example-steps { list-style: none; padding: 0; margin: 0 0 14px; }
+  .example-steps li { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .example-steps li:last-child { margin-bottom: 0; }
+  .step-num { flex-shrink: 0; width: 22px; height: 22px; background: var(--amber); color: var(--indigo-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11.5px; font-weight: 700; margin-top: 1px; }
+  .step-content { flex: 1; min-width: 0; }
+  .step-content p { margin: 0 0 6px; font-size: 14.5px; line-height: 1.6; }
+  .step-content p:last-child { margin-bottom: 0; }
+  .step-calc { font-family: var(--mono); font-size: 13px; background: #f4f6f8; border-radius: 6px; padding: 6px 12px; display: block; color: var(--indigo-dark); overflow-x: auto; margin-top: 4px; }
+  .example-answer { margin-top: 6px; padding-top: 12px; border-top: 1.5px dashed var(--border); font-size: 14.5px; font-weight: 600; color: var(--indigo-dark); display: flex; align-items: flex-start; gap: 8px; }
+  .example-answer .icon-sm { color: var(--amber-dim); flex-shrink: 0; margin-top: 2px; }
+
+  mark.sh { background: #cdeef1; color: var(--text); border-radius: 2px; padding: 0 2px; }
+  mark.sh.current { background: var(--flame); color: #fff; box-shadow: 0 0 0 2px var(--flame); }
+
+  .fig-block { margin: 18px 0; background: #f8fafb; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-align: center; }
+  .fig-block .fig-inner { padding: 20px; }
+  .fig-block figcaption { font-size: 12.5px; color: var(--muted); padding: 10px 16px 14px; border-top: 1px solid var(--border); line-height: 1.5; font-style: italic; text-align: left; }
+
+  /* === TABLEAUX DE DONNÉES === */
+  .table-wrap { overflow-x: auto; margin: 6px 0 20px; border-radius: 8px; border: 1px solid var(--border); }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.data-table caption { caption-side: top; text-align: left; font-family: 'Barlow Condensed', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--indigo-dark); padding: 9px 14px; }
+  table.data-table th { background: var(--indigo-mid); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; padding: 10px 14px; text-align: left; white-space: nowrap; }
+  table.data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); line-height: 1.5; }
+  table.data-table tbody tr:last-child td { border-bottom: none; }
+  table.data-table tbody tr:nth-child(even) { background: #f6f9fa; }
+
+  #to-top { position: fixed; bottom: 28px; right: 28px; width: 42px; height: 42px; background: var(--indigo-dark); color: var(--amber); border: 2px solid var(--amber); border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 200; }
+  #to-top.visible { opacity: 1; pointer-events: auto; }
+
+  #menu-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 150; background: var(--indigo-dark); border: 2px solid var(--amber); color: var(--amber); width: 40px; height: 40px; border-radius: 8px; font-size: 20px; cursor: pointer; align-items: center; justify-content: center; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: flex; }
+    .hero { padding: 60px 24px 36px; }
+    .search-bar-wrap { padding: 12px 24px; }
+    .content { padding: 28px 20px 60px; }
+    .page-toc-bar { padding: 12px 24px; }
+    .page-toc-body { padding: 4px 24px 20px; }
+  }
+
+  /* ── QUIZ ── */
+  .quiz-block { margin-top: 36px; margin-bottom: 32px; border-top: 2px solid var(--amber); border-bottom: 2px solid var(--amber); padding-top: 24px; padding-bottom: 24px; }
+  .quiz-block-bar { width: 100%; display: flex; align-items: flex-start; gap: 10px; background: var(--indigo-dark); border: none; border-radius: 10px; cursor: pointer; padding: 14px 18px; margin-bottom: 6px; text-align: left; transition: background .15s; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .quiz-block-bar:hover { background: var(--indigo-mid); }
+  .quiz-block-bar .quiz-block-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--amber); margin-top: 2px; }
+  .quiz-block-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .quiz-block-subtitle { font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); margin-left: 2px; }
+  .quiz-block-bar .chevron-q { margin-left: auto; width: 20px; height: 20px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 2px; }
+  .quiz-block-bar[aria-expanded="true"] .chevron-q { transform: rotate(180deg); }
+  .quiz-body { display: none; }
+  .quiz-block-bar[aria-expanded="true"] + .quiz-body { display: block; padding-top: 14px; }
+  .quiz-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 13px; color: var(--muted); }
+  .quiz-score-bar progress { flex: 1; height: 6px; border-radius: 3px; appearance: none; -webkit-appearance: none; }
+  .quiz-score-bar progress::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  .quiz-score-bar progress::-webkit-progress-value { background: var(--indigo-mid); border-radius: 3px; transition: width .4s; }
+
+  .quiz-q { background: var(--bg); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; border: 1.5px solid var(--border); transition: border-color .2s; }
+  .quiz-q.answered { border-color: transparent; }
+  .quiz-q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 14px; }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background .15s, border-color .15s; text-align: left; width: 100%; line-height: 1.45; }
+  .quiz-option:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-option .opt-letter { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-option.correct { background: #e8f8ef; border-color: #2da262; color: #1a6640; }
+  .quiz-option.correct .opt-letter { color: #2da262; }
+  .quiz-option.wrong { background: #fdecea; border-color: #d94f3d; color: #8b2218; }
+  .quiz-option.wrong .opt-letter { color: #d94f3d; }
+  .quiz-option.reveal { background: #e8f8ef; border-color: #2da262; color: #1a6640; opacity: .7; }
+  .quiz-option.reveal .opt-letter { color: #2da262; }
+
+  .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13.5px; line-height: 1.55; display: none; }
+  .quiz-feedback.show { display: flex; gap: 8px; align-items: flex-start; }
+  .quiz-feedback .icon-sm { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+  .quiz-feedback.ok { background: #e8f8ef; color: #1a6640; }
+  .quiz-feedback.ko { background: #fdecea; color: #8b2218; }
+  .quiz-result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; text-align: center; display: none; align-items: center; justify-content: center; gap: 8px; }
+  .quiz-result-msg.show { display: flex; }
+  .quiz-result-msg .icon-sm { width: 18px; height: 18px; flex-shrink: 0; }
+  .quiz-result-msg.great { background: #e8f8ef; color: #1a6640; }
+  .quiz-result-msg.good { background: #fdf6e3; color: #7a5c00; }
+  .quiz-result-msg.poor { background: #fdecea; color: #8b2218; }
+
+  .quiz-reset { margin-top: 20px; padding: 9px 20px; border-radius: 8px; border: 1.5px solid var(--indigo-mid); background: #fff; color: var(--indigo-dark); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; display: none; }
+  .quiz-reset:hover { background: #eef2fa; }
+
+  .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<button id="menu-toggle" aria-label="Menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<aside id="sidebar" role="navigation" aria-label="Table des matières">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-to-index" title="Retour à la table des matières du cours">
+      <svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Tous les chapitres
+    </a>
+    <div class="label">Physique Sec. 5 · Module 2</div>
+    <div class="chap-num">R</div>
+    <div class="chap-title">Notions de base — Mécanique</div>
+  </div>
+  <div class="toc-label">Table des matières</div>
+  <nav>
+    <ul>
+      <li><a href="#intro" class="toc-link"><span class="num">—</span> Avant de commencer</a></li>
+      <li><a href="#section-1" class="toc-link"><span class="num">Section 1</span> Les grandeurs et unités de mesure</a></li>
+      <li><a href="#section-2" class="toc-link"><span class="num">Section 2</span> Les systèmes de référence</a></li>
+      <li><a href="#section-3" class="toc-link"><span class="num">Section 3</span> Les vecteurs</a></li>
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <button onclick="document.getElementById('attrib-pop').classList.toggle('visible')" title="À propos de ce document" style="display:flex;align-items:center;gap:6px;"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg> À propos de ce document</button>
+    <div class="attrib-popover" id="attrib-pop">
+      Matériel préparé par M. Raphaël Sylvestre Bouchard, à l'aide du manuel <em>Delta</em>, Secondaire 5 (TC Média Livres inc.).
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="hero">
+    <div class="eyebrow">Physique · Secondaire 5 · Module 2 — Mécanique</div>
+    <h1>Notions de base</h1>
+    <p>Avant d'étudier le mouvement, les forces et l'énergie, la mécanique — comme toute la physique — repose sur une exigence commune : mesurer avec précision. Ce chapitre de notions de base revient d'abord sur ce qui distingue une grandeur physique de l'unité utilisée pour l'exprimer, puis présente le système international d'unités (SI), aujourd'hui utilisé presque partout dans le monde pour communiquer des mesures sans ambiguïté. Il présente ensuite les systèmes de référence, essentiels pour décrire avec précision la position et la trajectoire d'un corps en mouvement, puis les vecteurs — l'outil mathématique qui permettra, tout au long de l'année, de représenter et de calculer les grandeurs qui possèdent une orientation.</p>
+  </div>
+
+  <div class="page-toc">
+    <button class="page-toc-bar" aria-expanded="false" onclick="toggleNote(this)">
+      <svg class="page-toc-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="page-toc-label">Table des matières<span class="page-toc-subtitle">Accès direct à chaque notion</span></span>
+      <svg class="chevron-toc" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="page-toc-body">
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 1 — Les grandeurs et unités de mesure</div>
+        <div class="page-toc-pills">
+          <a href="#grandeur-unite"><span class="toc-num">1.1</span>Grandeur et unité de mesure</a>
+          <a href="#systeme-international"><span class="toc-num">1.2</span>Le système international d'unités</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 2 — Les systèmes de référence</div>
+        <div class="page-toc-pills">
+          <a href="#definir-systeme-reference"><span class="toc-num">2.1</span>Décrire la position d'un corps</a>
+          <a href="#trajectoire-systemes-reference"><span class="toc-num">2.2</span>La trajectoire selon le système</a>
+          <a href="#observateur-mouvement-relatif"><span class="toc-num">2.3</span>L'observateur et le mouvement relatif</a>
+        </div>
+      </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 3 — Les vecteurs</div>
+        <div class="page-toc-pills">
+          <a href="#scalaires-vectorielles"><span class="toc-num">3.1</span>Grandeurs scalaires et vectorielles</a>
+          <a href="#composantes-vecteur"><span class="toc-num">3.2</span>Les composantes d'un vecteur</a>
+          <a href="#addition-vecteurs"><span class="toc-num">3.3</span>L'addition des vecteurs</a>
+          <a href="#soustraction-vecteurs"><span class="toc-num">3.4</span>La soustraction des vecteurs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-bar-wrap">
+    <label for="search-input">🔍 Recherche rapide</label>
+    <input type="text" id="search-input" placeholder="Ex : grandeur, unité de mesure, système international, préfixes SI, mètre…" oninput="doSearch(this.value)">
+    <span id="search-count"></span>
+  </div>
+
+  <div class="content">
+
+    <!-- INTRO -->
+    <div id="intro" class="intro-card">
+      <h2><svg aria-hidden="true" style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="1"/><line x1="7" y1="9" x2="7" y2="12"/><line x1="11" y1="9" x2="11" y2="12"/><line x1="15" y1="9" x2="15" y2="12"/><line x1="19" y1="9" x2="19" y2="12"/></svg> Mesurer avant de calculer</h2>
+      <p>Toutes les lois de la mécanique que tu étudieras — sur le mouvement, les forces, l'énergie — s'expriment à l'aide de grandeurs physiques mesurées avec précision. Avant d'aller plus loin, il faut donc s'entendre sur la façon de mesurer et d'exprimer ces grandeurs.</p>
+      <p>Tu verras dans cette section la différence entre une grandeur et l'unité utilisée pour la mesurer (sous-section 1.1), puis le système international d'unités (SI), qui uniformise aujourd'hui la très grande majorité des mesures scientifiques dans le monde (sous-section 1.2).</p>
+      <p>Tu verras ensuite ce qu'est un système de référence et comment il permet de décrire la position et la trajectoire d'un corps (section 2) — et pourquoi deux observateurs en mouvement l'un par rapport à l'autre peuvent mesurer, pour un même corps, des trajectoires et des vitesses différentes.</p>
+      <p>Tu verras enfin ce qui distingue une grandeur scalaire d'une grandeur vectorielle, comment décomposer un vecteur en composantes x et y, et comment additionner ou soustraire des vecteurs (section 3) — des outils que tu réutiliseras tout au long de l'année, notamment pour le déplacement, la vitesse, l'accélération et la force.</p>
+      <div class="wip-note">Les sections suivantes de ce chapitre de notions de base seront ajoutées au fur et à mesure.</div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-card" id="section-1">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 1</span>
+          <span class="section-title">Les grandeurs et unités de mesure</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div class="subsection" id="grandeur-unite">
+          <div class="subsection-title">1.1 La différence entre grandeur et unité de mesure</div>
+
+          <p>La physique est une science qui cherche à découvrir les lois de la nature et à expliquer le mieux possible les phénomènes observables, à l'aide de modèles et de théories. Pour valider ces modèles, les scientifiques doivent pouvoir les confronter à ce qui peut être mesuré et reproduit expérimentalement avec exactitude — et cela passe inévitablement par la collecte de données se rapportant à différentes grandeurs.</p>
+
+          <p>Par exemple, pour étudier la chute d'une bille de métal du haut d'un immeuble, il faut mesurer la hauteur de la chute et la position de la bille à différents instants. La hauteur et les mesures de position sont des grandeurs de longueur, alors que les intervalles de temps entre les mesures sont des grandeurs de temps. La masse de la bille est une autre propriété qui pourrait servir à étudier son mouvement : il s'agit alors d'une grandeur de masse.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Grandeur :</strong> propriété d'un phénomène, d'un corps ou d'une substance qu'on peut exprimer quantitativement, c'est-à-dire à l'aide d'un nombre.</p>
+          </div>
+
+          <p>Pour pouvoir établir une grandeur, on a besoin d'une grandeur de référence, prise par convention au sein de la communauté scientifique. Par exemple, lorsqu'on affirme qu'une table mesure 3 mètres, on compare implicitement sa longueur à celle d'un mètre, pris comme référence :</p>
+
+          <div class="formula">Longueur de la table / 1 m = 3  →  Longueur de la table = 3 × 1 m = 3 m</div>
+          <p class="formula-caption">La mesure d'une grandeur revient donc à comparer cette grandeur à une autre grandeur de même nature prise comme référence, c'est-à-dire une unité de mesure.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 400 140" style="width:100%;max-width:460px;height:auto;" role="img" aria-label="Une table mesurée en reportant trois fois la longueur d'un mètre de référence, pour une longueur totale de 3 mètres">
+                <line x1="40" y1="50" x2="340" y2="50" stroke="var(--indigo-dark)" stroke-width="6" stroke-linecap="round"/>
+                <text x="190" y="30" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)" text-anchor="middle">table à mesurer</text>
+
+                <line x1="40" y1="88" x2="140" y2="88" stroke="var(--amber-dim)" stroke-width="4"/>
+                <line x1="140" y1="88" x2="240" y2="88" stroke="var(--indigo-light)" stroke-width="4"/>
+                <line x1="240" y1="88" x2="340" y2="88" stroke="var(--amber-dim)" stroke-width="4"/>
+
+                <line x1="40" y1="81" x2="40" y2="95" stroke="var(--muted)" stroke-width="2"/>
+                <line x1="140" y1="81" x2="140" y2="95" stroke="var(--muted)" stroke-width="2"/>
+                <line x1="240" y1="81" x2="240" y2="95" stroke="var(--muted)" stroke-width="2"/>
+                <line x1="340" y1="81" x2="340" y2="95" stroke="var(--muted)" stroke-width="2"/>
+
+                <text x="90" y="112" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--amber-dim)" text-anchor="middle">1 m</text>
+                <text x="190" y="112" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-light)" text-anchor="middle">1 m</text>
+                <text x="290" y="112" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--amber-dim)" text-anchor="middle">1 m</text>
+
+                <text x="190" y="132" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="14" fill="var(--indigo-dark)" text-anchor="middle">3 × 1 m = 3 m</text>
+              </svg>
+            </div>
+            <figcaption>La longueur de la table est mesurée en reportant trois fois la longueur de référence de 1 m : la grandeur « longueur » vaut donc 3 fois l'unité « mètre », soit 3 m.</figcaption>
+          </div>
+
+          <p>Historiquement, une multitude d'unités de longueur, de temps, de poids, etc., ont été inventées par les êtres humains. Certaines se sont répandues plus largement que d'autres et ont davantage marqué l'histoire (voir le tableau 1). La grandeur de plusieurs de ces unités était toutefois difficile à déterminer avec précision : la vitesse de marche ou la longueur de l'enjambée d'une personne, par exemple, pouvait grandement varier d'un individu à l'autre. Plusieurs tentatives ont donc été faites, au fil du temps, pour rendre plus formelles et plus universelles la définition et la valeur des unités de mesure, dans le but de restreindre le nombre d'unités utilisées pour chaque grandeur physique.</p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption>Tableau 1 — Quelques unités de longueur qui ont marqué l'histoire</caption>
+              <thead><tr><th>Unité de longueur</th><th>Définition</th><th>Longueur approx. (m)</th></tr></thead>
+              <tbody>
+                <tr><td>Coudée naturelle</td><td>Longueur allant du coude jusqu'à l'extrémité de la main (24 doigts).</td><td>0,45 m</td></tr>
+                <tr><td>Coudée de Nippour</td><td>30 doigts.</td><td>0,5185 m</td></tr>
+                <tr><td>Coudée égyptienne</td><td>28 doigts.</td><td>0,529 m</td></tr>
+                <tr><td>Lieue marine</td><td>Limite du champ visuel d'un homme de taille moyenne debout, les pieds au niveau de la mer.</td><td>5556 m</td></tr>
+                <tr><td>Lieue terrestre</td><td>Distance que peut parcourir un homme à pied en une heure.</td><td>4000 m</td></tr>
+                <tr><td>Mille</td><td>Unité du système impérial britannique équivalant à 5280 pieds.</td><td>1609 m</td></tr>
+                <tr><td>Pied</td><td>Unité du système impérial britannique équivalant à 12 pouces.</td><td>0,3048 m</td></tr>
+                <tr><td>Pouce</td><td>Unité du système impérial britannique (1/12 de pied).</td><td>0,0254 m</td></tr>
+                <tr><td>Toise</td><td>Distance entre les deux bras étendus : il y a six pieds dans une toise.</td><td>1,80 m</td></tr>
+                <tr><td>Yard anglais</td><td>Coudée de trois pieds.</td><td>0,9 m</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subsection" id="systeme-international">
+          <div class="subsection-title">1.2 Le système international d'unités</div>
+
+          <p>Pour régler le problème de la disparité des unités de mesure et favoriser la communication à l'échelle mondiale, la presque totalité des pays ont adopté un système de mesure commun : le <strong>système international d'unités (SI)</strong>. Dans ce système, on a déterminé sept grandeurs de base, à partir desquelles toutes les autres grandeurs peuvent être dérivées, et on a défini de façon précise la valeur de chacune des unités de mesure correspondantes (voir le tableau 2).</p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption>Tableau 2 — Les sept grandeurs et unités de base du SI</caption>
+              <thead><tr><th>Grandeur</th><th>Symbole</th><th>Unité (symbole)</th><th>Définition de l'unité</th></tr></thead>
+              <tbody>
+                <tr><td>Longueur</td><td>l</td><td>mètre (m)</td><td>Longueur du trajet parcouru par la lumière dans le vide pendant une durée de 1/299 792 458 seconde.</td></tr>
+                <tr><td>Masse</td><td>m</td><td>kilogramme (kg)</td><td>Depuis 2019, définie à partir de la constante de Planck (h), fixée à 6,626 070 15 × 10⁻³⁴ J·s — une définition qui a remplacé l'ancien prototype international en platine iridié (voir « Zoom » ci-dessous).</td></tr>
+                <tr><td>Temps</td><td>t</td><td>seconde (s)</td><td>Durée de 9 192 631 770 périodes de la radiation correspondant à la transition entre deux <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">niveaux hyperfins</span><span class="term-pop" role="tooltip"><span class="term-pop-word">niveaux hyperfins</span><span class="term-pop-ety">De hyper- (« au-delà », du grec) et fin, en référence à la structure fine du spectre atomique</span><span class="term-pop-body">Subdivision encore plus fine d'un niveau d'énergie atomique en plusieurs sous-niveaux, dont les énergies sont très proches les unes des autres. C'est la transition entre deux de ces sous-niveaux, chez l'atome de césium 133, qui sert de référence pour définir la seconde.</span></span></span> de l'état fondamental de l'atome de césium 133.</td></tr>
+                <tr><td>Courant électrique</td><td>I</td><td>ampère (A)</td><td>Depuis 2019, définie à partir de la charge élémentaire (e), fixée à 1,602 176 634 × 10⁻¹⁹ C.</td></tr>
+                <tr><td>Température thermodynamique</td><td>T</td><td>kelvin (K)</td><td>Depuis 2019, définie à partir de la constante de Boltzmann (k), fixée à 1,380 649 × 10⁻²³ J/K. En pratique, le <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">point triple</span><span class="term-pop" role="tooltip"><span class="term-pop-word">point triple</span><span class="term-pop-ety">Du latin triplus, « composé de trois »</span><span class="term-pop-body">Point d'un diagramme pression-température où les trois états d'un corps pur (solide, liquide et gazeux) coexistent en équilibre. Pour l'eau, ce point correspond à une température de 273,16 K et à une pression de 611 Pa.</span></span></span> de l'eau demeure une référence très précise pour calibrer les thermomètres de laboratoire.</td></tr>
+                <tr><td>Quantité de matière</td><td>n</td><td>mole (mol)</td><td>Définie de façon à ce qu'une mole d'une substance contienne exactement 6,022 140 76 × 10²³ entités élémentaires (atomes, molécules, ions, électrons, ou d'autres particules ou groupements de telles particules) — la constante d'Avogadro (Nₐ), fixée à cette valeur depuis 2019.</td></tr>
+                <tr><td>Intensité lumineuse</td><td>I<sub>v</sub></td><td>candela (cd)</td><td>Définie à partir de l'efficacité lumineuse d'une source monochromatique de fréquence 540 × 10¹² Hz, fixée à 683 lumens par watt (lm/W).</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="zoom-box">
+            <button class="zoom-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="zoom-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg> Zoom<span class="zoom-subtitle">La nouvelle définition du kilogramme</span></span>
+              <svg class="chevron-z" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="zoom-body">
+              <p>Jusqu'en 2019, le kilogramme était la seule unité de base du SI encore définie à partir d'un objet physique : un cylindre de platine iridié, conservé précieusement au Bureau international des poids et mesures (BIPM), près de Paris. Le problème, c'est que la masse de cet étalon pouvait varier très légèrement dans le temps — ne serait-ce qu'en raison de l'accumulation de poussière ou d'une modification de sa surface lors du nettoyage — ce qui rendait sa masse, et donc la définition même du kilogramme, un peu instable.</p>
+              <p>Pour régler ce problème, le BIPM a redéfini le kilogramme à partir d'une constante fondamentale de la nature : la constante de Planck (h), dont la valeur a été fixée une fois pour toutes. Cette nouvelle définition s'appuie sur une balance de précision appelée <strong>balance de Kibble</strong> (ou balance du watt), qui permet de relier très précisément une masse à une puissance électrique, elle-même mesurable avec une exactitude extrême grâce à des effets quantiques. Elle est officiellement entrée en vigueur le 20 mai 2019 — une date qui coïncide, non par hasard, avec la Journée mondiale de la métrologie.</p>
+            </div>
+          </div>
+
+          <p>Le tableau 3 présente les préfixes du SI, qui permettent d'exprimer des multiples ou des sous-multiples d'une unité de base sans avoir à écrire de très grands ou de très petits nombres.</p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption>Tableau 3 — Les préfixes du système international d'unités</caption>
+              <thead><tr><th>Préfixe</th><th>Symbole</th><th>Multiplicatif</th></tr></thead>
+              <tbody>
+                <tr><td>yotta</td><td>Y</td><td>× 10²⁴</td></tr>
+                <tr><td>zetta</td><td>Z</td><td>× 10²¹</td></tr>
+                <tr><td>exa</td><td>E</td><td>× 10¹⁸</td></tr>
+                <tr><td>péta</td><td>P</td><td>× 10¹⁵</td></tr>
+                <tr><td>téra</td><td>T</td><td>× 10¹²</td></tr>
+                <tr><td>giga</td><td>G</td><td>× 10⁹</td></tr>
+                <tr><td>méga</td><td>M</td><td>× 10⁶</td></tr>
+                <tr><td>kilo</td><td>k</td><td>× 10³</td></tr>
+                <tr><td>hecto</td><td>h</td><td>× 10²</td></tr>
+                <tr><td>déca</td><td>da</td><td>× 10¹</td></tr>
+                <tr><td><em>Unités centrales</em></td><td>—</td><td>× 10⁰ = 1</td></tr>
+                <tr><td>déci</td><td>d</td><td>× 10⁻¹</td></tr>
+                <tr><td>centi</td><td>c</td><td>× 10⁻²</td></tr>
+                <tr><td>milli</td><td>m</td><td>× 10⁻³</td></tr>
+                <tr><td>micro</td><td>μ</td><td>× 10⁻⁶</td></tr>
+                <tr><td>nano</td><td>n</td><td>× 10⁻⁹</td></tr>
+                <tr><td>pico</td><td>p</td><td>× 10⁻¹²</td></tr>
+                <tr><td>femto</td><td>f</td><td>× 10⁻¹⁵</td></tr>
+                <tr><td>atto</td><td>a</td><td>× 10⁻¹⁸</td></tr>
+                <tr><td>zepto</td><td>z</td><td>× 10⁻²¹</td></tr>
+                <tr><td>yocto</td><td>y</td><td>× 10⁻²⁴</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>L'écriture des unités du SI et de leurs symboles obéit à des règles précises, afin de communiquer adéquatement les données scientifiques :</p>
+          <ul class="content-list">
+            <li>Les noms des unités sont des noms communs : ils s'écrivent avec une minuscule, sauf en début de phrase ou dans un titre (ex. : 10 mètres, 2 mètres).</li>
+            <li>En général, les symboles des unités s'écrivent en minuscules; mais lorsqu'une unité dérive du nom d'une personne, la première lettre de son symbole s'écrit avec une majuscule (ex. : m pour mètre, A pour ampère, J pour joule).</li>
+            <li>Les symboles des unités ne sont jamais suivis d'un point (sauf en fin de phrase) et ils sont invariables au pluriel (ex. : 10 m de hauteur; 20 kg).</li>
+            <li>Les symboles des unités doivent obligatoirement être précédés d'une espace (ex. : 7,5 m).</li>
+          </ul>
+        </div>
+
+        <div class="quiz-block" data-quiz="s1">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 1<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Une grandeur physique et l'unité utilisée pour la mesurer désignent la même chose.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La grandeur (par exemple, la longueur) est la propriété qu'on mesure; l'unité (par exemple, le mètre) est la référence utilisée pour l'exprimer par un nombre.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : la grandeur est la propriété mesurée (ex. la longueur), alors que l'unité est la référence choisie pour l'exprimer (ex. le mètre).</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Laquelle de ces unités n'est PAS une unité de base du système international (SI)?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> mètre</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> newton</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> seconde</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> kelvin</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le newton (N) est une unité dérivée (N = kg·m/s²); le mètre, la seconde et le kelvin sont trois des sept unités de base du SI.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est le newton : c'est une unité dérivée (kg·m/s²), alors que le mètre, la seconde et le kelvin sont des unités de base du SI.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un chercheur en nanotechnologies conçoit une structure en couches de semi-conducteurs d'une épaisseur de 35 nm. Quelle est cette épaisseur exprimée en mètres?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 3,5 × 10⁻⁸ m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 3,5 × 10⁻⁹ m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 3,5 × 10⁻⁷ m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 3,5 × 10⁻⁶ m</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le préfixe nano (n) vaut × 10⁻⁹, donc 35 nm = 35 × 10⁻⁹ m = 3,5 × 10⁻⁸ m.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 3,5 × 10⁻⁸ m : puisque n = × 10⁻⁹, 35 nm = 35 × 10⁻⁹ m, qui s'écrit 3,5 × 10⁻⁸ m en notation scientifique.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un terrain a une façade de 50 pieds sur une profondeur de 100 pieds. Quelles sont les dimensions de ce terrain, exprimées en mètres (1 pied = 0,3048 m)?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 15,24 m × 30,48 m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 16,50 m × 33,00 m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 15,0 m × 30,0 m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 152,4 m × 304,8 m</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. 50 pi × 0,3048 m/pi = 15,24 m, et 100 pi × 0,3048 m/pi = 30,48 m.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 15,24 m × 30,48 m : il suffit de multiplier chaque dimension, en pieds, par le facteur de conversion 0,3048 m/pi.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un système laser utilisé pour observer des réactions chimiques en direct produit des impulsions ultracourtes; l'intervalle entre deux impulsions est de 4,5 × 10⁻¹⁵ s. Exprime ce temps à l'aide d'un préfixe du SI.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 4,5 fs</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 4,5 ps</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 4,5 as</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 4,5 ns</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Le préfixe femto (f) correspond à × 10⁻¹⁵, ce qui donne directement 4,5 fs.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 4,5 fs : le préfixe femto (f) vaut × 10⁻¹⁵, ce qui correspond exactement à 4,5 × 10⁻¹⁵ s.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-card" id="section-2">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 2</span>
+          <span class="section-title">Les systèmes de référence</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div class="subsection" id="definir-systeme-reference">
+          <div class="subsection-title">2.1 Décrire la position d'un corps</div>
+
+          <p>En physique, un <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">corps</span><span class="term-pop" role="tooltip"><span class="term-pop-word">corps</span><span class="term-pop-ety">Du latin corpus, « corps, substance »</span><span class="term-pop-body">Objet dont on étudie le mouvement ou les propriétés, qu'il soit macroscopique (une personne, une balle) ou microscopique (un atome).</span></span></span> désigne l'objet dont on étudie le mouvement. Pour décrire clairement et précisément la <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">position</span><span class="term-pop" role="tooltip"><span class="term-pop-word">position</span><span class="term-pop-ety">Du latin positio, de ponere, « placer »</span><span class="term-pop-body">Endroit où se situe un corps.</span></span></span> d'un corps, il faut pouvoir la préciser à différents moments — c'est pourquoi on utilise ce qu'on appelle un système de référence, aussi appelé « référentiel ».</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Système de référence :</strong> permet de situer un évènement dans l'espace et dans le temps. Il est constitué d'un point de repère (l'origine) associé à un système de coordonnées.</p>
+          </div>
+
+          <p>L'utilisation d'un système de référence bien défini est essentielle pour décrire la position d'un corps, comme l'illustre la figure 2 ci-dessous : dans une foule très dense, une personne pourrait décrire sa position de trois façons différentes, avec une précision croissante.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 720 230" style="width:100%;max-width:680px;height:auto;" role="img" aria-label="Trois façons de décrire la position d'une même personne dans une foule dense, avec une précision croissante">
+                <defs>
+                  <pattern id="crowd-dots" width="18" height="18" patternUnits="userSpaceOnUse">
+                    <circle cx="4" cy="4" r="1.6" fill="var(--border)"/>
+                    <circle cx="13" cy="11" r="1.6" fill="var(--border)"/>
+                  </pattern>
+                  <marker id="arrow-fig2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 Z" fill="var(--indigo-light)"/>
+                  </marker>
+                </defs>
+
+                <g transform="translate(10,0)">
+                  <rect x="15" y="10" width="180" height="16" rx="2" fill="var(--indigo-dark)"/>
+                  <text x="105" y="22" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="1">SCÈNE</text>
+                  <rect x="15" y="34" width="180" height="150" fill="url(#crowd-dots)" stroke="var(--border)"/>
+                  <circle cx="140" cy="110" r="6" fill="var(--flame)"/>
+                  <line x1="105" y1="152" x2="136" y2="115" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>
+                  <text x="55" y="150" font-family="Inter, sans-serif" font-size="10" font-style="italic" fill="var(--indigo-dark)">« Je suis assise</text>
+                  <text x="55" y="163" font-family="Inter, sans-serif" font-size="10" font-style="italic" fill="var(--indigo-dark)">du côté droit »</text>
+                  <text x="105" y="205" font-family="Barlow Condensed, sans-serif" font-size="11.5" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(a) Description vague</text>
+                </g>
+
+                <g transform="translate(260,0)">
+                  <rect x="15" y="10" width="180" height="16" rx="2" fill="var(--indigo-dark)"/>
+                  <text x="105" y="22" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="1">SCÈNE</text>
+                  <rect x="15" y="34" width="180" height="150" fill="url(#crowd-dots)" stroke="var(--border)"/>
+                  <circle cx="105" cy="34" r="3.5" fill="var(--indigo-dark)"/>
+                  <text x="112" y="38" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--indigo-dark)">O</text>
+                  <line x1="105" y1="34" x2="182" y2="34" stroke="var(--indigo-light)" stroke-width="1.5"/>
+                  <text x="186" y="38" font-family="Inter, sans-serif" font-size="9.5" fill="var(--indigo-light)">est</text>
+                  <line x1="105" y1="34" x2="150" y2="130" stroke="var(--amber-dim)" stroke-width="2" stroke-dasharray="4,3"/>
+                  <circle cx="150" cy="130" r="6" fill="var(--flame)"/>
+                  <path d="M 130 34 A 25 25 0 0 1 119 56" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+                  <text x="126" y="53" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">23°</text>
+                  <text x="138" y="90" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--amber-dim)" text-anchor="middle" transform="rotate(65 138 90)">28 m</text>
+                  <text x="105" y="205" font-family="Barlow Condensed, sans-serif" font-size="11.5" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(b) Repère + distance + direction</text>
+                </g>
+
+                <g transform="translate(510,0)">
+                  <rect x="15" y="10" width="180" height="16" rx="2" fill="var(--indigo-dark)"/>
+                  <text x="105" y="22" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="1">SCÈNE</text>
+                  <rect x="15" y="34" width="180" height="150" fill="url(#crowd-dots)" stroke="var(--border)"/>
+                  <line x1="15" y1="34" x2="195" y2="34" stroke="var(--indigo-light)" stroke-width="1.5" marker-end="url(#arrow-fig2)"/>
+                  <text x="182" y="30" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--indigo-light)">x</text>
+                  <line x1="105" y1="34" x2="105" y2="182" stroke="var(--amber-dim)" stroke-width="1.5" marker-end="url(#arrow-fig2)"/>
+                  <text x="112" y="180" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--amber-dim)">y</text>
+                  <line x1="150" y1="34" x2="150" y2="130" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>
+                  <line x1="105" y1="130" x2="150" y2="130" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>
+                  <circle cx="150" cy="130" r="6" fill="var(--flame)"/>
+                  <circle cx="105" cy="34" r="3.5" fill="var(--indigo-dark)"/>
+                  <text x="112" y="38" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--indigo-dark)">O</text>
+                  <text x="128" y="28" font-family="JetBrains Mono, monospace" font-size="9" fill="var(--muted)" text-anchor="middle">11 m</text>
+                  <text x="70" y="133" font-family="JetBrains Mono, monospace" font-size="9" fill="var(--muted)" text-anchor="middle">26 m</text>
+                  <text x="105" y="205" font-family="Barlow Condensed, sans-serif" font-size="11.5" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(c) Coordonnées cartésiennes</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 2 — Trois façons de décrire une même position, avec une précision croissante : (a) une description sans système de référence reste imprécise; (b) un système de référence avec un point de repère (O), une distance (28 m) et une direction (23° au sud de l'est); (c) un système de référence à coordonnées cartésiennes, avec une origine et deux axes perpendiculaires — ici, la position (11 m, 26 m).</figcaption>
+          </div>
+        </div>
+
+        <div class="subsection" id="trajectoire-systemes-reference">
+          <div class="subsection-title">2.2 La trajectoire selon le système de référence</div>
+
+          <p>Comme le montre la figure 2, plus d'un système de référence peut être utilisé pour décrire une même situation — il en existe en réalité une infinité. Il suffit, pour étudier une situation donnée, d'en choisir un et de le préciser clairement.</p>
+
+          <p>Un système de référence permet notamment de décrire la <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">trajectoire</span><span class="term-pop" role="tooltip"><span class="term-pop-word">trajectoire</span><span class="term-pop-ety">Du latin trajectus, de trajicere, « traverser, jeter à travers » (trans- + jacere, « jeter »)</span><span class="term-pop-body">Ensemble des points qu'un corps occupe au cours de son mouvement.</span></span></span> d'un corps en mouvement. La figure 3 montre un exemple de système de référence à coordonnées cartésiennes, utilisé pour décrire la trajectoire d'un skieur qui exécute un saut.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 620 260" style="width:100%;max-width:560px;height:auto;" role="img" aria-label="Trajectoire d'un skieur exécutant un saut, représentée dans un système de référence à coordonnées cartésiennes, avec l'axe des x en mètres de 0 à 24 et l'axe des y en mètres de 0 à 4">
+                <g stroke="var(--border)" stroke-width="1">
+                  <line x1="50" y1="30" x2="50" y2="220"/>
+                  <line x1="50" y1="220" x2="580" y2="220"/>
+                </g>
+                <g font-family="JetBrains Mono, monospace" font-size="10" fill="var(--muted)" text-anchor="middle">
+                  <text x="50" y="236">0</text><text x="138" y="236">4</text><text x="226" y="236">8</text>
+                  <text x="315" y="236">12</text><text x="403" y="236">16</text><text x="491" y="236">20</text><text x="580" y="236">24</text>
+                </g>
+                <g font-family="JetBrains Mono, monospace" font-size="10" fill="var(--muted)" text-anchor="end">
+                  <text x="42" y="224">0</text><text x="42" y="172">1</text><text x="42" y="125">2</text><text x="42" y="77">3</text><text x="42" y="30">4</text>
+                </g>
+                <text x="20" y="24" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)">y (m)</text>
+                <text x="560" y="252" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)" text-anchor="end">x (m)</text>
+
+                <path d="M 50 220 L 92 77" stroke="var(--muted)" stroke-width="5" stroke-linecap="round" fill="none"/>
+                <path d="M 92 77 C 160 55, 240 62, 315 97 S 470 160, 528 210" fill="none" stroke="var(--flame)" stroke-width="3"/>
+
+                <g fill="var(--indigo-dark)">
+                  <circle cx="92" cy="77" r="5"/>
+                  <circle cx="200" cy="58" r="5"/>
+                  <circle cx="315" cy="97" r="5"/>
+                  <circle cx="440" cy="158" r="5"/>
+                  <circle cx="528" cy="210" r="5"/>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 3 — Un système de référence à coordonnées cartésiennes permet de décrire la trajectoire d'un skieur qui exécute un saut.</figcaption>
+          </div>
+
+          <p>Quand un corps suit un mouvement <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">rectiligne</span><span class="term-pop" role="tooltip"><span class="term-pop-word">rectiligne</span><span class="term-pop-ety">Du latin rectus, « droit », et linea, « ligne »</span><span class="term-pop-body">En ligne droite.</span></span></span>, on se contente parfois d'un système de référence unidimensionnel, à un seul axe, pour décrire sa trajectoire — comme l'illustre la figure 4. Ce type de système de référence sera très utile dans les prochains chapitres consacrés au mouvement rectiligne.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 480 140" style="width:100%;max-width:440px;height:auto;" role="img" aria-label="Trajectoire d'un coureur sur une piste rectiligne, décrite à l'aide d'un seul axe gradué de 0 à 6 mètres">
+                <line x1="40" y1="100" x2="440" y2="100" stroke="var(--indigo-dark)" stroke-width="2"/>
+                <g stroke="var(--muted)" stroke-width="1.5">
+                  <line x1="40" y1="94" x2="40" y2="106"/><line x1="107" y1="94" x2="107" y2="106"/>
+                  <line x1="173" y1="94" x2="173" y2="106"/><line x1="240" y1="94" x2="240" y2="106"/>
+                  <line x1="307" y1="94" x2="307" y2="106"/><line x1="373" y1="94" x2="373" y2="106"/>
+                  <line x1="440" y1="94" x2="440" y2="106"/>
+                </g>
+                <g font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--muted)" text-anchor="middle">
+                  <text x="40" y="122">0</text><text x="107" y="122">1</text><text x="173" y="122">2</text>
+                  <text x="240" y="122">3</text><text x="307" y="122">4</text><text x="373" y="122">5</text><text x="440" y="122">6</text>
+                </g>
+                <text x="440" y="30" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)" text-anchor="end">x (m)</text>
+                <g fill="var(--flame)">
+                  <circle cx="73" cy="82" r="6"/><circle cx="190" cy="82" r="6"/>
+                  <circle cx="273" cy="82" r="6"/><circle cx="390" cy="82" r="6"/>
+                </g>
+                <g stroke="var(--flame)" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="73" y1="88" x2="73" y2="98"/><line x1="190" y1="88" x2="190" y2="98"/>
+                  <line x1="273" y1="88" x2="273" y2="98"/><line x1="390" y1="88" x2="390" y2="98"/>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 4 — Pour décrire la trajectoire d'un coureur en ligne droite, un seul axe suffit : un système de référence rectiligne (unidimensionnel).</figcaption>
+          </div>
+        </div>
+
+        <div class="subsection" id="observateur-mouvement-relatif">
+          <div class="subsection-title">2.3 L'observateur et le mouvement relatif</div>
+
+          <p>Quand on compare les points de vue de différents <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">observateurs</span><span class="term-pop" role="tooltip"><span class="term-pop-word">observateur</span><span class="term-pop-ety">Du latin observare, « surveiller attentivement » (ob- + servare, « garder, veiller sur »)</span><span class="term-pop-body">Personne qui effectue des observations et prend des mesures à partir d'un système de référence par rapport auquel elle est immobile.</span></span></span>, l'expression « système de référence de tel observateur » désigne un système de référence immobile par rapport à cet observateur — peu importe où se trouve l'origine de ce système.</p>
+
+          <p>Ainsi, lorsque deux observateurs sont en mouvement l'un par rapport à l'autre et étudient la trajectoire d'un même corps, ils utilisent des systèmes de référence qui sont eux aussi en mouvement l'un par rapport à l'autre. Il est alors possible que les deux observateurs perçoivent des formes différentes pour cette trajectoire — et que leurs mesures de la vitesse du corps diffèrent elles aussi. La figure 5 illustre cette situation.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 600 240" style="width:100%;max-width:560px;height:auto;" role="img" aria-label="Un homme avance sur un tapis roulant à 2 virgule 00 mètres par seconde en tenant une balle; un agent de sécurité, immobile, l'observe depuis le sol">
+                <defs>
+                  <marker id="arrow-fig5a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 Z" fill="currentColor"/>
+                  </marker>
+                </defs>
+                <rect x="20" y="70" width="560" height="30" fill="var(--indigo-light)" opacity="0.25"/>
+                <line x1="20" y1="70" x2="580" y2="70" stroke="var(--indigo-mid)" stroke-width="1.5"/>
+                <line x1="20" y1="100" x2="580" y2="100" stroke="var(--indigo-mid)" stroke-width="1.5"/>
+                <path d="M 290 60 L 320 60" fill="none" stroke="var(--amber-dim)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#arrow-fig5a)" color="var(--amber-dim)"/>
+                <text x="305" y="45" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--amber-dim)" text-anchor="middle">2,00 m/s</text>
+
+                <g>
+                  <circle cx="420" cy="55" r="9" fill="var(--indigo-dark)"/>
+                  <line x1="420" y1="64" x2="420" y2="90" stroke="var(--indigo-dark)" stroke-width="4" stroke-linecap="round"/>
+                  <line x1="420" y1="70" x2="405" y2="82" stroke="var(--indigo-dark)" stroke-width="3.5" stroke-linecap="round"/>
+                  <circle cx="403" cy="84" r="4" fill="var(--flame)"/>
+                  <line x1="420" y1="90" x2="410" y2="112" stroke="var(--indigo-dark)" stroke-width="4" stroke-linecap="round"/>
+                  <line x1="420" y1="90" x2="432" y2="112" stroke="var(--indigo-dark)" stroke-width="4" stroke-linecap="round"/>
+                  <text x="420" y="132" font-family="Barlow Condensed, sans-serif" font-size="11" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle" letter-spacing=".04em">HOMME (TAPIS)</text>
+                </g>
+
+                <g>
+                  <circle cx="130" cy="55" r="9" fill="var(--muted)"/>
+                  <line x1="130" y1="64" x2="130" y2="90" stroke="var(--muted)" stroke-width="4" stroke-linecap="round"/>
+                  <line x1="130" y1="90" x2="120" y2="112" stroke="var(--muted)" stroke-width="4" stroke-linecap="round"/>
+                  <line x1="130" y1="90" x2="142" y2="112" stroke="var(--muted)" stroke-width="4" stroke-linecap="round"/>
+                  <text x="130" y="132" font-family="Barlow Condensed, sans-serif" font-size="11" font-weight="700" fill="var(--muted)" text-anchor="middle" letter-spacing=".04em">AGENT (IMMOBILE)</text>
+                </g>
+
+                <g transform="translate(30,155)">
+                  <rect width="255" height="58" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+                  <text x="12" y="20" font-family="Barlow Condensed, sans-serif" font-size="11" font-weight="700" fill="var(--indigo-dark)">Selon l'homme sur le tapis</text>
+                  <line x1="150" y1="40" x2="105" y2="40" stroke="var(--flame)" stroke-width="2.5" marker-end="url(#arrow-fig5a)" color="var(--flame)"/>
+                  <text x="160" y="44" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">l'agent recule</text>
+                </g>
+
+                <g transform="translate(305,155)">
+                  <rect width="255" height="58" rx="8" fill="var(--bg)" stroke="var(--border)"/>
+                  <text x="12" y="20" font-family="Barlow Condensed, sans-serif" font-size="11" font-weight="700" fill="var(--indigo-dark)">Selon l'agent, immobile</text>
+                  <line x1="105" y1="40" x2="150" y2="40" stroke="var(--indigo-light)" stroke-width="2.5" marker-end="url(#arrow-fig5a)" color="var(--indigo-light)"/>
+                  <text x="160" y="44" font-family="Inter, sans-serif" font-size="11" fill="var(--text)">l'homme avance</text>
+                </g>
+              </svg>
+
+              <svg viewBox="0 0 560 240" style="width:100%;max-width:520px;height:auto;margin-top:10px;" role="img" aria-label="La chute d'une même balle vue par les deux observateurs : trajectoire verticale pour l'homme sur le tapis, trajectoire courbe pour l'agent immobile">
+                <defs>
+                  <marker id="arrow-fig5b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 Z" fill="var(--amber-dim)"/>
+                  </marker>
+                </defs>
+                <g transform="translate(20,10)">
+                  <text x="0" y="0" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-dark)">Selon l'homme sur le tapis</text>
+                  <line x1="10" y1="20" x2="10" y2="200" stroke="var(--border)" stroke-width="1.5"/>
+                  <line x1="10" y1="200" x2="230" y2="200" stroke="var(--border)" stroke-width="1.5"/>
+                  <line x1="60" y1="20" x2="60" y2="180" stroke="var(--flame)" stroke-width="2.5"/>
+                  <circle cx="60" cy="20" r="5" fill="var(--indigo-dark)"/>
+                  <circle cx="60" cy="60" r="5" fill="var(--indigo-dark)"/>
+                  <circle cx="60" cy="180" r="5" fill="var(--indigo-dark)"/>
+                  <text x="72" y="24" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">t = 0 s</text>
+                  <text x="72" y="64" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">t = 0,3 s</text>
+                  <text x="72" y="184" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">t = 0,6 s</text>
+                </g>
+                <g transform="translate(300,10)">
+                  <text x="0" y="0" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-dark)">Selon l'agent, immobile</text>
+                  <line x1="10" y1="20" x2="10" y2="200" stroke="var(--border)" stroke-width="1.5"/>
+                  <line x1="10" y1="200" x2="230" y2="200" stroke="var(--border)" stroke-width="1.5"/>
+                  <path d="M 40 20 Q 100 30 110 60 T 180 180" fill="none" stroke="var(--flame)" stroke-width="2.5"/>
+                  <circle cx="40" cy="20" r="5" fill="var(--indigo-dark)"/>
+                  <circle cx="110" cy="60" r="5" fill="var(--indigo-dark)"/>
+                  <circle cx="180" cy="180" r="5" fill="var(--indigo-dark)"/>
+                  <text x="45" y="14" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">t = 0 s</text>
+                  <text x="118" y="56" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">t = 0,3 s</text>
+                  <text x="150" y="176" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">t = 0,6 s</text>
+                  <line x1="40" y1="207" x2="180" y2="207" stroke="var(--amber-dim)" stroke-width="1.5" marker-end="url(#arrow-fig5b)"/>
+                  <text x="110" y="220" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--amber-dim)" text-anchor="middle">1,20 m</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 5 — Dans un aéroport, un homme avance sur un tapis roulant à 2,00 m/s en tenant une balle; un agent de sécurité, immobile au sol, l'observe passer (haut). Quand l'homme laisse tomber la balle — une chute de 0,60 s, illustrée toutes les 0,30 s — celle-ci suit une trajectoire verticale pour l'homme, mais une trajectoire courbe pour l'agent (bas), qui la voit aussi avancer de 1,20 m à l'horizontale pendant sa chute.</figcaption>
+          </div>
+
+          <p>Pour l'agent de sécurité, la balle avance tout en tombant : elle possède donc à la fois une vitesse horizontale et une vitesse verticale. L'agent mesure que la balle avance de 1,20 m pendant sa chute, à un rythme régulier. La vitesse horizontale de la balle, dans le système de référence de l'agent, est donc :</p>
+
+          <div class="formula">v = d / Δt = 1,20 m / 0,60 s = 2,00 m/s</div>
+          <p class="formula-caption">Cette valeur correspond exactement à la vitesse du tapis roulant. Pour l'homme sur le tapis, en revanche, la vitesse horizontale de la balle est nulle : la balle tombe directement devant lui.</p>
+
+          <div class="def-box">
+            <div class="def-label">À retenir</div>
+            <p>Il en est toujours ainsi : quand deux observateurs sont en mouvement l'un par rapport à l'autre à une vitesse relative <strong>v</strong>, leurs mesures de la vitesse d'un corps, dans le sens de ce mouvement, diffèrent d'une grandeur égale à <strong>v</strong>.</p>
+          </div>
+
+          <p>Le choix d'un système de référence est arbitraire. Toutefois, selon les situations, certains systèmes sont plus appropriés que d'autres et permettent une description plus simple du mouvement étudié. Il convient donc de bien y réfléchir avant de choisir un système de référence.</p>
+        </div>
+
+        <div class="quiz-block" data-quiz="s2">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 2<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 5</span>
+            <progress class="quiz-progress" value="0" max="5"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Un point de repère (une origine) suffit à lui seul pour définir un système de référence.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Un système de référence est constitué d'un point de repère (l'origine) <strong>associé à un système de coordonnées</strong> — l'origine seule ne suffit pas à situer une position.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : un système de référence est constitué d'un point de repère (l'origine) associé à un système de coordonnées, pas seulement d'une origine.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Laquelle de ces descriptions constitue un système de référence suffisamment précis pour situer une position?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> « Je suis assis près de la scène. »</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> « Je suis assis à 28 m du centre de l'avant de la scène, à 23° au sud de l'est. »</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> « Je suis quelque part dans la foule. »</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> « Je suis loin de la sortie. »</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Cette description comporte un point de repère bien défini (le centre de l'avant de la scène), une distance et une direction : c'est un système de référence complet.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est B : c'est la seule description qui précise un point de repère, une distance et une direction — les autres restent vagues.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Deux observateurs sont immobiles l'un par rapport à l'autre et étudient la trajectoire d'un même corps en mouvement. Que peut-on affirmer?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Ils mesureront nécessairement des trajectoires différentes.</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Ils mesureront la même trajectoire et la même vitesse pour le corps, même si leurs origines sont différentes.</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Un seul des deux peut être considéré comme un observateur valide.</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Ils doivent obligatoirement choisir la même origine pour obtenir le même résultat.</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Puisqu'ils sont immobiles l'un par rapport à l'autre, leur vitesse relative est nulle : leurs mesures de vitesse ne diffèrent donc pas, et la position de l'origine choisie n'y change rien.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est B : deux observateurs immobiles l'un par rapport à l'autre ont une vitesse relative nulle, donc leurs mesures de trajectoire et de vitesse coïncident, peu importe où se trouve chaque origine.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un train avance à 25,0 m/s. Une passagère laisse tomber son gobelet, qui touche le plancher directement devant elle. Une personne immobile sur le quai regarde passer le train. Quelle est la vitesse horizontale du gobelet, mesurée par la personne sur le quai, au moment où il quitte la main de la passagère?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 0 m/s</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> 25,0 m/s</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 12,5 m/s</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Impossible à déterminer sans plus d'information</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Dans le système de référence de la passagère, la vitesse horizontale du gobelet est nulle (il tombe directement devant elle). La personne sur le quai et la passagère se déplacent l'une par rapport à l'autre à 25,0 m/s : leurs mesures de vitesse horizontale diffèrent donc de cette valeur, comme pour la balle de la figure 5.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est 25,0 m/s : la vitesse horizontale du gobelet est nulle dans le système de référence de la passagère, mais les deux observateurs se déplacent l'un par rapport à l'autre à 25,0 m/s — exactement comme pour la balle de la figure 5.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Un système de référence rectiligne (à un seul axe) ne peut être utilisé que si le mouvement étudié se fait en ligne droite.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Un seul axe ne peut situer que des positions alignées sur cet axe; dès que la trajectoire s'en écarte (comme celle du skieur, figure 3), il faut un système à deux dimensions ou plus.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : un système à un seul axe (rectiligne) ne peut décrire que des positions situées sur cet axe, donc seulement un mouvement en ligne droite.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-card" id="section-3">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 3</span>
+          <span class="section-title">Les vecteurs</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div class="subsection" id="scalaires-vectorielles">
+          <div class="subsection-title">3.1 Les grandeurs scalaires et les grandeurs vectorielles</div>
+
+          <p>Les grandeurs physiques utilisées en mécanique — le temps, la masse, la vitesse, la force, et bien d'autres — ne se comportent pas toutes de la même façon. Certaines sont entièrement décrites par un simple nombre accompagné d'une unité de mesure. D'autres, en plus de ce nombre et de cette unité, exigent qu'on précise une direction dans l'espace : sans cette information, elles ne sont pas complètement définies. Cette distinction sépare les grandeurs physiques en deux grandes catégories : les grandeurs scalaires et les grandeurs vectorielles.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Grandeur scalaire (scalaire) :</strong> grandeur entièrement définie par un nombre et une unité de mesure. Elle ne possède pas d'orientation.</p>
+          </div>
+
+          <p>Le temps est un exemple typique de grandeur scalaire. Affirmer que « le chronomètre affiche 10 s depuis le départ de la course » suffit à décrire complètement cette grandeur : un nombre (10) et une unité (secondes) — aucune direction n'entre en jeu.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Grandeur vectorielle (vecteur) :</strong> grandeur qui, en plus d'un nombre et d'une unité de mesure, possède une orientation. Ces trois informations sont toutes nécessaires pour la définir complètement.</p>
+          </div>
+
+          <p>La vitesse, à l'inverse, est une grandeur vectorielle. Dire qu'une balle « se déplace à 4,1 m/s » ne renseigne pas sur la direction de son mouvement : il faut préciser, par exemple, qu'elle « se déplace à 4,1 m/s vers la droite » pour la décrire complètement. Un vecteur se représente graphiquement par une flèche caractérisée par deux propriétés : sa <strong>norme</strong> (aussi appelée « module »), qui correspond à sa longueur, et son <strong>orientation</strong>.</p>
+
+          <p>Dans un texte ou une équation, on indique qu'une grandeur est vectorielle en surmontant sa lettre d'une petite flèche — par exemple, la vitesse s'écrit V⃗. La norme de ce vecteur, c'est-à-dire sa grandeur seule (sans l'information d'orientation), s'écrit simplement V, sans flèche. Ce chapitre ne traite que de vecteurs à deux dimensions, c'est-à-dire situés dans un plan.</p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption>Tableau 4 — Quelques exemples de grandeurs scalaires</caption>
+              <thead><tr><th>Grandeur scalaire</th></tr></thead>
+              <tbody>
+                <tr><td>Temps</td></tr>
+                <tr><td>Masse</td></tr>
+                <tr><td>Longueur</td></tr>
+                <tr><td>Superficie</td></tr>
+                <tr><td>Volume</td></tr>
+                <tr><td>Énergie</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption>Tableau 5 — Quelques exemples de grandeurs vectorielles</caption>
+              <thead><tr><th>Grandeur vectorielle</th></tr></thead>
+              <tbody>
+                <tr><td>Déplacement</td></tr>
+                <tr><td>Vitesse</td></tr>
+                <tr><td>Accélération</td></tr>
+                <tr><td>Force</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="def-box" style="border-left-color: var(--amber-dim); background: linear-gradient(135deg,#eefaf9,#f2fbfa);">
+            <div class="def-label" style="color: var(--amber-dim);">Remarque</div>
+            <p>La position d'un corps, elle, n'est pas traitée comme une grandeur vectorielle dans ce cours : elle est plutôt exprimée comme une coordonnée, définie par rapport à l'origine d'un système de référence (voir la section 2). C'est plutôt le <strong>déplacement</strong> — la variation de position entre deux instants — qui constitue une grandeur vectorielle à part entière.</p>
+          </div>
+
+          <div class="zoom-box">
+            <button class="zoom-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="zoom-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg> Zoom<span class="zoom-subtitle">D'où viennent les vecteurs?</span></span>
+              <svg class="chevron-z" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="zoom-body">
+              <p>L'idée de représenter certaines grandeurs par une flèche possédant une longueur et une direction est plus récente qu'on pourrait le croire. C'est le mathématicien irlandais William Rowan Hamilton qui, en développant les quaternions en 1843, a posé une bonne partie des bases mathématiques qui allaient mener à l'algèbre vectorielle moderne.</p>
+              <p>Le formalisme des vecteurs à trois composantes, plus simple à manipuler que les quaternions et plus proche de celui utilisé aujourd'hui, a ensuite été développé indépendamment par le physicien américain Josiah Willard Gibbs et l'ingénieur britannique Oliver Heaviside, dans les années 1880, notamment pour faciliter l'écriture des équations de l'électromagnétisme.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="subsection" id="composantes-vecteur">
+          <div class="subsection-title">3.2 Les composantes d'un vecteur</div>
+
+          <p>Dans un système de référence à deux dimensions basé sur des coordonnées cartésiennes, l'orientation d'un vecteur se mesure par un angle, désigné par convention par le <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">symbole θ</span><span class="term-pop" role="tooltip"><span class="term-pop-word">symbole θ</span><span class="term-pop-ety">Thêta (θ), lettre grecque</span><span class="term-pop-body">Utilisé par convention pour désigner l'orientation d'un vecteur, mesurée par rapport à l'axe des x positifs. Par convention, l'angle est positif lorsqu'il est mesuré dans le sens antihoraire (sens inverse des aiguilles d'une montre), et négatif lorsqu'il est mesuré dans le sens horaire.</span></span></span> (thêta). Cet angle est mesuré par rapport à l'axe des x positifs, dans le sens antihoraire par convention — un angle mesuré dans le sens horaire reçoit une valeur négative. La figure 6 illustre l'orientation de trois vecteurs différents.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 700 230" style="width:100%;max-width:660px;height:auto;" role="img" aria-label="Trois vecteurs orientés à 30 degrés, à 140 degrés et à moins 60 degrés (ou 300 degrés) par rapport à l'axe des x positifs">
+                <defs>
+                  <marker id="arrow-fig6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 Z" fill="var(--flame)"/>
+                  </marker>
+                  <marker id="arrow-fig6-axis" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 Z" fill="var(--indigo-dark)"/>
+                  </marker>
+                </defs>
+
+                <g transform="translate(0,0)">
+                  <line x1="10" y1="130" x2="205" y2="130" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig6-axis)"/>
+                  <line x1="90" y1="130" x2="90" y2="18" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig6-axis)"/>
+                  <text x="198" y="146" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)" text-anchor="end">x</text>
+                  <text x="98" y="26" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)">y</text>
+                  <circle cx="90" cy="130" r="3" fill="var(--indigo-dark)"/>
+                  <path d="M 118 130 A 28 28 0 0 0 114.2 116.0" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+                  <text x="130" y="121" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--muted)">30°</text>
+                  <line x1="90" y1="130" x2="155.0" y2="92.5" stroke="var(--flame)" stroke-width="2.5" marker-end="url(#arrow-fig6)"/>
+                  <text x="158" y="86" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-dark)">θ = 30°</text>
+                </g>
+
+                <g transform="translate(235,0)">
+                  <line x1="10" y1="130" x2="205" y2="130" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig6-axis)"/>
+                  <line x1="90" y1="130" x2="90" y2="18" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig6-axis)"/>
+                  <text x="198" y="146" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)" text-anchor="end">x</text>
+                  <text x="98" y="26" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)">y</text>
+                  <circle cx="90" cy="130" r="3" fill="var(--indigo-dark)"/>
+                  <path d="M 118 130 A 28 28 0 0 0 68.6 112.0" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+                  <text x="98" y="93" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--muted)">140°</text>
+                  <line x1="90" y1="130" x2="32.5" y2="81.8" stroke="var(--flame)" stroke-width="2.5" marker-end="url(#arrow-fig6)"/>
+                  <text x="8" y="70" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-dark)">θ = 140°</text>
+                </g>
+
+                <g transform="translate(470,0)">
+                  <line x1="10" y1="130" x2="205" y2="130" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig6-axis)"/>
+                  <line x1="90" y1="130" x2="90" y2="18" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig6-axis)"/>
+                  <text x="198" y="146" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)" text-anchor="end">x</text>
+                  <text x="98" y="26" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--indigo-dark)">y</text>
+                  <circle cx="90" cy="130" r="3" fill="var(--indigo-dark)"/>
+                  <path d="M 118 130 A 28 28 0 0 1 104.0 154.2" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+                  <text x="122" y="163" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--muted)">-60°</text>
+                  <line x1="90" y1="130" x2="127.5" y2="195.0" stroke="var(--flame)" stroke-width="2.5" marker-end="url(#arrow-fig6)"/>
+                  <text x="100" y="210" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">θ = -60° (300°)</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 6 — L'orientation d'un vecteur (symbole θ) se mesure par rapport à l'axe des x positifs, dans le sens antihoraire pour un angle positif (comme 30° ou 140°) et dans le sens horaire pour un angle négatif (comme -60°, ce qui équivaut à 300°).</figcaption>
+          </div>
+
+          <p>Quand on utilise un système de référence basé sur des coordonnées cartésiennes, les vecteurs peuvent être décomposés en deux <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">composantes</span><span class="term-pop" role="tooltip"><span class="term-pop-word">composante</span><span class="term-pop-ety">Du latin componere, « mettre ensemble »</span><span class="term-pop-body">Projection orthogonale d'un vecteur sur un axe d'un système de coordonnées. Un vecteur à deux dimensions possède une composante en x et une composante en y, dont la somme (vectorielle) redonne le vecteur d'origine.</span></span></span> : une composante en x et une composante en y (voir la figure 7).</p>
+
+          <div class="formula">V<sub>x</sub> = V·cos θ &nbsp;&nbsp;&nbsp; V<sub>y</sub> = V·sin θ</div>
+          <p class="formula-caption">où V est la norme du vecteur V⃗, et θ, son orientation mesurée par rapport à l'axe des x positifs.</p>
+
+          <p>Puisque les fonctions sinus et cosinus peuvent prendre des valeurs négatives, les composantes d'un vecteur peuvent elles aussi être négatives. La composante en x est positive lorsque le vecteur pointe dans le sens positif de l'axe des x, et négative dans le cas contraire. Il en va de même pour la composante en y. La figure 7 illustre un cas où les deux composantes sont positives (a), et un cas où la composante en x est négative alors que la composante en y est positive (b).</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 560 240" style="width:100%;max-width:560px;height:auto;" role="img" aria-label="Décomposition d'un vecteur en composantes x et y, dans un cas où les deux composantes sont positives et dans un cas où la composante en x est négative">
+                <defs>
+                  <marker id="arrow-fig7-vec" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--flame)"/></marker>
+                  <marker id="arrow-fig7-axis" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--indigo-dark)"/></marker>
+                  <marker id="arrow-fig7-vx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--amber-dim)"/></marker>
+                  <marker id="arrow-fig7-vy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--indigo-light)"/></marker>
+                </defs>
+
+                <g transform="translate(0,0)">
+                  <line x1="10" y1="190" x2="230" y2="190" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig7-axis)"/>
+                  <line x1="70" y1="190" x2="70" y2="25" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig7-axis)"/>
+                  <text x="222" y="206" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--indigo-dark)" text-anchor="end">x</text>
+                  <text x="78" y="33" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--indigo-dark)">y</text>
+                  <circle cx="70" cy="190" r="3" fill="var(--indigo-dark)"/>
+                  <line x1="118.2" y1="190" x2="118.2" y2="132.5" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <line x1="70" y1="132.5" x2="118.2" y2="132.5" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <line x1="70" y1="190" x2="116" y2="190" stroke="var(--amber-dim)" stroke-width="3" marker-end="url(#arrow-fig7-vx)"/>
+                  <line x1="70" y1="190" x2="70" y2="135" stroke="var(--indigo-light)" stroke-width="3" marker-end="url(#arrow-fig7-vy)"/>
+                  <line x1="70" y1="190" x2="118.2" y2="132.5" stroke="var(--flame)" stroke-width="2.5" marker-end="url(#arrow-fig7-vec)"/>
+                  <path d="M 88 190 A 18 18 0 0 0 81.6 176.2" fill="none" stroke="var(--muted)" stroke-width="1"/>
+                  <text x="92" y="182" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">θ</text>
+                  <text x="124" y="128" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-dark)">V</text>
+                  <text x="90" y="207" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--amber-dim)" text-anchor="middle">V<tspan font-size="8" dy="2">x</tspan></text>
+                  <text x="46" y="165" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--indigo-light)" text-anchor="end">V<tspan font-size="8" dy="2">y</tspan></text>
+                  <text x="115" y="228" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(a) Vx et Vy positives</text>
+                </g>
+
+                <g transform="translate(300,0)">
+                  <line x1="10" y1="190" x2="230" y2="190" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig7-axis)"/>
+                  <line x1="70" y1="190" x2="70" y2="25" stroke="var(--indigo-dark)" stroke-width="1.5" marker-end="url(#arrow-fig7-axis)"/>
+                  <text x="222" y="206" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--indigo-dark)" text-anchor="end">x</text>
+                  <text x="78" y="33" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--indigo-dark)">y</text>
+                  <circle cx="70" cy="190" r="3" fill="var(--indigo-dark)"/>
+                  <line x1="27" y1="190" x2="27" y2="128.6" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <line x1="27" y1="128.6" x2="70" y2="128.6" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <line x1="70" y1="190" x2="29" y2="190" stroke="var(--amber-dim)" stroke-width="3" marker-end="url(#arrow-fig7-vx)"/>
+                  <line x1="70" y1="190" x2="70" y2="131" stroke="var(--indigo-light)" stroke-width="3" marker-end="url(#arrow-fig7-vy)"/>
+                  <line x1="70" y1="190" x2="27.0" y2="128.6" stroke="var(--flame)" stroke-width="2.5" marker-end="url(#arrow-fig7-vec)"/>
+                  <path d="M 88 190 A 18 18 0 0 0 59.7 175.3" fill="none" stroke="var(--muted)" stroke-width="1"/>
+                  <text x="76" y="180" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--muted)">θ</text>
+                  <text x="0" y="122" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-dark)">V</text>
+                  <text x="48" y="207" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--amber-dim)" text-anchor="middle">V<tspan font-size="8" dy="2">x</tspan></text>
+                  <text x="46" y="160" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--indigo-light)" text-anchor="end">V<tspan font-size="8" dy="2">y</tspan></text>
+                  <text x="115" y="228" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(b) Vx négative, Vy positive</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 7 — La composante en x d'un vecteur est positive quand il pointe vers les x positifs, et négative dans le cas contraire; il en va de même pour la composante en y.</figcaption>
+          </div>
+
+          <div class="example-box">
+            <div class="example-header">Exemple — Les composantes d'une tension</div>
+            <div class="example-body">
+              <p>Un ballon publicitaire captif est retenu au sol par un câble fixé à un poteau. La tension dans le câble a une norme de 125 N, et le câble fait un angle de 250° avec l'axe des x positifs. Quelles sont les composantes x et y de cette tension?</p>
+              <div class="example-data">F = 125 N &nbsp;|&nbsp; θ = 250° &nbsp;|&nbsp; F<sub>x</sub> = ? &nbsp;|&nbsp; F<sub>y</sub> = ?</div>
+              <ol class="example-steps">
+                <li><span class="step-num">1</span><div class="step-content"><p>Calculer la composante en x :</p><div class="step-calc">F<sub>x</sub> = F·cos θ = 125 N × cos 250° = -42,8 N</div></div></li>
+                <li><span class="step-num">2</span><div class="step-content"><p>Calculer la composante en y :</p><div class="step-calc">F<sub>y</sub> = F·sin θ = 125 N × sin 250° = -117 N</div></div></li>
+              </ol>
+              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Les deux composantes sont négatives, ce qui est cohérent avec un vecteur orienté à 250° : il pointe dans le troisième quadrant, où x et y sont tous deux négatifs.</span></p>
+            </div>
+          </div>
+
+          <p style="margin-top:24px;">L'opération inverse est tout aussi utile : lorsqu'on connaît les composantes x et y d'un vecteur, on peut en calculer la norme et l'orientation. Puisque le vecteur, sa composante en x et sa composante en y forment un triangle rectangle (voir la figure 8), la relation de Pythagore permet de trouver la norme du vecteur V⃗ :</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 260 220" style="width:100%;max-width:260px;height:auto;" role="img" aria-label="Un triangle rectangle formé par un vecteur, sa composante en x et sa composante en y, illustrant la relation de Pythagore">
+                <defs>
+                  <marker id="arrow-fig8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--flame)"/></marker>
+                  <marker id="arrow-fig8-vx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--amber-dim)"/></marker>
+                  <marker id="arrow-fig8-vy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--indigo-light)"/></marker>
+                </defs>
+                <line x1="40" y1="190" x2="148" y2="190" stroke="var(--amber-dim)" stroke-width="3" marker-end="url(#arrow-fig8-vx)"/>
+                <line x1="150" y1="190" x2="150" y2="122" stroke="var(--indigo-light)" stroke-width="3" marker-end="url(#arrow-fig8-vy)"/>
+                <line x1="40" y1="190" x2="150" y2="120" stroke="var(--flame)" stroke-width="2.5" marker-end="url(#arrow-fig8)"/>
+                <path d="M 140 190 L 140 180 L 150 180" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+                <path d="M 62 190 A 22 22 0 0 0 55.7 172.6" fill="none" stroke="var(--muted)" stroke-width="1"/>
+                <text x="66" y="180" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--muted)">θ</text>
+                <text x="94" y="207" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--amber-dim)" text-anchor="middle">Vx</text>
+                <text x="165" y="158" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-light)">Vy</text>
+                <text x="70" y="145" font-family="Barlow Condensed, sans-serif" font-size="14" font-weight="700" fill="var(--indigo-dark)">V</text>
+              </svg>
+            </div>
+            <figcaption>Figure 8 — Le vecteur V⃗, sa composante Vx et sa composante Vy forment un triangle rectangle : la norme V du vecteur correspond donc à l'hypoténuse de ce triangle.</figcaption>
+          </div>
+
+          <div class="formula">V = √(V<sub>x</sub>² + V<sub>y</sub>²)</div>
+          <p class="formula-caption">La norme d'un vecteur à partir de ses composantes x et y.</p>
+
+          <p>Pour déterminer l'orientation θ du vecteur, on pourrait être tenté d'utiliser directement la relation tan θ = V<sub>y</sub>/V<sub>x</sub>, donc θ = tan⁻¹(V<sub>y</sub>/V<sub>x</sub>). Ce raisonnement est mathématiquement exact, mais il pose un problème pratique : la touche tan⁻¹ d'une calculatrice ne renvoie que des valeurs comprises entre -90° et 90°. Si la composante en x du vecteur est négative, la calculatrice donnera alors une orientation erronée, décalée de 180°.</p>
+
+          <p>Pour contourner ce problème, on utilise le <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">symbole α</span><span class="term-pop" role="tooltip"><span class="term-pop-word">symbole α</span><span class="term-pop-ety">Alpha (α), première lettre de l'alphabet grec</span><span class="term-pop-body">Angle obtenu directement à l'aide de la touche tan⁻¹ de la calculatrice, en utilisant les valeurs absolues des composantes. Cette valeur, toujours comprise entre 0° et 90°, doit ensuite être ajustée selon le quadrant du vecteur pour obtenir sa véritable orientation θ.</span></span></span> (alpha), défini comme suit :</p>
+
+          <div class="formula">α = tan⁻¹( |V<sub>y</sub>| / |V<sub>x</sub>| )</div>
+          <p class="formula-caption">α est toujours une valeur positive comprise entre 0° et 90°, peu importe le quadrant du vecteur.</p>
+
+          <p>Une fois la valeur de α calculée, on détermine θ à l'aide du signe des composantes V<sub>x</sub> et V<sub>y</sub>, qui indique dans quel quadrant se trouve le vecteur (voir le tableau 6).</p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <caption>Tableau 6 — Les quatre cas pour évaluer l'orientation θ d'un vecteur à partir de α</caption>
+              <thead><tr><th>Signe de Vx</th><th>Signe de Vy</th><th>Plage de θ</th><th>Formule</th></tr></thead>
+              <tbody>
+                <tr><td>Positif</td><td>Positif</td><td>0° à 90°</td><td>θ = α</td></tr>
+                <tr><td>Négatif</td><td>Positif</td><td>90° à 180°</td><td>θ = 180° - α</td></tr>
+                <tr><td>Négatif</td><td>Négatif</td><td>180° à 270°</td><td>θ = 180° + α</td></tr>
+                <tr><td>Positif</td><td>Négatif</td><td>270° à 360°</td><td>θ = 360° - α</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="example-box">
+            <div class="example-header">Exemple — La norme et l'orientation à partir des composantes</div>
+            <div class="example-body">
+              <p>Un palet glisse sur une table et subit un déplacement dont la composante en x vaut -30,0 cm et la composante en y, 60,0 cm. Quelles sont la norme et l'orientation de ce déplacement?</p>
+              <div class="example-data">s<sub>x</sub> = -30,0 cm &nbsp;|&nbsp; s<sub>y</sub> = 60,0 cm &nbsp;|&nbsp; s = ? &nbsp;|&nbsp; θ = ?</div>
+              <ol class="example-steps">
+                <li><span class="step-num">1</span><div class="step-content"><p>Calculer la norme du déplacement :</p><div class="step-calc">s = √(s<sub>x</sub>² + s<sub>y</sub>²) = √((-30,0 cm)² + (60,0 cm)²) = 67,1 cm</div></div></li>
+                <li><span class="step-num">2</span><div class="step-content"><p>Calculer α :</p><div class="step-calc">α = tan⁻¹(|s<sub>y</sub>/s<sub>x</sub>|) = tan⁻¹(|60,0 cm / -30,0 cm|) = 63,4°</div></div></li>
+                <li><span class="step-num">3</span><div class="step-content"><p>Comme s<sub>x</sub> est négative et s<sub>y</sub>, positive (tableau 6), θ est compris entre 90° et 180° :</p><div class="step-calc">θ = 180° - α = 180° - 63,4° = 116,6°</div></div></li>
+              </ol>
+              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Le déplacement a une norme de 67,1 cm et une orientation de 116,6°.</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" id="addition-vecteurs">
+          <div class="subsection-title">3.3 L'addition des vecteurs</div>
+
+          <p>Additionner des vecteurs revient à les placer bout à bout : l'origine de chaque vecteur additionné coïncide avec l'extrémité du précédent. Le <strong>vecteur résultant</strong> relie alors l'origine du premier vecteur à l'extrémité du dernier (voir la figure 9). Il est important de noter qu'on ne peut pas trouver la norme (ni l'orientation) d'une somme de vecteurs en additionnant simplement les normes (ni les orientations) des vecteurs de départ : l'orientation de chaque vecteur influence directement le résultat.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 420 220" style="width:100%;max-width:420px;height:auto;" role="img" aria-label="Addition de deux vecteurs placés bout à bout, puis de trois vecteurs placés bout à bout, pour obtenir chaque fois un vecteur résultant">
+                <defs>
+                  <marker id="arrow-fig9-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--flame)"/></marker>
+                  <marker id="arrow-fig9-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--indigo-light)"/></marker>
+                  <marker id="arrow-fig9-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--amber-dim)"/></marker>
+                </defs>
+
+                <g transform="translate(0,0)">
+                  <line x1="30" y1="170" x2="97" y2="100" stroke="var(--indigo-light)" stroke-width="2.5" marker-end="url(#arrow-fig9-a)"/>
+                  <line x1="100" y1="100" x2="187" y2="130" stroke="var(--amber-dim)" stroke-width="2.5" marker-end="url(#arrow-fig9-b)"/>
+                  <line x1="30" y1="170" x2="190" y2="130" stroke="var(--flame)" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrow-fig9-r)"/>
+                  <text x="52" y="128" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-light)">V1</text>
+                  <text x="150" y="106" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--amber-dim)">V2</text>
+                  <text x="95" y="163" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--flame)">VR</text>
+                  <text x="110" y="200" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(a) V1 + V2 = VR</text>
+                </g>
+
+                <g transform="translate(220,0)">
+                  <line x1="20" y1="190" x2="70" y2="140" stroke="var(--indigo-light)" stroke-width="2.5" marker-end="url(#arrow-fig9-a)"/>
+                  <line x1="70" y1="140" x2="130" y2="155" stroke="var(--amber-dim)" stroke-width="2.5" marker-end="url(#arrow-fig9-b)"/>
+                  <line x1="130" y1="155" x2="175" y2="100" stroke="var(--indigo-light)" stroke-width="2.5" marker-end="url(#arrow-fig9-a)"/>
+                  <line x1="20" y1="190" x2="178" y2="98" stroke="var(--flame)" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrow-fig9-r)"/>
+                  <text x="30" y="160" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-light)">V1</text>
+                  <text x="88" y="153" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--amber-dim)">V2</text>
+                  <text x="145" y="120" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-light)">V3</text>
+                  <text x="70" y="205" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--flame)" text-anchor="middle">VR</text>
+                  <text x="100" y="215" font-family="Barlow Condensed, sans-serif" font-size="12" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(b) V1 + V2 + V3 = VR</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 9 — La somme de plusieurs vecteurs est un vecteur : on place les vecteurs à additionner bout à bout, et le vecteur résultant relie l'origine du premier à l'extrémité du dernier.</figcaption>
+          </div>
+
+          <p>Une première façon de trouver la norme et l'orientation d'un vecteur résultant consiste à utiliser une méthode graphique : on trace les vecteurs à additionner à l'échelle, bout à bout, à l'aide d'une règle et d'un rapporteur d'angle, puis on mesure directement la norme et l'orientation du vecteur résultant sur le schéma. Par exemple, si un joueur de football est plaqué simultanément par deux adversaires exerçant chacun une force sur lui — F⃗1, mesurant 2,5 cm sur le schéma (soit 2,5 × 10² N à l'échelle 1 cm = 100 N) et orientée à 40°, et F⃗2, mesurant 1,5 cm (1,5 × 10² N) et orientée à 190° — on peut redessiner ces deux vecteurs bout à bout et mesurer directement le vecteur résultant : celui-ci mesure environ 1,4 cm, ce qui correspond à une force résultante F⃗R d'environ 1,4 × 10² N, orientée à environ 72°.</p>
+
+          <p>La méthode graphique est valide, mais il est difficile d'en tirer un résultat très précis : on lui préfère généralement la <strong>méthode des composantes</strong>. Cette méthode repose sur le fait que la composante x du vecteur résultant d'une addition correspond à la somme des composantes x des vecteurs additionnés, et il en va de même pour les composantes y :</p>
+
+          <div class="formula">V<sub>Rx</sub> = V<sub>1x</sub> + V<sub>2x</sub> + … + V<sub>nx</sub> &nbsp;&nbsp;&nbsp; V<sub>Ry</sub> = V<sub>1y</sub> + V<sub>2y</sub> + … + V<sub>ny</sub></div>
+          <p class="formula-caption">Une fois les composantes du vecteur résultant calculées, on trouve sa norme et son orientation à l'aide des équations vues à la sous-section précédente.</p>
+
+          <div class="example-box">
+            <div class="example-header">Exemple — L'addition de deux déplacements</div>
+            <div class="example-body">
+              <p>Lors d'une randonnée guidée par une application de géolocalisation, une personne se déplace d'abord de 400 m à 30,0°, puis de 800 m à 125,0°. L'axe des x est orienté vers l'est et l'axe des y, vers le nord. Quel est le déplacement total de cette personne?</p>
+              <div class="example-data">s⃗<sub>1</sub> = 400 m à 30,0° &nbsp;|&nbsp; s⃗<sub>2</sub> = 800 m à 125,0° &nbsp;|&nbsp; s⃗<sub>R</sub> = ?</div>
+              <ol class="example-steps">
+                <li><span class="step-num">1</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>1</sub> :</p><div class="step-calc">s<sub>1x</sub> = s<sub>1</sub>·cos θ = 400 m × cos 30,0° = 346 m<br>s<sub>1y</sub> = s<sub>1</sub>·sin θ = 400 m × sin 30,0° = 200 m</div></div></li>
+                <li><span class="step-num">2</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>2</sub> :</p><div class="step-calc">s<sub>2x</sub> = s<sub>2</sub>·cos θ = 800 m × cos 125,0° = -459 m<br>s<sub>2y</sub> = s<sub>2</sub>·sin θ = 800 m × sin 125,0° = 655 m</div></div></li>
+                <li><span class="step-num">3</span><div class="step-content"><p>Additionner les composantes :</p><div class="step-calc">s<sub>Rx</sub> = s<sub>1x</sub> + s<sub>2x</sub> = 346 m + (-459 m) = -113 m<br>s<sub>Ry</sub> = s<sub>1y</sub> + s<sub>2y</sub> = 200 m + 655 m = 855 m</div></div></li>
+                <li><span class="step-num">4</span><div class="step-content"><p>Calculer la norme de s⃗<sub>R</sub> :</p><div class="step-calc">s<sub>R</sub> = √(s<sub>Rx</sub>² + s<sub>Ry</sub>²) = √((-113 m)² + (855 m)²) = 862 m</div></div></li>
+                <li><span class="step-num">5</span><div class="step-content"><p>Calculer α, puis l'orientation de s⃗<sub>R</sub> (s<sub>Rx</sub> négative, s<sub>Ry</sub> positive → θ entre 90° et 180°) :</p><div class="step-calc">α = tan⁻¹(|855 m / -113 m|) = 82,5° &nbsp;→&nbsp; θ = 180° - 82,5° = 97,5°</div></div></li>
+              </ol>
+              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Le déplacement total est s⃗<sub>R</sub> = 862 m à 97,5°.</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" id="soustraction-vecteurs">
+          <div class="subsection-title">3.4 La soustraction des vecteurs et la notion de vecteur opposé</div>
+
+          <p>En arithmétique, soustraire un nombre équivaut à additionner son opposé (par exemple, 8 - 5 = 8 + (-5)). Il en va de même avec les vecteurs : soustraire un vecteur équivaut à additionner son opposé.</p>
+
+          <div class="formula">V⃗<sub>1</sub> - V⃗<sub>2</sub> = V⃗<sub>1</sub> + (-V⃗<sub>2</sub>)</div>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Vecteurs opposés :</strong> deux vecteurs dont l'orientation diffère de 180°. Des vecteurs opposés ont la même norme, mais des composantes de même grandeur et de signe contraire.</p>
+          </div>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 460 220" style="width:100%;max-width:460px;height:auto;" role="img" aria-label="Un vecteur et son opposé, puis la soustraction graphique de deux vecteurs à l'aide du vecteur opposé">
+                <defs>
+                  <marker id="arrow-fig10-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--indigo-light)"/></marker>
+                  <marker id="arrow-fig10-nv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--amber-dim)"/></marker>
+                  <marker id="arrow-fig10-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--flame)"/></marker>
+                </defs>
+
+                <g transform="translate(0,0)">
+                  <line x1="30" y1="160" x2="190" y2="80" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <circle cx="110" cy="120" r="3" fill="var(--indigo-dark)"/>
+                  <line x1="110" y1="120" x2="190" y2="80" stroke="var(--indigo-light)" stroke-width="2.5" marker-end="url(#arrow-fig10-v)"/>
+                  <line x1="110" y1="120" x2="30" y2="160" stroke="var(--amber-dim)" stroke-width="2.5" marker-end="url(#arrow-fig10-nv)"/>
+                  <text x="195" y="75" font-family="Barlow Condensed, sans-serif" font-size="14" font-weight="700" fill="var(--indigo-light)">V</text>
+                  <text x="8" y="170" font-family="Barlow Condensed, sans-serif" font-size="14" font-weight="700" fill="var(--amber-dim)">-V</text>
+                  <text x="100" y="200" font-family="Barlow Condensed, sans-serif" font-size="12.5" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(a) Vecteurs opposés</text>
+                </g>
+
+                <g transform="translate(230,0)">
+                  <line x1="30" y1="150" x2="110" y2="90" stroke="var(--indigo-light)" stroke-width="2.5" marker-end="url(#arrow-fig10-v)"/>
+                  <line x1="110" y1="90" x2="165" y2="55" stroke="var(--amber-dim)" stroke-width="2.5" marker-end="url(#arrow-fig10-nv)"/>
+                  <line x1="30" y1="150" x2="168" y2="53" stroke="var(--flame)" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrow-fig10-r)"/>
+                  <text x="55" y="112" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--indigo-light)">U</text>
+                  <text x="128" y="65" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--amber-dim)">-V</text>
+                  <text x="60" y="185" font-family="Barlow Condensed, sans-serif" font-size="13" font-weight="700" fill="var(--flame)">W = U - V</text>
+                  <text x="95" y="205" font-family="Barlow Condensed, sans-serif" font-size="12.5" font-weight="700" fill="var(--indigo-dark)" text-anchor="middle">(b) Soustraction graphique</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption>Figure 10 — (a) Deux vecteurs opposés ont la même norme, mais une orientation qui diffère de 180°. (b) Pour soustraire graphiquement V⃗ de U⃗, on dessine le vecteur opposé -V⃗ à l'extrémité de U⃗; le vecteur résultant W⃗ part de l'origine de U⃗ et se termine à l'extrémité de -V⃗.</figcaption>
+          </div>
+
+          <p>Comme pour l'addition, la méthode des composantes est plus précise que la méthode graphique pour effectuer une soustraction vectorielle. Pour soustraire le vecteur V⃗<sub>2</sub> du vecteur V⃗<sub>1</sub>, il suffit de soustraire les composantes de V⃗<sub>2</sub> de celles de V⃗<sub>1</sub> — ce qui revient à trouver les composantes du vecteur opposé -V⃗<sub>2</sub> et à les additionner à celles de V⃗<sub>1</sub>.</p>
+
+          <div class="example-box">
+            <div class="example-header">Exemple — La soustraction de deux déplacements</div>
+            <div class="example-body">
+              <p>Lors d'une activité d'orientation en forêt, une équipe doit atteindre un point situé à 800 m à 95,0° par rapport à son point de départ. Or, un cours d'eau l'empêche d'avancer en ligne droite : elle doit d'abord contourner l'obstacle par un trajet de 550 m à 120,0°. Quel déplacement complémentaire doit-elle ensuite effectuer pour atteindre sa destination?</p>
+              <div class="example-data">s⃗<sub>R</sub> = 800 m à 95,0° &nbsp;|&nbsp; s⃗<sub>1</sub> = 550 m à 120,0° &nbsp;|&nbsp; s⃗<sub>2</sub> = ?</div>
+              <ol class="example-steps">
+                <li><span class="step-num">1</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>R</sub> :</p><div class="step-calc">s<sub>Rx</sub> = 800 m × cos 95,0° = -69,7 m<br>s<sub>Ry</sub> = 800 m × sin 95,0° = 797 m</div></div></li>
+                <li><span class="step-num">2</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>1</sub> :</p><div class="step-calc">s<sub>1x</sub> = 550 m × cos 120,0° = -275 m<br>s<sub>1y</sub> = 550 m × sin 120,0° = 476 m</div></div></li>
+                <li><span class="step-num">3</span><div class="step-content"><p>Soustraire les composantes de s⃗<sub>1</sub> de celles de s⃗<sub>R</sub> :</p><div class="step-calc">s<sub>2x</sub> = s<sub>Rx</sub> - s<sub>1x</sub> = -69,7 m - (-275 m) = 205 m<br>s<sub>2y</sub> = s<sub>Ry</sub> - s<sub>1y</sub> = 797 m - 476 m = 321 m</div></div></li>
+                <li><span class="step-num">4</span><div class="step-content"><p>Calculer la norme de s⃗<sub>2</sub> :</p><div class="step-calc">s<sub>2</sub> = √((205 m)² + (321 m)²) = 381 m</div></div></li>
+                <li><span class="step-num">5</span><div class="step-content"><p>Calculer α, puis l'orientation (s<sub>2x</sub> et s<sub>2y</sub> sont toutes deux positives → θ entre 0° et 90°) :</p><div class="step-calc">α = tan⁻¹(|321 m / 205 m|) = 57,4° &nbsp;→&nbsp; θ = α = 57,4°</div></div></li>
+              </ol>
+              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Le déplacement complémentaire à effectuer est s⃗<sub>2</sub> = 381 m à 57,4°.</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s3">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 3<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 6</span>
+            <progress class="quiz-progress" value="0" max="6"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">La force de frottement qui agit sur une caisse qu'on pousse sur le sol est une grandeur vectorielle.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. En plus d'un nombre et d'une unité, la force de frottement possède une orientation (elle s'oppose au mouvement) : c'est donc une grandeur vectorielle.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : la force de frottement possède une orientation (elle s'oppose toujours au mouvement), en plus d'un nombre et d'une unité — c'est donc une grandeur vectorielle.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un vecteur force F⃗ a une norme de 50,0 N et une orientation de 210,0°. Quelles sont ses composantes x et y?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Fx = -43,3 N; Fy = -25,0 N</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Fx = 43,3 N; Fy = 25,0 N</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Fx = -25,0 N; Fy = -43,3 N</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Fx = -43,3 N; Fy = 25,0 N</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Fx = 50,0 N × cos 210,0° = -43,3 N, et Fy = 50,0 N × sin 210,0° = -25,0 N. Les deux composantes sont négatives, ce qui est cohérent avec un vecteur situé dans le troisième quadrant.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est A : Fx = 50,0 N × cos 210,0° = -43,3 N et Fy = 50,0 N × sin 210,0° = -25,0 N. Un angle de 210° place le vecteur dans le troisième quadrant, où les deux composantes sont négatives.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">Un vecteur V⃗ a pour composantes Vx = -12,0 m et Vy = 9,00 m. Quelles sont sa norme et son orientation?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 15,0 m à 143,1°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 15,0 m à 36,9°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 21,0 m à 143,1°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 15,0 m à 233,1°</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. V = √((-12,0 m)² + (9,00 m)²) = 15,0 m. α = tan⁻¹(9,00/12,0) = 36,9°; comme Vx est négative et Vy, positive, θ = 180° - 36,9° = 143,1°.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est A, 15,0 m à 143,1° : la norme s'obtient par Pythagore (15,0 m), et puisque Vx est négative et Vy, positive, il faut calculer θ = 180° - α = 180° - 36,9° = 143,1°, et non utiliser α directement.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Si la norme du vecteur V⃗1 est de 3 m et que celle du vecteur V⃗2 est de 4 m, alors la norme du vecteur V⃗R qui correspond à V⃗1 + V⃗2 sera nécessairement de 7 m.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La norme de la résultante dépend de l'orientation relative des deux vecteurs. Elle ne vaut 7 m que si V⃗1 et V⃗2 pointent exactement dans la même direction; par exemple, si les deux vecteurs sont plutôt perpendiculaires, la résultante mesurerait √(3² + 4²) = 5 m.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : la norme de la résultante dépend de l'orientation relative des deux vecteurs, pas seulement de leurs normes. Si V⃗1 et V⃗2 sont perpendiculaires, par exemple, la résultante mesurerait √(3² + 4²) = 5 m plutôt que 7 m.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple — calcul</div>
+            <div class="quiz-q-text">On additionne le vecteur A⃗ = 6,00 m à 0° et le vecteur B⃗ = 8,00 m à 90°. Quelles sont la norme et l'orientation du vecteur résultant?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 10,0 m à 53,1°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 14,0 m à 53,1°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 10,0 m à 36,9°</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 2,00 m à 53,1°</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Rx = 6,00 m, Ry = 8,00 m, donc R = √(6,00² + 8,00²) = 10,0 m, et θ = tan⁻¹(8,00/6,00) = 53,1° (les deux composantes étant positives).</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est A, 10,0 m à 53,1° : il faut additionner séparément les composantes x et y (Rx = 6,00 m, Ry = 8,00 m), puis appliquer Pythagore et la tangente inverse — additionner directement les normes (6 + 8 = 14) n'est pas valide.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="5">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Que peut-on affirmer à propos de deux vecteurs opposés?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Ils ont la même orientation, mais des normes différentes.</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Ils ont la même norme, mais une orientation qui diffère de 180°.</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Ils ont nécessairement la même norme et la même orientation.</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Leurs composantes x et y sont toutes deux nulles.</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Deux vecteurs opposés ont la même norme, mais leur orientation diffère de 180° — leurs composantes x et y sont donc de même grandeur, mais de signe contraire.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse est B : deux vecteurs opposés ont la même norme, mais une orientation qui diffère de 180°, ce qui donne des composantes de même grandeur, mais de signe contraire.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</main>
+
+<button id="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+<script>
+// ── Toggle sections ────────────────────────────────────────
+function toggleSection(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  btn.parentElement.querySelector('.section-body').classList.toggle('open', !expanded);
+}
+
+// ── Toggle bulles de note ────────────────────────────────────
+function toggleNote(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Termes consultables (définition au clic) ────────────────
+function toggleTerm(el) {
+  const expanded = el.getAttribute('aria-expanded') === 'true';
+  document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => {
+    if (t !== el) t.setAttribute('aria-expanded', 'false');
+  });
+  el.setAttribute('aria-expanded', String(!expanded));
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.term-wrap')) {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
+
+// ── Toggle blocs d'exercices ────────────────────────────────
+function toggleQuiz(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Sidebar active link ────────────────────────────────────
+const tocLinks = document.querySelectorAll('.toc-link');
+const sectionIds = ['intro','section-1','section-2','section-3'];
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 130) current = id;
+  });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+  document.getElementById('to-top').classList.toggle('visible', window.scrollY > 300);
+}, {passive: true});
+
+// ── Smooth scroll from TOC ─────────────────────────────────
+tocLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const toggle = target.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ── Table des matières (page-toc) : ouvre la bonne section, puis défile ────
+document.querySelectorAll('.page-toc-pills a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const card = target.closest('.section-card');
+    const toggle = card ? card.querySelector('.section-toggle') : null;
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// Ouvre automatiquement la bonne section si on arrive via une ancre (#section-1, etc.)
+if (location.hash) {
+  const target = document.getElementById(location.hash.slice(1));
+  if (target) {
+    const card = target.closest('.section-card') || target;
+    const toggle = card.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
+}
+
+// ── Search ─────────────────────────────────────────────────
+const contentEl = document.querySelector('.content');
+const originalHTML = contentEl.innerHTML;
+
+let lastQuery = '';
+let matchIndex = -1;
+
+function doSearch(query) {
+  contentEl.innerHTML = originalHTML;
+  const countEl = document.getElementById('search-count');
+  matchIndex = -1;
+  lastQuery = query;
+
+  if (!query.trim()) { countEl.textContent = ''; return 0; }
+
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  let count = 0;
+  nodes.forEach(node => {
+    if (!re.test(node.textContent)) return;
+    re.lastIndex = 0;
+    const span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(re, m => { count++; return `<mark class="sh">${m}</mark>`; });
+    node.parentNode.replaceChild(span, node);
+  });
+
+  countEl.textContent = count ? `${count} résultat${count>1?'s':''}` : 'Aucun résultat';
+
+  document.querySelectorAll('.section-card').forEach(card => {
+    if (card.querySelector('mark.sh')) {
+      const t = card.querySelector('.section-toggle');
+      if (t && t.getAttribute('aria-expanded') === 'false') toggleSection(t);
+    }
+  });
+
+  return count;
+}
+
+function goToMatch(step) {
+  const marks = contentEl.querySelectorAll('mark.sh');
+  if (!marks.length) return;
+  if (matchIndex >= 0 && marks[matchIndex]) marks[matchIndex].classList.remove('current');
+  matchIndex = (matchIndex + step + marks.length) % marks.length;
+  const m = marks[matchIndex];
+  m.classList.add('current');
+  m.scrollIntoView({behavior:'smooth', block:'center'});
+  const countEl = document.getElementById('search-count');
+  countEl.textContent = `${matchIndex+1} / ${marks.length} résultats`;
+}
+
+function runSearchAndJump(query, step) {
+  if (query !== lastQuery || !contentEl.querySelector('mark.sh')) {
+    const count = doSearch(query);
+    if (count > 0) goToMatch(0);
+  } else {
+    goToMatch(step);
+  }
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAndJump(e.target.value, e.shiftKey ? -1 : 1);
+  }
+});
+
+// Ctrl+F → recherche interne
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    const inp = document.getElementById('search-input');
+    inp.focus(); inp.select();
+  }
+});
+
+// Fermer la bulle d'attribution au clic à l'extérieur
+document.addEventListener('click', e => {
+  const pop = document.getElementById('attrib-pop');
+  if (pop && !pop.contains(e.target) && !e.target.closest('.sidebar-footer button')) {
+    pop.classList.remove('visible');
+  }
+});
+
+// === MOTEUR DE QUIZ INTERACTIFS ===
+function initQuizBlock(block) {
+  const questions = Array.from(block.querySelectorAll('.quiz-q'));
+  const total = questions.length;
+  const scoreLabel = block.querySelector('.quiz-score-label');
+  const progressBar = block.querySelector('.quiz-progress');
+  const resultMsg = block.querySelector('.quiz-result-msg');
+  const resetBtn = block.querySelector('.quiz-reset');
+  progressBar.max = total;
+
+  function updateScore() {
+    const answered = questions.filter(q => q.classList.contains('answered'));
+    const correct = answered.filter(q => q.dataset.gotCorrect === 'true').length;
+    scoreLabel.textContent = `${correct} / ${total}`;
+    progressBar.value = answered.length;
+
+    if (answered.length === total) {
+      resultMsg.classList.add('show');
+      const pct = Math.round((correct / total) * 100);
+      resultMsg.classList.remove('great', 'good', 'poor');
+      const starIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 16.9 6.5 19.7l1.4-6.1-4.7-4.2 6.2-.6Z"/></svg>';
+      const upIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13l3-3 2 2 3-3.5"/></svg>';
+      const bookIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg>';
+      let icon, msg, variant;
+      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — la section est maîtrisée.`; variant = 'great'; }
+      else if (pct >= 70) { icon = upIcon; msg = `Bon travail : ${correct} / ${total}. Relis les explications des questions manquées.`; variant = 'good'; }
+      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de revoir cette section avant de continuer.`; variant = 'poor'; }
+      resultMsg.classList.add(variant);
+      resultMsg.innerHTML = `${icon}<span>${msg}</span>`;
+      resetBtn.style.display = 'inline-block';
+    } else {
+      resultMsg.classList.remove('show', 'great', 'good', 'poor');
+      resetBtn.style.display = 'none';
+    }
+  }
+
+  questions.forEach(q => {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    const fbOk = q.querySelector('.quiz-feedback.ok');
+    const fbKo = q.querySelector('.quiz-feedback.ko');
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (q.classList.contains('answered')) return;
+
+        const isCorrect = opt.dataset.correct === 'true';
+        q.classList.add('answered');
+        q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
+
+        options.forEach(o => {
+          o.disabled = true;
+          if (o.dataset.correct === 'true') {
+            o.classList.add(o === opt ? 'correct' : 'reveal');
+          } else if (o === opt) {
+            o.classList.add('wrong');
+          }
+        });
+
+        (isCorrect ? fbOk : fbKo).classList.add('show');
+        updateScore();
+      });
+    });
+  });
+
+  block.addEventListener('reset-quiz', () => {
+    questions.forEach(q => {
+      q.classList.remove('answered');
+      delete q.dataset.gotCorrect;
+      q.querySelectorAll('.quiz-option').forEach(o => {
+        o.disabled = false;
+        o.classList.remove('correct', 'wrong', 'reveal');
+      });
+      q.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+    });
+    updateScore();
+  });
+
+  updateScore();
+}
+
+document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+</script>
+</body>
+</html>
