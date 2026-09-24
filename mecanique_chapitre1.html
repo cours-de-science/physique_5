@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1 — Le mouvement rectiligne uniforme — Physique Sec. 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette « banc d'optique » — bleu nuit + cyan laser, la même que celle
+       établie dans le module 1 (notions_de_base.html, chapitre1.html), afin
+       que l'ensemble du cours de Physique Sec. 5 garde une identité visuelle
+       cohérente d'un module à l'autre. */
+    --indigo-dark: #0d1b2e;
+    --indigo-mid:  #163a5c;
+    --indigo-light:#4f90b8;
+    --amber:       #2bc4d4;
+    --amber-dim:   #1f8fa0;
+    --flame:       #dd4a3a;
+    --bg:          #eef2f5;
+    --surface:     #ffffff;
+    --text:        #16212c;
+    --muted:       #5c6b78;
+    --border:      #d7e0e6;
+    --sidebar-w:   268px;
+    --mono:        'JetBrains Mono', monospace;
+    /* Motif signature du module 2 : une « traînée de mouvement » qui va du
+       bleu nuit (position initiale) au cyan (position finale) — l'équivalent,
+       pour la mécanique, du motif du spectre visible utilisé en optique. */
+    --trace:        linear-gradient(90deg, #163a5c 0%, #2a5f86 30%, #3f86a8 55%, #2bc4d4 80%, #7fe3ec 100%);
+    --trace-pastel: linear-gradient(100deg, #9db3c9 0%, #a9c7d8 30%, #a9dde3 60%, #bdeef2 100%);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar { width: var(--sidebar-w); background: var(--indigo-dark); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; display: flex; flex-direction: column; z-index: 100; transition: transform .3s ease; }
+  .sidebar-header { background: var(--trace-pastel); padding: 20px 18px 16px; flex-shrink: 0; }
+  .back-to-index { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--indigo-dark); text-decoration: none; opacity: .65; margin-bottom: 12px; transition: opacity .15s; }
+  .back-to-index:hover { opacity: 1; text-decoration: underline; }
+  .sidebar-header .label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-dark); }
+  .sidebar-header .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 800; line-height: 1; color: var(--indigo-dark); }
+  .sidebar-header .chap-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-dark); margin-top: 4px; }
+  .toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--indigo-light); padding: 20px 18px 8px; }
+  #sidebar nav ul { list-style: none; }
+  #sidebar nav ul li a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; border-left: 3px solid transparent; transition: background .15s, color .15s, border-color .15s; line-height: 1.35; }
+  #sidebar nav ul li a:hover, #sidebar nav ul li a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--amber); }
+  #sidebar nav ul li a .num { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+  .sidebar-footer { margin-top: auto; padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
+  .sidebar-footer button { background: none; border: none; cursor: pointer; font-size: 11px; color: rgba(255,255,255,.3); padding: 0; text-align: left; width: 100%; transition: color .15s; }
+  .sidebar-footer button:hover { color: rgba(255,255,255,.6); }
+  .attrib-popover { display: none; position: absolute; bottom: 60px; left: 14px; width: 230px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.18); padding: 14px 16px; font-size: 12px; color: var(--text); line-height: 1.6; z-index: 200; }
+  .attrib-popover::after { content: ''; position: absolute; bottom: -7px; left: 20px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 2px 2px 4px rgba(0,0,0,.08); }
+  .attrib-popover.visible { display: block; }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+  .hero { background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-mid) 60%, var(--indigo-light) 100%); padding: 60px 56px 48px; color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: 'Δ'; position: absolute; right: 40px; top: -30px; font-family: 'Barlow Condensed', sans-serif; font-size: 260px; font-weight: 800; color: rgba(255,255,255,.07); line-height: 1; pointer-events: none; }
+  .hero .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px, 5vw, 56px); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 20px; }
+  .hero p { max-width: 600px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.82); }
+
+  .search-bar-wrap { background: var(--indigo-dark); padding: 14px 56px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid var(--amber); }
+  .search-bar-wrap label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.5); white-space: nowrap; letter-spacing: .06em; text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif; }
+  #search-input { flex: 1; max-width: 440px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 8px 14px; font-size: 14px; color: #fff; font-family: 'Inter', sans-serif; outline: none; transition: background .2s, border-color .2s; }
+  #search-input::placeholder { color: rgba(255,255,255,.4); }
+  #search-input:focus { background: rgba(255,255,255,.16); border-color: var(--amber); }
+  #search-count { font-size: 12px; color: var(--amber); font-family: var(--mono); min-width: 90px; }
+
+  .content { padding: 48px 56px 80px; max-width: 880px; }
+
+  /* Carte d'introduction */
+  .intro-card { background: linear-gradient(120deg, var(--indigo-dark), var(--indigo-mid)); border-radius: 10px; padding: 24px 28px; color: rgba(255,255,255,.88); margin-bottom: 24px; }
+  .intro-card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--amber); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; }
+  .intro-card h2 svg { margin-top: 3px; flex-shrink: 0; }
+  .intro-card p { color: rgba(255,255,255,.82); font-size: 14px; margin-bottom: 10px; line-height: 1.65; }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .intro-card a { color: var(--amber); }
+  .intro-card .wip-note { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.18); font-size: 12.5px; color: rgba(255,255,255,.65); font-style: italic; }
+
+  .section-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .section-toggle { width: 100%; background: none; border: none; cursor: pointer; padding: 0; text-align: left; display: block; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; background: var(--surface); transition: background .15s; border-bottom: 1px solid transparent; }
+  .section-toggle:hover .section-header, .section-toggle[aria-expanded="true"] .section-header { background: #f0f4f6; border-bottom-color: var(--border); }
+  .section-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 4px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; margin-top: 2px; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--indigo-dark); flex: 1; }
+  .chevron { width: 20px; height: 20px; color: var(--muted); transition: transform .25s ease; flex-shrink: 0; margin-top: 2px; }
+  .section-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .section-body { display: none; padding: 28px 28px 32px; border-top: 3px solid; border-image: var(--trace) 1; }
+  .section-body.open { display: block; }
+
+  .subsection { margin-bottom: 32px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--indigo-mid); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .subsection-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--amber); border-radius: 2px; flex-shrink: 0; }
+
+  .subhead { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-mid); margin: 22px 0 10px; display: flex; align-items: center; gap: 7px; scroll-margin-top: 12px; }
+  .subhead::before { content: ''; width: 3px; height: 14px; background: var(--amber-dim); border-radius: 2px; flex-shrink: 0; }
+  .subhead:first-child { margin-top: 0; }
+
+  p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul.content-list { padding-left: 20px; margin-bottom: 14px; }
+  ul.content-list li { font-size: 15px; line-height: 1.7; margin-bottom: 6px; }
+  .content a.xref { color: var(--indigo-mid); font-weight: 600; text-decoration: underline; text-decoration-color: var(--amber-dim); text-underline-offset: 2px; }
+  .content a.xref:hover { color: var(--indigo-dark); }
+
+  /* === TERME CONSULTABLE (étymologie au clic) === */
+  .term-wrap { position: relative; display: inline-block; }
+  .term { cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--amber-dim); text-decoration-thickness: 1.5px; text-underline-offset: 3px; transition: color .15s; }
+  .term:hover, .term[aria-expanded="true"] { color: var(--amber-dim); }
+  .term-pop { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 10px; width: 250px; max-width: min(250px, 80vw); background: var(--indigo-dark); border-radius: 10px; box-shadow: 0 6px 22px rgba(13,27,46,.35); padding: 12px 15px; z-index: 220; text-align: left; font-weight: 400; white-space: normal; }
+  .term-pop::before { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-bottom-color: var(--indigo-dark); }
+  .term[aria-expanded="true"] + .term-pop { display: block; }
+  .term-pop-word { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; display: block; }
+  .term-pop-ety { font-size: 12.5px; font-style: italic; color: rgba(255,255,255,.75); margin-bottom: 6px; display: block; line-height: 1.5; }
+  .term-pop-body { font-size: 13px; color: rgba(255,255,255,.92); line-height: 1.55; display: block; }
+
+  .def-box { background: linear-gradient(135deg, #eef2fa, #f2f6fb); border-left: 4px solid var(--indigo-light); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .def-box .def-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 6px; }
+  .def-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
+  .def-box p:last-child { margin: 0; }
+  .def-box strong { color: var(--indigo-dark); font-weight: 600; }
+
+  .note-box { margin: 20px 0; border: 1.5px solid var(--amber-dim); border-radius: 10px; overflow: hidden; background: #eaf8fa; }
+  .note-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: rgba(43,196,212,.22); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .note-bar:hover { background: rgba(43,196,212,.32); }
+  .note-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #0d5a66; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .note-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .note-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: #2a7d8a; }
+  .note-bar .chevron-n { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #0d5a66; margin-top: 1px; }
+  .note-bar[aria-expanded="true"] .chevron-n { transform: rotate(180deg); }
+  .note-body { display: none; padding: 14px 18px 18px; font-size: 14px; color: #0d3a42; line-height: 1.65; }
+  .note-bar[aria-expanded="true"] + .note-body { display: block; }
+
+  /* === RAPPEL (encadré non repliable) === */
+  .rappel-box { background: #eef1f4; border-left: 4px solid var(--muted); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 4px 0 20px; }
+  .rappel-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .rappel-box p { font-size: 14px; color: var(--text); margin: 0; }
+
+  /* === ZOOM (encadré historique repliable) === */
+  .zoom-box { margin: 20px 0; border: 1.5px solid var(--indigo-mid); border-radius: 10px; overflow: hidden; background: #eef2f7; }
+  .zoom-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: var(--indigo-dark); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .zoom-bar:hover { background: var(--indigo-mid); }
+  .zoom-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .zoom-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .zoom-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.65); }
+  .zoom-bar .chevron-z { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .zoom-bar[aria-expanded="true"] .chevron-z { transform: rotate(180deg); }
+  .zoom-body { display: none; padding: 16px 18px 18px; font-size: 14px; color: var(--text); line-height: 1.65; }
+  .zoom-bar[aria-expanded="true"] + .zoom-body { display: block; }
+
+  /* === À QUOI ÇA SERT (encadré application repliable) === */
+  .apply-box { margin: 20px 0; border: 1.5px solid var(--flame); border-radius: 10px; overflow: hidden; background: #fdf5f4; }
+  .apply-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: linear-gradient(120deg, var(--flame), #b8362a); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: #fff; transition: filter .15s; }
+  .apply-bar:hover { filter: brightness(1.08); }
+  .apply-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .apply-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .apply-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.8); }
+  .apply-bar .chevron-ap { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .apply-bar[aria-expanded="true"] .chevron-ap { transform: rotate(180deg); }
+  .apply-body { display: none; padding: 16px 18px 18px; font-size: 14px; color: var(--text); line-height: 1.65; }
+  .apply-bar[aria-expanded="true"] + .apply-body { display: block; }
+
+  /* === EXEMPLE RÉSOLU (encadré non repliable, mise en évidence forte) === */
+  .exemple-box { margin: 24px 0; border: 1.5px solid var(--indigo-light); border-radius: 10px; overflow: hidden; background: var(--surface); box-shadow: 0 2px 8px rgba(13,27,46,.08); }
+  .exemple-header { background: linear-gradient(120deg, var(--indigo-mid), var(--indigo-dark)); padding: 12px 20px; display: flex; align-items: center; gap: 8px; }
+  .exemple-label { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 8px; }
+  .exemple-label .icon-sm { width: 16px; height: 16px; }
+  .exemple-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); }
+  .exemple-body { padding: 22px 24px 24px; }
+  .exemple-donnees { background: var(--bg); border-radius: 8px; padding: 14px 20px; margin: 14px 0 18px; }
+  .exemple-donnees-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo-mid); margin-bottom: 8px; }
+  .exemple-donnees ul { list-style: none; padding: 0; margin: 0; font-family: var(--mono); font-size: 14px; line-height: 1.85; color: var(--text); }
+  .exemple-question { font-weight: 700; color: var(--indigo-dark); margin: 18px 0 8px; font-size: 15px; }
+  .exemple-reponse { background: #eaf8fa; border-left: 4px solid var(--amber-dim); border-radius: 0 8px 8px 0; padding: 10px 16px; margin-top: 12px; font-weight: 600; color: #0d5a66; font-size: 14.5px; }
+
+  .formula { font-family: var(--mono); background: var(--indigo-dark); color: var(--amber); padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 16px 0; letter-spacing: .04em; text-align: center; overflow-x: auto; }
+  .formula-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: -10px; margin-bottom: 14px; }
+
+  .kw { background: rgba(43,196,212,.22); color: var(--indigo-dark); padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+  mark.sh { background: #cdeef1; color: var(--text); border-radius: 2px; padding: 0 2px; }
+  mark.sh.current { background: var(--flame); color: #fff; box-shadow: 0 0 0 2px var(--flame); }
+
+  .fig-block { margin: 18px 0; background: #f8fafb; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-align: center; }
+  .fig-block .fig-inner { padding: 20px; }
+  .fig-block figcaption { font-size: 12.5px; color: var(--muted); padding: 10px 16px 14px; border-top: 1px solid var(--border); line-height: 1.5; font-style: italic; text-align: left; }
+
+  .fig-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 18px 0; }
+  .fig-row .fig-block { flex: 1 1 260px; margin: 0; }
+
+  .table-wrap { overflow-x: auto; margin: 6px 0 20px; border-radius: 8px; border: 1px solid var(--border); }
+  .data-table { width: 100%; border-collapse: collapse; margin: 0; font-size: 14px; }
+  .data-table th { background: var(--indigo-dark); color: var(--amber); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; padding: 10px 14px; text-align: left; }
+  .data-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f2f6f8; }
+  .data-table td strong { color: var(--indigo-dark); }
+
+  #to-top { position: fixed; bottom: 28px; right: 28px; width: 42px; height: 42px; background: var(--indigo-dark); color: var(--amber); border: 2px solid var(--amber); border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 200; }
+  #to-top.visible { opacity: 1; pointer-events: auto; }
+
+  #menu-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 150; background: var(--indigo-dark); border: 2px solid var(--amber); color: var(--amber); width: 40px; height: 40px; border-radius: 8px; font-size: 20px; cursor: pointer; align-items: center; justify-content: center; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: flex; }
+    .hero { padding: 60px 24px 36px; }
+    .search-bar-wrap { padding: 12px 24px; }
+    .content { padding: 28px 20px 60px; }
+    .page-toc-bar { padding: 12px 24px; }
+    .page-toc-body { padding: 4px 24px 20px; }
+    .fig-row { flex-direction: column; }
+  }
+
+  /* === TABLE DES MATIÈRES (index des notions, repliable, en tête de page) === */
+  .page-toc { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .page-toc-bar { width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 56px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+  .page-toc-bar:hover { background: #f4f6f8; }
+  .page-toc-icon { width: 17px; height: 17px; color: var(--amber-dim); flex-shrink: 0; }
+  .page-toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--indigo-dark); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 2px; }
+  .page-toc-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .page-toc-bar .chevron-toc { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--muted); }
+  .page-toc-bar[aria-expanded="true"] .chevron-toc { transform: rotate(180deg); }
+  .page-toc-body { display: none; padding: 4px 56px 22px; }
+  .page-toc-bar[aria-expanded="true"] + .page-toc-body { display: block; }
+  .page-toc-group { margin-top: 14px; }
+  .page-toc-group-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+  .page-toc-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .page-toc-pills a { font-size: 13px; font-weight: 600; color: var(--indigo-mid); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 5px 13px 5px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: background .15s, color .15s, border-color .15s; }
+  .page-toc-pills a .toc-num { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--indigo-light); border-radius: 8px; padding: 1px 6px; }
+  .page-toc-pills a:hover { background: var(--indigo-dark); color: #fff; border-color: var(--indigo-dark); }
+  .page-toc-pills a:hover .toc-num { background: var(--amber); color: var(--indigo-dark); }
+
+  /* ── QUIZ ── */
+  .quiz-block { margin-top: 36px; margin-bottom: 32px; border-top: 2px solid var(--amber); border-bottom: 2px solid var(--amber); padding-top: 24px; padding-bottom: 24px; }
+  .quiz-block-bar { width: 100%; display: flex; align-items: flex-start; gap: 10px; background: var(--indigo-dark); border: none; border-radius: 10px; cursor: pointer; padding: 14px 18px; margin-bottom: 6px; text-align: left; transition: background .15s; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .quiz-block-bar:hover { background: var(--indigo-mid); }
+  .quiz-block-bar .quiz-block-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--amber); margin-top: 2px; }
+  .quiz-block-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .quiz-block-subtitle { font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); margin-left: 2px; }
+  .quiz-block-bar .chevron-q { margin-left: auto; width: 20px; height: 20px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 2px; }
+  .quiz-block-bar[aria-expanded="true"] .chevron-q { transform: rotate(180deg); }
+  .quiz-body { display: none; }
+  .quiz-block-bar[aria-expanded="true"] + .quiz-body { display: block; padding-top: 14px; }
+  .quiz-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 13px; color: var(--muted); }
+  .quiz-score-bar progress { flex: 1; height: 6px; border-radius: 3px; appearance: none; -webkit-appearance: none; }
+  .quiz-score-bar progress::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  .quiz-score-bar progress::-webkit-progress-value { background: var(--indigo-mid); border-radius: 3px; transition: width .4s; }
+
+  .quiz-q { background: var(--bg); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; border: 1.5px solid var(--border); transition: border-color .2s; }
+  .quiz-q.answered { border-color: transparent; }
+  .quiz-q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 14px; }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background .15s, border-color .15s; text-align: left; width: 100%; line-height: 1.45; }
+  .quiz-option:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-option .opt-letter { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-option.correct { background: #e8f8ef; border-color: #2da262; color: #1a6640; }
+  .quiz-option.correct .opt-letter { color: #2da262; }
+  .quiz-option.wrong { background: #fdecea; border-color: #d94f3d; color: #8b2218; }
+  .quiz-option.wrong .opt-letter { color: #d94f3d; }
+  .quiz-option.reveal { background: #e8f8ef; border-color: #2da262; color: #1a6640; opacity: .7; }
+  .quiz-option.reveal .opt-letter { color: #2da262; }
+
+  .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13.5px; line-height: 1.55; display: none; }
+  .quiz-feedback.show { display: flex; gap: 8px; align-items: flex-start; }
+  .quiz-feedback .icon-sm { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+  .quiz-feedback.ok { background: #e8f8ef; color: #1a6640; }
+  .quiz-feedback.ko { background: #fdecea; color: #8b2218; }
+  .quiz-result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; text-align: center; display: none; align-items: center; justify-content: center; gap: 8px; }
+  .quiz-result-msg.show { display: flex; }
+  .quiz-result-msg .icon-sm { width: 18px; height: 18px; flex-shrink: 0; }
+  .quiz-result-msg.great { background: #e8f8ef; color: #1a6640; }
+  .quiz-result-msg.good { background: #fdf6e3; color: #7a5c00; }
+  .quiz-result-msg.poor { background: #fdecea; color: #8b2218; }
+
+  .quiz-reset { margin-top: 20px; padding: 9px 20px; border-radius: 8px; border: 1.5px solid var(--indigo-mid); background: #fff; color: var(--indigo-dark); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; display: none; }
+  .quiz-reset:hover { background: #eef2fa; }
+
+  .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<button id="menu-toggle" aria-label="Menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<aside id="sidebar" role="navigation" aria-label="Table des matières">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-to-index" title="Retour à la table des matières du cours">
+      <svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Tous les chapitres
+    </a>
+    <div class="label">Physique Sec. 5 · Module 2</div>
+    <div class="chap-num">1</div>
+    <div class="chap-title">Le mouvement rectiligne uniforme</div>
+  </div>
+  <div class="toc-label">Table des matières</div>
+  <nav>
+    <ul>
+      <li><a href="#intro" class="toc-link"><span class="num">—</span> Avant de commencer</a></li>
+      <li><a href="#section-1" class="toc-link"><span class="num">Section 1</span> La position, le déplacement et la distance parcourue</a></li>
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <button onclick="document.getElementById('attrib-pop').classList.toggle('visible')" title="À propos de ce document" style="display:flex;align-items:center;gap:6px;"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg> À propos de ce document</button>
+    <div class="attrib-popover" id="attrib-pop">
+      Matériel préparé par M. Raphaël Sylvestre Bouchard, à l'aide du manuel <em>Delta</em>, Secondaire 5 (TC Média Livres inc.).
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="hero">
+    <div class="eyebrow">Physique · Secondaire 5 · Module 2 — Mécanique</div>
+    <h1>Le mouvement rectiligne uniforme</h1>
+    <p>Comment décrire, précisément, le mouvement d'un objet? Un wagon de métro qui roule d'une station à l'autre, une bille qui file en ligne droite sur une table : dans les deux cas, une poignée de concepts mathématiques suffit à décrire complètement le mouvement. Ce chapitre pose les bases de cette description, avant que le vocabulaire de la vitesse ne vienne compléter le tableau.</p>
+  </div>
+
+  <div class="page-toc">
+    <button class="page-toc-bar" aria-expanded="false" onclick="toggleNote(this)">
+      <svg class="page-toc-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="page-toc-label">Table des matières<span class="page-toc-subtitle">Accès direct à chaque notion</span></span>
+      <svg class="chevron-toc" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="page-toc-body">
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 1 — La position, le déplacement et la distance parcourue</div>
+        <div class="page-toc-pills">
+          <a href="#la-position"><span class="toc-num">1.1</span>La position</a>
+          <a href="#le-deplacement"><span class="toc-num">1.2</span>Le déplacement</a>
+          <a href="#la-distance-parcourue"><span class="toc-num">1.3</span>La distance parcourue</a>
+          <a href="#exemple-metro"><span class="toc-num">Ex.</span>Exemple résolu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-bar-wrap">
+    <label for="search-input">🔍 Recherche rapide</label>
+    <input type="text" id="search-input" placeholder="Ex : déplacement, distance parcourue, position, trajectoire…" oninput="doSearch(this.value)">
+    <span id="search-count"></span>
+  </div>
+
+  <div class="content">
+
+    <!-- INTRO -->
+    <div id="intro" class="intro-card">
+      <h2><svg aria-hidden="true" style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18L10 12L4 6"/><path d="M20 18L14 12L20 6"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Décrire le mouvement, un axe à la fois</h2>
+      <p>Avant de pouvoir calculer une vitesse ou tracer le graphique d'un mouvement, il faut d'abord un vocabulaire précis pour en parler : où se trouve un corps, de combien sa position a changé, et quelle distance il a réellement parcourue pour s'y rendre. Ces trois notions, plus proches les unes des autres qu'il n'y paraît à première vue, font l'objet de la section 1.</p>
+      <p>Le reste du chapitre s'appuiera directement sur ces bases : la section 2 montrera comment représenter un mouvement à l'aide d'un graphique de la position en fonction du temps, la section 3 reviendra sur la notion de vitesse pour la formaliser mathématiquement, et la section 4 complétera le tableau avec la représentation graphique de la vitesse en fonction du temps.</p>
+      <div class="wip-note">Ce chapitre est en cours de rédaction. Cette version couvre uniquement la section 1 (la position, le déplacement et la distance parcourue); les sections 2 à 4 suivront.</div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-card" id="section-1">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 1</span>
+          <span class="section-title">La position, le déplacement et la distance parcourue</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+
+        <div class="rappel-box">
+          <div class="rappel-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Rappel — Position et mouvement</div>
+          <p>Tu as déjà croisé, en Science et technologie, des notions comme la distance et la vitesse pour décrire un mouvement, entre autres à l'aide de la relation v = d / t. Ce chapitre reprend ces mêmes idées intuitives, mais les traite avec plus de rigueur : la position et le déplacement y sont définis précisément, et une distinction importante s'ajoute entre les grandeurs vectorielles et les grandeurs scalaires.</p>
+        </div>
+
+        <div class="subsection" id="la-position">
+          <div class="subsection-title">1.1 La position</div>
+
+          <p>La position d'un corps, c'est tout simplement l'endroit où il se trouve. Mais pour qu'elle soit utile en physique, cette idée doit pouvoir s'exprimer de façon précise et mesurable — ce qui suppose de la situer par rapport à un <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">référentiel</span><span class="term-pop" role="tooltip"><span class="term-pop-word">référentiel</span><span class="term-pop-ety">De <em>référer</em>, du latin <em>referre</em> (re- + <em>ferre</em>, « porter ») — litt. « rapporter, reporter »</span><span class="term-pop-body">Un référentiel est littéralement ce à quoi on « rapporte » une mesure de position : sans lui, dire qu'un corps est « ici » ne veut rien dire de précis.</span></span></span> (aussi appelé système de référence) choisi au préalable.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Position :</strong> l'endroit où se trouve un corps, à un instant donné, exprimé par rapport à un système de référence.</p>
+          </div>
+
+          <p>En physique, le mot « corps » peut désigner à peu près n'importe quel objet en mouvement : une planète aussi bien qu'un wagon de métro ou une bille. Pour simplifier l'analyse, on traite généralement ces corps comme des particules ponctuelles — des objets mathématiques sans dimension. Ce qui compte, c'est la position qu'ils occupent, pas leur forme ni leur taille.</p>
+
+          <p>De façon générale, la position d'un corps se représente par un vecteur position, noté s⃗, qui part de l'origine du système de référence et pointe vers le corps. Dans un système de coordonnées cartésiennes, ce vecteur se décompose en une composante horizontale x et une composante verticale y (figure 1.1).</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 360 260" style="width:100%;max-width:340px;height:auto;" role="img" aria-label="Un vecteur position part de l'origine et pointe vers un corps; ses composantes x et y sont indiquées par des lignes pointillées">
+                <defs>
+                  <marker id="arrow-pos" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/>
+                  </marker>
+                </defs>
+                <line x1="40" y1="220" x2="330" y2="220" stroke="var(--indigo-dark)" stroke-width="2.4"/>
+                <line x1="40" y1="220" x2="40" y2="20" stroke="var(--indigo-dark)" stroke-width="2.4"/>
+                <text x="336" y="224" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-dark)">x</text>
+                <text x="24" y="24" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-dark)">y</text>
+                <text x="18" y="236" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">O</text>
+                <circle cx="250" cy="80" r="5" fill="var(--indigo-mid)"/>
+                <text x="260" y="76" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">corps</text>
+                <line x1="40" y1="220" x2="250" y2="80" stroke="var(--flame)" stroke-width="2.6" marker-end="url(#arrow-pos)"/>
+                <text x="130" y="140" font-family="Inter, sans-serif" font-size="14" fill="var(--flame)" font-style="italic">s⃗</text>
+                <line x1="250" y1="80" x2="250" y2="220" stroke="#9aa7b0" stroke-width="1.4" stroke-dasharray="4 3"/>
+                <line x1="40" y1="80" x2="250" y2="80" stroke="#9aa7b0" stroke-width="1.4" stroke-dasharray="4 3"/>
+                <text x="240" y="240" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">x</text>
+                <text x="12" y="84" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">y</text>
+                <path d="M64,220 A24,24 0 0 1 83,199" fill="none" stroke="var(--amber-dim)" stroke-width="1.6"/>
+                <text x="68" y="204" font-family="Inter, sans-serif" font-size="12" fill="var(--amber-dim)">θ</text>
+              </svg>
+            </div>
+            <figcaption>Figure 1.1 — Dans un système de référence cartésien, la position d'un corps est représentée par un vecteur s⃗ partant de l'origine O; ses composantes x et y donnent les coordonnées du point occupé par le corps.</figcaption>
+          </div>
+
+          <div class="zoom-box">
+            <button class="zoom-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="zoom-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg> Zoom<span class="zoom-subtitle">Descartes et l'invention des coordonnées</span></span>
+              <svg class="chevron-z" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="zoom-body">
+              <p>L'idée de repérer un point à l'aide de deux nombres — ses coordonnées — semble aujourd'hui une évidence, mais elle n'a été formalisée qu'en 1637 par le philosophe et mathématicien français René Descartes (1596-1650), dans un appendice de son <em>Discours de la méthode</em> intitulé <em>La Géométrie</em>. C'est de la forme latinisée de son nom, <em>Cartesius</em>, que vient l'adjectif « cartésien ».</p>
+              <p>L'apport de Descartes fut de relier algèbre et géométrie : une équation à deux variables pouvait désormais se tracer comme une courbe, et inversement, toute courbe pouvait s'étudier par le calcul. C'est cette même idée, appliquée au mouvement plutôt qu'à une simple courbe, qui permet de traiter la position d'un corps comme une paire de nombres plutôt que comme une simple description qualitative de l'endroit où il se trouve.</p>
+            </div>
+          </div>
+
+          <p>Le mouvement étudié dans ce chapitre est un cas particulier, plus simple que le cas général : le mouvement rectiligne, c'est-à-dire en ligne droite. Un seul axe suffit alors à décrire la position — inutile de conserver deux coordonnées quand le corps ne s'écarte jamais d'une même droite.</p>
+
+          <p>Décrire une position sur cet axe suppose deux choix, faits une fois pour toutes avant d'analyser un mouvement :</p>
+          <ul class="content-list">
+            <li><strong>L'origine de l'axe</strong> — le point où la position vaut zéro. On la place habituellement là où se trouve le corps au début de l'observation.</li>
+            <li><strong>L'orientation de l'axe</strong> — le sens dans lequel les positions sont considérées comme positives. On l'oriente habituellement dans le sens du mouvement initial du corps.</li>
+          </ul>
+
+          <p>Ces deux choix sont arbitraires : rien, dans la physique du mouvement, n'impose de placer l'origine à un endroit plutôt qu'à un autre. Les figures 1.2 et 1.3 illustrent ce point à l'aide d'un même wagon de métro, analysé à partir de deux origines différentes.</p>
+
+          <div class="fig-row">
+            <div class="fig-block">
+              <div class="fig-inner">
+                <svg viewBox="0 0 640 150" style="width:100%;height:auto;" role="img" aria-label="Ligne de métro avec origine à la station C : un wagon se déplace de la station C à la station E">
+                  <defs>
+                    <marker id="arrow-depl-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/>
+                    </marker>
+                  </defs>
+                  <line x1="20" y1="95" x2="620" y2="95" stroke="var(--indigo-dark)" stroke-width="3"/>
+                  <text x="624" y="99" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x (km)</text>
+                  <g font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">
+                    <line x1="40" y1="88" x2="40" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <line x1="208" y1="88" x2="208" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <line x1="320" y1="80" x2="320" y2="110" stroke="var(--flame)" stroke-width="2.4"/>
+                    <line x1="516" y1="88" x2="516" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <line x1="600" y1="88" x2="600" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <text x="40" y="128">Station A</text><text x="40" y="142" fill="var(--indigo-mid)" font-weight="600">−2,0 km</text>
+                    <text x="208" y="128">Station B</text><text x="208" y="142" fill="var(--indigo-mid)" font-weight="600">−0,8 km</text>
+                    <text x="320" y="128" fill="var(--flame)" font-weight="700">Station C</text><text x="320" y="142" fill="var(--flame)" font-weight="700">0 (origine)</text>
+                    <text x="516" y="128">Station D</text><text x="516" y="142" fill="var(--indigo-mid)" font-weight="600">+1,4 km</text>
+                    <text x="600" y="128">Station E</text><text x="600" y="142" fill="var(--indigo-mid)" font-weight="600">+2,0 km</text>
+                  </g>
+                  <path d="M320,60 C420,30 500,30 596,58" fill="none" stroke="var(--amber-dim)" stroke-width="2.4" marker-end="url(#arrow-depl-1)"/>
+                  <text x="450" y="30" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">Δx (wagon)</text>
+                  <circle cx="320" cy="95" r="6" fill="var(--flame)"/>
+                  <circle cx="600" cy="95" r="6" fill="var(--indigo-mid)"/>
+                  <text x="320" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle">xᵢ</text>
+                  <text x="600" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xf</text>
+                </svg>
+              </div>
+              <figcaption>Figure 1.2 — Un wagon se déplace de la station C à la station E. En plaçant l'origine à la station C, on obtient xᵢ = 0 km et xf = 2,0 km.</figcaption>
+            </div>
+
+            <div class="fig-block">
+              <div class="fig-inner">
+                <svg viewBox="0 0 640 150" style="width:100%;height:auto;" role="img" aria-label="Même ligne de métro, mais avec l'origine à la station A">
+                  <defs>
+                    <marker id="arrow-depl-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/>
+                    </marker>
+                  </defs>
+                  <line x1="20" y1="95" x2="620" y2="95" stroke="var(--indigo-dark)" stroke-width="3"/>
+                  <text x="624" y="99" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x (km)</text>
+                  <g font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">
+                    <line x1="40" y1="80" x2="40" y2="110" stroke="var(--flame)" stroke-width="2.4"/>
+                    <line x1="208" y1="88" x2="208" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <line x1="320" y1="88" x2="320" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <line x1="516" y1="88" x2="516" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <line x1="600" y1="88" x2="600" y2="102" stroke="var(--indigo-dark)" stroke-width="2"/>
+                    <text x="40" y="128" fill="var(--flame)" font-weight="700">Station A</text><text x="40" y="142" fill="var(--flame)" font-weight="700">0 (origine)</text>
+                    <text x="208" y="128">Station B</text><text x="208" y="142" fill="var(--indigo-mid)" font-weight="600">1,2 km</text>
+                    <text x="320" y="128">Station C</text><text x="320" y="142" fill="var(--indigo-mid)" font-weight="600">2,0 km</text>
+                    <text x="516" y="128">Station D</text><text x="516" y="142" fill="var(--indigo-mid)" font-weight="600">3,4 km</text>
+                    <text x="600" y="128">Station E</text><text x="600" y="142" fill="var(--indigo-mid)" font-weight="600">4,0 km</text>
+                  </g>
+                  <path d="M320,60 C420,30 500,30 596,58" fill="none" stroke="var(--amber-dim)" stroke-width="2.4" marker-end="url(#arrow-depl-2)"/>
+                  <text x="450" y="30" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">Δx (wagon)</text>
+                  <circle cx="320" cy="95" r="6" fill="var(--flame)"/>
+                  <circle cx="600" cy="95" r="6" fill="var(--indigo-mid)"/>
+                  <text x="320" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle">xᵢ</text>
+                  <text x="600" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xf</text>
+                </svg>
+              </div>
+              <figcaption>Figure 1.3 — Le même mouvement, analysé avec l'origine à la station A : on obtient cette fois xᵢ = 2,0 km et xf = 4,0 km. Le wagon n'a pas changé de comportement — seuls les nombres utilisés pour le décrire ont changé.</figcaption>
+            </div>
+          </div>
+
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Une position, ça n'existe jamais tout seul</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body">
+              <p>Il n'existe pas, en physique, de position « absolue » qui ne dépendrait d'aucun référentiel : même la Terre, qu'on croit spontanément immobile, tourne sur elle-même et file autour du Soleil. Un système de positionnement satellite (GPS) ne fait rien d'autre, au fond, que choisir un référentiel pratique — centré sur la Terre — et y calculer ta position par triangulation à partir de plusieurs satellites. Le choix d'un référentiel n'est donc jamais une vérité physique en soi, seulement une convention utile.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" id="le-deplacement">
+          <div class="subsection-title">1.2 Le déplacement</div>
+
+          <p>Une fois qu'on sait décrire une position, on peut s'intéresser à la façon dont elle change au fil du temps. C'est exactement ce qu'exprime le déplacement : la variation de la position d'un corps entre un instant initial et un instant final.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Déplacement :</strong> la variation de la position d'un corps, c'est-à-dire la différence entre sa position finale et sa position initiale. Il s'agit d'une grandeur <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">vectorielle</span><span class="term-pop" role="tooltip"><span class="term-pop-word">vecteur</span><span class="term-pop-ety">Du latin <em>vector</em>, « celui qui transporte », de <em>vehere</em>, « porter, transporter » (d'où vient aussi <em>véhicule</em>)</span><span class="term-pop-body">Un vecteur « transporte » à la fois une grandeur (une intensité) et une direction — ce qu'un simple nombre, à lui seul, ne peut pas faire.</span></span></span>, notée Δs⃗ (ou Δx dans le cas particulier d'un mouvement rectiligne).</p>
+          </div>
+
+          <p>Le symbole Δ (delta majuscule) n'est pas propre à la physique : en mathématique, il indique toujours la <em>variation</em> d'une grandeur. Δx ne désigne donc pas une nouvelle grandeur indépendante de x, mais bien x<sub>f</sub> − x<sub>i</sub> — la variation de la position.</p>
+
+          <div class="formula">Δx = x<sub>f</sub> − x<sub>i</sub></div>
+          <p class="formula-caption">Δx = déplacement, en mètres (m) · x<sub>f</sub> = position finale, en mètres (m) · x<sub>i</sub> = position initiale, en mètres (m)</p>
+
+          <p>Le signe de Δx renseigne sur le sens du mouvement par rapport à l'orientation choisie pour l'axe : un déplacement positif indique un mouvement vers les x positifs, un déplacement négatif, un mouvement vers les x négatifs. Sa valeur absolue indique, elle, l'ampleur du déplacement — à quel point la position a changé.</p>
+
+          <div class="fig-row">
+            <div class="fig-block">
+              <div class="fig-inner">
+                <svg viewBox="0 0 280 220" style="width:100%;max-width:280px;height:auto;" role="img" aria-label="Cas général en deux dimensions : deux vecteurs position et un vecteur déplacement entre leurs extrémités">
+                  <defs>
+                    <marker id="arrow-si" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
+                    <marker id="arrow-sf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
+                    <marker id="arrow-ds" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker>
+                  </defs>
+                  <line x1="30" y1="190" x2="260" y2="190" stroke="var(--indigo-dark)" stroke-width="2"/>
+                  <line x1="30" y1="190" x2="30" y2="20" stroke="var(--indigo-dark)" stroke-width="2"/>
+                  <text x="20" y="200" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">O</text>
+                  <line x1="30" y1="190" x2="110" y2="90" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-si)"/>
+                  <line x1="30" y1="190" x2="210" y2="50" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-sf)"/>
+                  <line x1="110" y1="90" x2="210" y2="50" stroke="var(--flame)" stroke-width="2.4" stroke-dasharray="5 3" marker-end="url(#arrow-ds)"/>
+                  <text x="60" y="150" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s⃗ᵢ</text>
+                  <text x="150" y="55" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s⃗f</text>
+                  <text x="150" y="82" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)">Δs⃗</text>
+                  <line x1="110" y1="190" x2="110" y2="90" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
+                  <line x1="210" y1="190" x2="210" y2="50" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
+                  <text x="150" y="205" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">Δx</text>
+                </svg>
+              </div>
+              <figcaption>Figure 1.4a — Cas général : le déplacement Δs⃗ relie l'extrémité du vecteur position initiale s⃗ᵢ à celle du vecteur position finale s⃗f.</figcaption>
+            </div>
+
+            <div class="fig-block">
+              <div class="fig-inner">
+                <svg viewBox="0 0 280 130" style="width:100%;max-width:280px;height:auto;" role="img" aria-label="Cas rectiligne : les positions initiale et finale se trouvent sur un même axe">
+                  <defs>
+                    <marker id="arrow-dx1d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker>
+                  </defs>
+                  <line x1="20" y1="80" x2="260" y2="80" stroke="var(--indigo-dark)" stroke-width="2.4"/>
+                  <text x="264" y="84" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x</text>
+                  <circle cx="70" cy="80" r="5" fill="var(--indigo-mid)"/>
+                  <circle cx="210" cy="80" r="5" fill="var(--indigo-mid)"/>
+                  <text x="70" y="65" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xᵢ</text>
+                  <text x="210" y="65" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xf</text>
+                  <path d="M70,45 C130,25 150,25 210,45" fill="none" stroke="var(--flame)" stroke-width="2.2" marker-end="url(#arrow-dx1d)"/>
+                  <text x="140" y="20" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)" text-anchor="middle">Δx</text>
+                </svg>
+              </div>
+              <figcaption>Figure 1.4b — Cas rectiligne : les deux positions se trouvent sur le même axe, le vecteur déplacement s'y « aplatit » complètement — Δx suffit alors à tout décrire, sans notation vectorielle.</figcaption>
+            </div>
+          </div>
+
+          <p>Le déplacement ne dépend donc que de la position de départ et de la position d'arrivée — jamais du chemin parcouru entre les deux. La figure 1.5 le montre bien : deux wagons empruntant des trajets complètement différents peuvent très bien terminer avec exactement le même déplacement.</p>
+
+          <div class="fig-block">
+            <div class="fig-inner">
+              <svg viewBox="0 0 640 190" style="width:100%;height:auto;" role="img" aria-label="Deux wagons empruntent des trajets différents mais aboutissent au même déplacement">
+                <defs>
+                  <marker id="arrow-w1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/></marker>
+                  <marker id="arrow-w2a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
+                  <marker id="arrow-w2b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
+                </defs>
+                <line x1="20" y1="100" x2="620" y2="100" stroke="var(--indigo-dark)" stroke-width="3"/>
+                <text x="624" y="104" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x</text>
+                <g font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">
+                  <text x="40" y="130">Station A</text>
+                  <text x="208" y="130">Station B</text>
+                  <text x="320" y="130" fill="var(--flame)" font-weight="700">Station C</text>
+                  <text x="516" y="130">Station D</text>
+                  <text x="600" y="130">Station E</text>
+                </g>
+                <circle cx="40" cy="100" r="5" fill="#9aa7b0"/><circle cx="208" cy="100" r="5" fill="#9aa7b0"/>
+                <circle cx="320" cy="100" r="6" fill="var(--flame)"/><circle cx="516" cy="100" r="5" fill="#9aa7b0"/>
+                <circle cx="600" cy="100" r="6" fill="var(--indigo-mid)"/>
+                <path d="M320,70 C420,45 500,45 596,68" fill="none" stroke="var(--amber-dim)" stroke-width="2.6" marker-end="url(#arrow-w1)"/>
+                <text x="450" y="42" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">Wagon 1 — direct</text>
+                <path d="M320,150 C220,175 90,175 42,152" fill="none" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-w2a)"/>
+                <path d="M40,155 C220,185 480,185 596,150" fill="none" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-w2b)"/>
+                <text x="320" y="180" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)" text-anchor="middle">Wagon 2 — via la station A</text>
+              </svg>
+            </div>
+            <figcaption>Figure 1.5 — Le wagon 1 va directement de C à E; le wagon 2 va d'abord de C à A avant de rebrousser chemin jusqu'à E. En prenant l'origine à la station C, les deux trajets donnent le même déplacement : Δx = xf − xᵢ = 2,0 km − 0 km = 2,0 km. Le wagon 2 a pourtant parcouru un chemin beaucoup plus long.</figcaption>
+          </div>
+
+          <p>C'est précisément cette limite du déplacement — son indifférence totale au chemin suivi — qui appelle une nouvelle grandeur : la distance parcourue, qui fait l'objet de la prochaine sous-section.</p>
+        </div>
+
+        <div class="subsection" id="la-distance-parcourue">
+          <div class="subsection-title">1.3 La distance parcourue</div>
+
+          <p>Reprenons l'exemple du wagon 2 de la figure 1.5. Il quitte la station C, roule 2,0 km vers la gauche jusqu'à la station A, puis rebrousse chemin et roule 4,0 km vers la droite jusqu'à la station E. Son déplacement est de 2,0 km — identique à celui du wagon 1 — mais il a clairement « fait plus de chemin » que lui. Pour capter cette différence, on définit la trajectoire et la distance parcourue.</p>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong><span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">Trajectoire</span><span class="term-pop" role="tooltip"><span class="term-pop-word">trajectoire</span><span class="term-pop-ety">Du latin <em>trajectus</em>, participe passé de <em>trajicere</em> (trans- + <em>jacere</em>, « jeter ») — litt. « jeté à travers, lancé au-delà »</span><span class="term-pop-body">La trajectoire est littéralement le chemin « jeté » par un corps en mouvement — l'ensemble des points par lesquels il passe, comme la traînée que laisserait un projectile.</span></span></span> :</strong> l'ensemble des points qu'a occupés un corps au cours de son mouvement.</p>
+          </div>
+
+          <div class="def-box">
+            <div class="def-label">Définition</div>
+            <p><strong>Distance parcourue (L) :</strong> la longueur totale de la trajectoire suivie par un corps, peu importe le sens dans lequel il s'est déplacé. Contrairement au déplacement, il s'agit d'une grandeur <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">scalaire</span><span class="term-pop" role="tooltip"><span class="term-pop-word">scalaire</span><span class="term-pop-ety">Du latin <em>scala</em>, « échelle »</span><span class="term-pop-body">Une grandeur scalaire se situe sur une seule échelle de valeurs — un simple nombre — sans direction associée, contrairement à une grandeur vectorielle.</span></span></span> : elle est toujours positive ou nulle, jamais négative.</p>
+          </div>
+
+          <p>Quand le mouvement se fait dans un seul sens du début à la fin, la distance parcourue est simplement égale à la valeur absolue du déplacement. Mais dès que le corps change de sens en cours de route, il faut découper le mouvement en segments, où chacun se déroule dans un seul sens, puis additionner la valeur absolue du déplacement de chaque segment :</p>
+
+          <div class="formula">L = |Δx<sub>1</sub>| + |Δx<sub>2</sub>| + … + |Δx<sub>n</sub>|</div>
+          <p class="formula-caption">L = distance parcourue, en mètres (m) · |Δx<sub>1</sub>|, |Δx<sub>2</sub>|… = valeur absolue du déplacement de chaque segment, en mètres (m)</p>
+
+          <p>Revenons au wagon 2 : son trajet se découpe naturellement en deux segments, un vers la gauche (C → A) et un vers la droite (A → E).</p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th>Segment</th><th>Δx du segment</th><th>|Δx| du segment</th></tr>
+              <tr><td>Wagon 1 — C → E (direct)</td><td>+2,0 km</td><td><strong>2,0 km</strong></td></tr>
+              <tr><td>Wagon 2 — C → A</td><td>−2,0 km</td><td>2,0 km</td></tr>
+              <tr><td>Wagon 2 — A → E</td><td>+4,0 km</td><td>4,0 km</td></tr>
+            </table>
+          </div>
+
+          <p>Pour le wagon 1, L = |2,0 km| = 2,0 km : la distance parcourue égale le déplacement, puisqu'il n'y a qu'un seul segment. Pour le wagon 2, L = |−2,0 km| + |4,0 km| = 6,0 km : une distance trois fois plus grande que son déplacement, malgré un déplacement identique à celui du wagon 1. C'est bien la preuve que déplacement et distance parcourue sont deux grandeurs distinctes, qui ne coïncident que dans le cas particulier d'un mouvement en une seule direction.</p>
+
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Vers la section 4 : la distance comme aire sous une courbe</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body">
+              <p>La méthode vue ici — découper un mouvement en segments et additionner des valeurs absolues — fonctionne bien pour un mouvement rectiligne uniforme, où la vitesse ne change jamais de valeur à l'intérieur d'un même segment. Une fois la vitesse traitée en profondeur (section 3) et représentée graphiquement (section 4), tu verras que la distance parcourue correspond en fait à l'aire sous un graphique de la vitesse en fonction du temps — une idée qui généralise directement ce qui est fait ici, et qui restera valable même pour des mouvements beaucoup plus complexes.</p>
+            </div>
+          </div>
+
+          <div class="apply-box">
+            <button class="apply-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="apply-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.8" fill="currentColor" stroke="none"/></svg> À quoi ça sert?<span class="apply-subtitle">L'odomètre d'une voiture — et l'application de course sur ton téléphone</span></span>
+              <svg class="chevron-ap" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="apply-body">
+              <p>L'odomètre d'une voiture est un excellent exemple concret de distance parcourue : sa valeur ne fait qu'augmenter, peu importe la direction empruntée — faire demi-tour ou tourner à répétition dans un stationnement fait quand même avancer le compteur. Un aller-retour Montréal-Québec, par exemple, ajoute environ 500 km à l'odomètre même si le déplacement net, une fois la voiture revenue à son point de départ, est nul.</p>
+              <p>Le même principe s'applique à une application de course à pied ou de vélo utilisant le GPS d'un téléphone : si tu cours en boucle autour d'un parc et reviens exactement à ton point de départ, ton déplacement est nul (Δx = 0), mais l'application affichera quand même fièrement les kilomètres réellement parcourus — c'est cette distance-là, et non le déplacement, qui reflète l'effort fourni.</p>
+              <div class="fig-block" style="background:#fff;">
+                <div class="fig-inner">
+                  <svg viewBox="0 0 260 170" style="width:100%;max-width:220px;height:auto;" role="img" aria-label="Cadran d'odomètre stylisé affichant un nombre de kilomètres">
+                    <circle cx="130" cy="90" r="72" fill="none" stroke="var(--indigo-dark)" stroke-width="6"/>
+                    <g stroke="var(--muted)" stroke-width="2">
+                      <line x1="130" y1="24" x2="130" y2="38"/>
+                      <line x1="130" y1="142" x2="130" y2="156"/>
+                      <line x1="64" y1="90" x2="78" y2="90"/>
+                      <line x1="182" y1="90" x2="196" y2="90"/>
+                    </g>
+                    <line x1="130" y1="90" x2="168" y2="55" stroke="var(--flame)" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="130" cy="90" r="5" fill="var(--indigo-dark)"/>
+                    <rect x="92" y="105" width="76" height="28" rx="4" fill="var(--indigo-dark)"/>
+                    <text x="130" y="124" font-family="JetBrains Mono, monospace" font-size="15" fill="var(--amber)" text-anchor="middle">041862</text>
+                    <text x="130" y="150" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="middle">km parcourus</text>
+                  </svg>
+                </div>
+                <figcaption>L'odomètre n'affiche jamais qu'un nombre qui augmente — c'est une distance parcourue, une grandeur scalaire, et non un déplacement.</figcaption>
+              </div>
+            </div>
+          </div>
+
+          <!-- EXEMPLE RÉSOLU -->
+          <div class="exemple-box" id="exemple-metro">
+            <div class="exemple-header">
+              <span class="exemple-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Exemple résolu<span class="exemple-subtitle">Distinguer déplacement et distance parcourue</span></span>
+            </div>
+            <div class="exemple-body">
+              <p>Un wagon de métro effectue le trajet suivant : A → D → E → D (la figure ci-dessous situe les cinq stations sur l'axe des x, origine à la station A).</p>
+              <p class="exemple-question">a) Quel est son déplacement?</p>
+              <p class="exemple-question" style="margin-top:-6px;">b) Quelle est la distance parcourue?</p>
+
+              <div class="fig-block">
+                <div class="fig-inner">
+                  <svg viewBox="0 0 640 165" style="width:100%;height:auto;" role="img" aria-label="Ligne de métro avec cinq stations et un trajet A vers D, D vers E, puis retour de E vers D">
+                    <defs>
+                      <marker id="arrow-leg1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
+                      <marker id="arrow-leg2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/></marker>
+                      <marker id="arrow-leg3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker>
+                    </defs>
+                    <line x1="20" y1="110" x2="620" y2="110" stroke="var(--indigo-dark)" stroke-width="3"/>
+                    <text x="624" y="114" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x (km)</text>
+                    <g stroke="var(--indigo-dark)" stroke-width="2">
+                      <line x1="40" y1="103" x2="40" y2="117"/>
+                      <line x1="208" y1="103" x2="208" y2="117"/>
+                      <line x1="320" y1="103" x2="320" y2="117"/>
+                      <line x1="516" y1="103" x2="516" y2="117"/>
+                      <line x1="600" y1="103" x2="600" y2="117"/>
+                    </g>
+                    <g font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">
+                      <text x="40" y="140">Station A</text><text x="40" y="153" fill="var(--text)">0 km</text>
+                      <text x="208" y="140">Station B</text><text x="208" y="153" fill="var(--text)">1,2 km</text>
+                      <text x="320" y="140">Station C</text><text x="320" y="153" fill="var(--text)">2,0 km</text>
+                      <text x="516" y="140">Station D</text><text x="516" y="153" fill="var(--text)">3,4 km</text>
+                      <text x="600" y="140">Station E</text><text x="600" y="153" fill="var(--text)">4,0 km</text>
+                    </g>
+                    <g font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="middle">
+                      <text x="124" y="98">1,2 km</text><text x="264" y="98">0,8 km</text><text x="418" y="98">1,4 km</text><text x="558" y="98">0,6 km</text>
+                    </g>
+                    <path d="M40,45 C220,10 380,10 512,42" fill="none" stroke="var(--indigo-mid)" stroke-width="2.4" marker-end="url(#arrow-leg1)"/>
+                    <text x="270" y="14" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">① A → D</text>
+                    <path d="M320,72 C400,55 470,55 512,66" fill="none" stroke="var(--amber-dim)" stroke-width="2.4" marker-end="url(#arrow-leg2)"/>
+                    <text x="440" y="48" font-family="Inter, sans-serif" font-size="12" fill="var(--amber-dim)" text-anchor="middle">② D → E</text>
+                    <path d="M596,72 C570,86 545,86 520,74" fill="none" stroke="var(--flame)" stroke-width="2.4" marker-end="url(#arrow-leg3)"/>
+                    <text x="558" y="90" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)" text-anchor="middle">③ E → D</text>
+                    <circle cx="40" cy="110" r="6" fill="var(--indigo-mid)"/>
+                    <circle cx="516" cy="110" r="6" fill="var(--flame)"/>
+                  </svg>
+                </div>
+                <figcaption>Le wagon part de la station A ①, roule jusqu'à D, poursuit jusqu'à E ②, puis revient à D ③ — sa position finale est donc celle de la station D.</figcaption>
+              </div>
+
+              <div class="exemple-donnees">
+                <div class="exemple-donnees-label">Données</div>
+                <ul>
+                  <li>Origine de l'axe : station A → x<sub>A</sub> = 0 km</li>
+                  <li>x<sub>D</sub> = 3,4 km &nbsp;·&nbsp; x<sub>E</sub> = 4,0 km</li>
+                  <li>Trajet : A → D → E → D</li>
+                  <li>x<sub>i</sub> = 0 km (départ, à A) &nbsp;·&nbsp; x<sub>f</sub> = 3,4 km (arrivée, à D)</li>
+                </ul>
+              </div>
+
+              <p class="exemple-question">a) Le déplacement</p>
+              <p>Seules les positions initiale et finale comptent, peu importe le détour par E :</p>
+              <div class="formula">Δx = x<sub>f</sub> − x<sub>i</sub> = 3,4 km − 0 km = 3,4 km</div>
+              <div class="exemple-reponse">Le déplacement du wagon est de 3,4 km, orienté vers la droite.</div>
+
+              <p class="exemple-question">b) La distance parcourue</p>
+              <p>Le mouvement change de sens une seule fois, à la station E : il faut donc le découper en deux segments — un vers la droite (de A à E, en passant par D) et un vers la gauche (de E à D) — puis additionner la valeur absolue du déplacement de chacun.</p>
+              <div class="formula">L = |Δx<sub>A→E</sub>| + |Δx<sub>E→D</sub>|<br>L = |4,0 km − 0 km| + |3,4 km − 4,0 km|<br>L = |4,0 km| + |−0,6 km| = 4,0 km + 0,6 km</div>
+              <div class="exemple-reponse">La distance parcourue par le wagon est de 4,6 km.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s1">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 1<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 6</span>
+            <progress class="quiz-progress" value="0" max="6"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Le choix de l'origine d'un axe influence la physique réelle du mouvement étudié.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. L'origine est un choix arbitraire : elle change les valeurs numériques de xᵢ et xf, mais jamais le mouvement réel du corps.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : comme le montrent les figures 1.2 et 1.3, changer l'origine change les valeurs de xᵢ et xf, mais jamais le comportement physique du corps.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Un cycliste part d'un point situé à x = 3 m et termine à x = −5 m. Quel est son déplacement?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 8 m</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> −8 m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> −2 m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 2 m</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Δx = xf − xᵢ = −5 m − 3 m = −8 m. Le signe négatif indique un mouvement vers les x négatifs.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>Δx = xf − xᵢ = −5 m − 3 m = −8 m. N'oublie pas de soustraire la position initiale, avec son signe, de la position finale.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Reprends le cycliste de la question précédente (xᵢ = 3 m, xf = −5 m), mais on précise cette fois qu'il a d'abord roulé jusqu'à x = 6 m avant de revenir à x = −5 m. Quelle est la distance parcourue?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 8 m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 3 m</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> 14 m</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> −8 m</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Segment 1 (3 m → 6 m) : |6 − 3| = 3 m. Segment 2 (6 m → −5 m) : |−5 − 6| = 11 m. L = 3 m + 11 m = 14 m.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>Il faut découper le trajet en deux segments unidirectionnels : 3 m → 6 m (3 m), puis 6 m → −5 m (11 m). En additionnant : L = 3 m + 11 m = 14 m.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">La distance parcourue peut être négative si le corps se déplace vers les x négatifs.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La distance parcourue est une grandeur scalaire toujours positive ou nulle — c'est justement ce qui la distingue du déplacement, qui peut être négatif.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : la distance parcourue est une grandeur scalaire, toujours positive ou nulle. C'est le déplacement (une grandeur vectorielle) qui peut être négatif.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Dans quel cas la distance parcourue est-elle égale à la valeur absolue du déplacement?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Uniquement si le corps revient à son point de départ</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Lorsque le corps se déplace dans un seul et même sens du début à la fin</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Toujours, peu importe le trajet</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Jamais</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Sans changement de sens, il n'y a qu'un seul segment, et L = |Δx| — comme pour le wagon 1 des figures 1.2 et 1.5.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : cette égalité ne tient que lorsque le corps ne change jamais de sens — un seul segment, sans détour.</span></div>
+          </div>
+
+          <div class="quiz-q" data-qi="5">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Si un corps revient exactement à son point de départ, son déplacement est nul, mais la distance parcourue peut être très grande.</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+            </div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact — comme le coureur qui termine une boucle : xf = xᵢ, donc Δx = 0, même si la distance réellement parcourue est bien supérieure à zéro.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : revenir au point de départ donne xf = xᵢ, donc Δx = 0, mais chaque mètre parcouru en chemin s'ajoute quand même à la distance parcourue.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<button id="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+<script>
+// ── Toggle sections ────────────────────────────────────────
+function toggleSection(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  btn.parentElement.querySelector('.section-body').classList.toggle('open', !expanded);
+}
+
+// ── Toggle bulles de note ────────────────────────────────────
+function toggleNote(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Termes consultables (étymologie au clic) ────────────────
+function toggleTerm(el) {
+  const expanded = el.getAttribute('aria-expanded') === 'true';
+  document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => {
+    if (t !== el) t.setAttribute('aria-expanded', 'false');
+  });
+  el.setAttribute('aria-expanded', String(!expanded));
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.term-wrap')) {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
+
+// ── Toggle blocs d'exercices ────────────────────────────────
+function toggleQuiz(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Sidebar active link ────────────────────────────────────
+const tocLinks = document.querySelectorAll('.toc-link');
+const sectionIds = ['intro','section-1'];
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 130) current = id;
+  });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+  document.getElementById('to-top').classList.toggle('visible', window.scrollY > 300);
+}, {passive: true});
+
+// ── Smooth scroll from TOC ─────────────────────────────────
+tocLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const toggle = target.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ── Table des matières (page-toc) : ouvre la bonne section, puis défile ────
+document.querySelectorAll('.page-toc-pills a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const card = target.closest('.section-card');
+    const toggle = card ? card.querySelector('.section-toggle') : null;
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// Ouvre automatiquement la bonne section si on arrive via une ancre (#section-1, etc.)
+if (location.hash) {
+  const target = document.getElementById(location.hash.slice(1));
+  if (target) {
+    const card = target.closest('.section-card') || target;
+    const toggle = card.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
+}
+
+// ── Search ─────────────────────────────────────────────────
+const contentEl = document.querySelector('.content');
+const originalHTML = contentEl.innerHTML;
+
+let lastQuery = '';
+let matchIndex = -1;
+
+function doSearch(query) {
+  contentEl.innerHTML = originalHTML;
+  const countEl = document.getElementById('search-count');
+  matchIndex = -1;
+  lastQuery = query;
+
+  if (!query.trim()) { countEl.textContent = ''; return 0; }
+
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  let count = 0;
+  nodes.forEach(node => {
+    if (!re.test(node.textContent)) return;
+    re.lastIndex = 0;
+    const span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(re, m => { count++; return `<mark class="sh">${m}</mark>`; });
+    node.parentNode.replaceChild(span, node);
+  });
+
+  countEl.textContent = count ? `${count} résultat${count>1?'s':''}` : 'Aucun résultat';
+
+  document.querySelectorAll('.section-card').forEach(card => {
+    if (card.querySelector('mark.sh')) {
+      const t = card.querySelector('.section-toggle');
+      if (t && t.getAttribute('aria-expanded') === 'false') toggleSection(t);
+    }
+  });
+
+  return count;
+}
+
+function goToMatch(step) {
+  const marks = contentEl.querySelectorAll('mark.sh');
+  if (!marks.length) return;
+  if (matchIndex >= 0 && marks[matchIndex]) marks[matchIndex].classList.remove('current');
+  matchIndex = (matchIndex + step + marks.length) % marks.length;
+  const m = marks[matchIndex];
+  m.classList.add('current');
+  m.scrollIntoView({behavior:'smooth', block:'center'});
+  const countEl = document.getElementById('search-count');
+  countEl.textContent = `${matchIndex+1} / ${marks.length} résultats`;
+}
+
+function runSearchAndJump(query, step) {
+  if (query !== lastQuery || !contentEl.querySelector('mark.sh')) {
+    const count = doSearch(query);
+    if (count > 0) goToMatch(0);
+  } else {
+    goToMatch(step);
+  }
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAndJump(e.target.value, e.shiftKey ? -1 : 1);
+  }
+});
+
+// Ctrl+F → recherche interne
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    const inp = document.getElementById('search-input');
+    inp.focus(); inp.select();
+  }
+});
+
+// Fermer la bulle d'attribution au clic à l'extérieur
+document.addEventListener('click', e => {
+  const pop = document.getElementById('attrib-pop');
+  if (pop && !pop.contains(e.target) && !e.target.closest('.sidebar-footer button')) {
+    pop.classList.remove('visible');
+  }
+});
+
+// === MOTEUR DE QUIZ INTERACTIFS ===
+function initQuizBlock(block) {
+  const questions = Array.from(block.querySelectorAll('.quiz-q'));
+  const total = questions.length;
+  const scoreLabel = block.querySelector('.quiz-score-label');
+  const progressBar = block.querySelector('.quiz-progress');
+  const resultMsg = block.querySelector('.quiz-result-msg');
+  const resetBtn = block.querySelector('.quiz-reset');
+  progressBar.max = total;
+
+  function updateScore() {
+    const answered = questions.filter(q => q.classList.contains('answered'));
+    const correct = answered.filter(q => q.dataset.gotCorrect === 'true').length;
+    scoreLabel.textContent = `${correct} / ${total}`;
+    progressBar.value = answered.length;
+
+    if (answered.length === total) {
+      resultMsg.classList.add('show');
+      const pct = Math.round((correct / total) * 100);
+      resultMsg.classList.remove('great', 'good', 'poor');
+      const starIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 16.9 6.5 19.7l1.4-6.1-4.7-4.2 6.2-.6Z"/></svg>';
+      const upIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13l3-3 2 2 3-3.5"/></svg>';
+      const bookIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg>';
+      let icon, msg, variant;
+      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — la section est maîtrisée.`; variant = 'great'; }
+      else if (pct >= 70) { icon = upIcon; msg = `Bon travail : ${correct} / ${total}. Relis les explications des questions manquées.`; variant = 'good'; }
+      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de revoir cette section avant de continuer.`; variant = 'poor'; }
+      resultMsg.classList.add(variant);
+      resultMsg.innerHTML = `${icon}<span>${msg}</span>`;
+      resetBtn.style.display = 'inline-block';
+    } else {
+      resultMsg.classList.remove('show', 'great', 'good', 'poor');
+      resetBtn.style.display = 'none';
+    }
+  }
+
+  questions.forEach(q => {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    const fbOk = q.querySelector('.quiz-feedback.ok');
+    const fbKo = q.querySelector('.quiz-feedback.ko');
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (q.classList.contains('answered')) return;
+
+        const isCorrect = opt.dataset.correct === 'true';
+        q.classList.add('answered');
+        q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
+
+        options.forEach(o => {
+          o.disabled = true;
+          if (o.dataset.correct === 'true') {
+            o.classList.add(o === opt ? 'correct' : 'reveal');
+          } else if (o === opt) {
+            o.classList.add('wrong');
+          }
+        });
+
+        (isCorrect ? fbOk : fbKo).classList.add('show');
+        updateScore();
+      });
+    });
+  });
+
+  block.addEventListener('reset-quiz', () => {
+    questions.forEach(q => {
+      q.classList.remove('answered');
+      delete q.dataset.gotCorrect;
+      q.querySelectorAll('.quiz-option').forEach(o => {
+        o.disabled = false;
+        o.classList.remove('correct', 'wrong', 'reveal');
+      });
+      q.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+    });
+    updateScore();
+  });
+
+  updateScore();
+}
+
+document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+</script>
+</body>
+</html>
