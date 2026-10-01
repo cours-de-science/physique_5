@@ -287,6 +287,35 @@
   .quiz-reset:hover { background: #eef2fa; }
 
   .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* === SECTION 2 : laboratoires interactifs === */
+  .iv-opts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .iv-btn{flex:1 1 150px;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font:600 14px Inter,sans-serif;color:var(--indigo-dark);cursor:pointer;transition:background .15s,border-color .15s}
+  .iv-btn:hover{border-color:var(--indigo-mid);background:#eef6f7}
+  .iv-btn.ok{background:#e8f8ef;border-color:#2da262;color:#1a6640}
+  .iv-btn.ko{background:#fdecea;border-color:#d94f3d;color:#8b2218}
+  .iv-fb{font-size:13.5px;line-height:1.55;min-height:46px;padding:10px 14px;border-radius:8px;background:var(--bg)}
+  .lab{background:#f8fafb;border:1.5px solid var(--indigo-light);border-radius:10px;padding:16px 18px 18px;margin:18px 0}
+  .lab-title{font:700 13px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--indigo-mid);margin-bottom:12px}
+  .lab-grid{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+  .lab-grid .table-wrap{flex:0 0 190px;margin:0}
+  .lab-grid .lab-gr{flex:1 1 300px;min-width:0}
+  .lab-ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 8px}
+  .lab-ctl input[type=range]{flex:1 1 200px;accent-color:var(--amber-dim);min-width:140px}
+  .lab-btn{padding:8px 16px;border-radius:8px;border:1.5px solid var(--indigo-mid);background:#fff;font:600 13px Inter,sans-serif;color:var(--indigo-dark);cursor:pointer}
+  .lab-btn:hover{background:#eef2fa}
+  .lab-read{font-family:var(--mono);font-size:13px;font-weight:600;background:var(--indigo-dark);color:var(--amber);padding:9px 14px;border-radius:8px;overflow-x:auto;white-space:nowrap}
+  .lab-phase{font-size:14px;font-weight:600;color:var(--indigo-dark);margin:10px 0 0;min-height:22px}
+  .data-table tr.on td{background:#cdeef1;font-weight:700}
+  .chip{display:inline-block;background:#eaf8fa;border:1px solid var(--amber-dim);border-radius:6px;padding:4px 10px;font:600 13px var(--mono);color:#0d5a66;margin:3px 6px 3px 0}
+  .legs{list-style:none;padding:0;margin:0;font-size:14px;line-height:1.9}
+  .legs b{font-family:var(--mono);color:var(--indigo-dark)}
+
+  /* === VECTEUR : flèche dessinée en CSS (le caractère Unicode combinant U+20D7 n'existe pas dans Inter ni JetBrains Mono) === */
+  .vec { position: relative; display: inline-block; line-height: 1; --vy: -.03em; }
+  .vec.lc { --vy: .13em; }
+  .vec::before { content: ""; position: absolute; left: .05em; right: .02em; top: calc(var(--vy) - .0125em); border-top: .075em solid currentColor; }
+  .vec::after { content: ""; position: absolute; right: .02em; top: calc(var(--vy) - .06em); width: .16em; height: .16em; box-sizing: border-box; border-top: .075em solid currentColor; border-right: .075em solid currentColor; transform: rotate(45deg); }
 </style>
 </head>
 <body>
@@ -308,6 +337,7 @@
     <ul>
       <li><a href="#intro" class="toc-link"><span class="num">—</span> Avant de commencer</a></li>
       <li><a href="#section-1" class="toc-link"><span class="num">Section 1</span> La position, le déplacement et la distance parcourue</a></li>
+      <li><a href="#section-2" class="toc-link"><span class="num">Section 2</span> Le graphique de la position en fonction du temps</a></li>
     </ul>
   </nav>
   <div class="sidebar-footer">
@@ -341,6 +371,15 @@
           <a href="#exemple-metro"><span class="toc-num">Ex.</span>Exemple résolu</a>
         </div>
       </div>
+      <div class="page-toc-group">
+        <div class="page-toc-group-label">Section 2 — Le graphique de la position en fonction du temps</div>
+        <div class="page-toc-pills">
+          <a href="#decouper-le-mouvement"><span class="toc-num">2.1</span>Découper le mouvement</a>
+          <a href="#tableau-et-graphique"><span class="toc-num">2.2</span>Le tableau et le graphique</a>
+          <a href="#mru-successifs"><span class="toc-num">2.3</span>Plusieurs MRU à la suite</a>
+          <a href="#exemple-camelot"><span class="toc-num">Ex.</span>Le camelot</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -357,7 +396,7 @@
       <h2><svg aria-hidden="true" style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18L10 12L4 6"/><path d="M20 18L14 12L20 6"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Décrire le mouvement, un axe à la fois</h2>
       <p>Avant de pouvoir calculer une vitesse ou tracer le graphique d'un mouvement, il faut d'abord un vocabulaire précis pour en parler : où se trouve un corps, de combien sa position a changé, et quelle distance il a réellement parcourue pour s'y rendre. Ces trois notions, plus proches les unes des autres qu'il n'y paraît à première vue, font l'objet de la section 1.</p>
       <p>Le reste du chapitre s'appuiera directement sur ces bases : la section 2 montrera comment représenter un mouvement à l'aide d'un graphique de la position en fonction du temps, la section 3 reviendra sur la notion de vitesse pour la formaliser mathématiquement, et la section 4 complétera le tableau avec la représentation graphique de la vitesse en fonction du temps.</p>
-      <div class="wip-note">Ce chapitre est en cours de rédaction. Cette version couvre uniquement la section 1 (la position, le déplacement et la distance parcourue); les sections 2 à 4 suivront.</div>
+      <div class="wip-note">Ce chapitre est en cours de rédaction. Cette version couvre les sections 1 (la position, le déplacement et la distance parcourue) et 2 (le graphique de la position en fonction du temps); les sections 3 et 4 suivront.</div>
     </div>
 
     <!-- SECTION 1 -->
@@ -388,7 +427,7 @@
 
           <p>En physique, le mot « corps » peut désigner à peu près n'importe quel objet en mouvement : une planète aussi bien qu'un wagon de métro ou une bille. Pour simplifier l'analyse, on traite généralement ces corps comme des particules ponctuelles — des objets mathématiques sans dimension. Ce qui compte, c'est la position qu'ils occupent, pas leur forme ni leur taille.</p>
 
-          <p>De façon générale, la position d'un corps se représente par un vecteur position, noté s⃗, qui part de l'origine du système de référence et pointe vers le corps. Dans un système de coordonnées cartésiennes, ce vecteur se décompose en une composante horizontale x et une composante verticale y (figure 1.1).</p>
+          <p>De façon générale, la position d'un corps se représente par un vecteur position, noté <span class="vec lc">s</span>, qui part de l'origine du système de référence et pointe vers le corps. Dans un système de coordonnées cartésiennes, ce vecteur se décompose en une composante horizontale x et une composante verticale y (figure 1.1).</p>
 
           <div class="fig-block">
             <div class="fig-inner">
@@ -406,7 +445,7 @@
                 <circle cx="250" cy="80" r="5" fill="var(--indigo-mid)"/>
                 <text x="260" y="76" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">corps</text>
                 <line x1="40" y1="220" x2="250" y2="80" stroke="var(--flame)" stroke-width="2.6" marker-end="url(#arrow-pos)"/>
-                <text x="130" y="140" font-family="Inter, sans-serif" font-size="14" fill="var(--flame)" font-style="italic">s⃗</text>
+                <text x="130" y="140" font-family="Inter, sans-serif" font-size="14" fill="var(--flame)" font-style="italic">s</text><path d="M132.2,128.5 H139.2 M136.4,126.6 L139.2,128.5 L136.4,130.4" fill="none" stroke="var(--flame)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
                 <line x1="250" y1="80" x2="250" y2="220" stroke="#9aa7b0" stroke-width="1.4" stroke-dasharray="4 3"/>
                 <line x1="40" y1="80" x2="250" y2="80" stroke="#9aa7b0" stroke-width="1.4" stroke-dasharray="4 3"/>
                 <text x="240" y="240" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">x</text>
@@ -415,7 +454,7 @@
                 <text x="68" y="204" font-family="Inter, sans-serif" font-size="12" fill="var(--amber-dim)">θ</text>
               </svg>
             </div>
-            <figcaption>Figure 1.1 — Dans un système de référence cartésien, la position d'un corps est représentée par un vecteur s⃗ partant de l'origine O; ses composantes x et y donnent les coordonnées du point occupé par le corps.</figcaption>
+            <figcaption>Figure 1.1 — Dans un système de référence cartésien, la position d'un corps est représentée par un vecteur <span class="vec lc">s</span> partant de l'origine O; ses composantes x et y donnent les coordonnées du point occupé par le corps.</figcaption>
           </div>
 
           <div class="zoom-box">
@@ -525,7 +564,7 @@
 
           <div class="def-box">
             <div class="def-label">Définition</div>
-            <p><strong>Déplacement :</strong> la variation de la position d'un corps, c'est-à-dire la différence entre sa position finale et sa position initiale. Il s'agit d'une grandeur <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">vectorielle</span><span class="term-pop" role="tooltip"><span class="term-pop-word">vecteur</span><span class="term-pop-ety">Du latin <em>vector</em>, « celui qui transporte », de <em>vehere</em>, « porter, transporter » (d'où vient aussi <em>véhicule</em>)</span><span class="term-pop-body">Un vecteur « transporte » à la fois une grandeur (une intensité) et une direction — ce qu'un simple nombre, à lui seul, ne peut pas faire.</span></span></span>, notée Δs⃗ (ou Δx dans le cas particulier d'un mouvement rectiligne).</p>
+            <p><strong>Déplacement :</strong> la variation de la position d'un corps, c'est-à-dire la différence entre sa position finale et sa position initiale. Il s'agit d'une grandeur <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">vectorielle</span><span class="term-pop" role="tooltip"><span class="term-pop-word">vecteur</span><span class="term-pop-ety">Du latin <em>vector</em>, « celui qui transporte », de <em>vehere</em>, « porter, transporter » (d'où vient aussi <em>véhicule</em>)</span><span class="term-pop-body">Un vecteur « transporte » à la fois une grandeur (une intensité) et une direction — ce qu'un simple nombre, à lui seul, ne peut pas faire.</span></span></span>, notée Δ<span class="vec lc">s</span> (ou Δx dans le cas particulier d'un mouvement rectiligne).</p>
           </div>
 
           <p>Le symbole Δ (delta majuscule) n'est pas propre à la physique : en mathématique, il indique toujours la <em>variation</em> d'une grandeur. Δx ne désigne donc pas une nouvelle grandeur indépendante de x, mais bien x<sub>f</sub> − x<sub>i</sub> — la variation de la position.</p>
@@ -550,15 +589,15 @@
                   <line x1="30" y1="190" x2="110" y2="90" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-si)"/>
                   <line x1="30" y1="190" x2="210" y2="50" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-sf)"/>
                   <line x1="110" y1="90" x2="210" y2="50" stroke="var(--flame)" stroke-width="2.4" stroke-dasharray="5 3" marker-end="url(#arrow-ds)"/>
-                  <text x="60" y="150" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s⃗ᵢ</text>
-                  <text x="150" y="55" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s⃗f</text>
-                  <text x="150" y="82" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)">Δs⃗</text>
+                  <text x="60" y="150" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s<tspan dy="3.2" font-size="9.4">i</tspan></text><path d="M60.9,139.3 H67.4 M64.8,137.6 L67.4,139.3 L64.8,141.1" fill="none" stroke="var(--indigo-mid)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+                  <text x="150" y="55" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s<tspan dy="3.2" font-size="9.4">f</tspan></text><path d="M150.9,44.3 H157.4 M154.8,42.6 L157.4,44.3 L154.8,46.1" fill="none" stroke="var(--indigo-mid)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+                  <text x="118" y="70" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)">Δ<tspan x="127.5">s</tspan></text><path d="M128.4,59.3 H134.9 M132.3,57.5 L134.9,59.3 L132.3,61.1" fill="none" stroke="var(--flame)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
                   <line x1="110" y1="190" x2="110" y2="90" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
                   <line x1="210" y1="190" x2="210" y2="50" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
                   <text x="150" y="205" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">Δx</text>
                 </svg>
               </div>
-              <figcaption>Figure 1.4a — Cas général : le déplacement Δs⃗ relie l'extrémité du vecteur position initiale s⃗ᵢ à celle du vecteur position finale s⃗f.</figcaption>
+              <figcaption>Figure 1.4a — Cas général : le déplacement Δ<span class="vec lc">s</span> relie l'extrémité du vecteur position initiale <span class="vec lc">s</span>ᵢ à celle du vecteur position finale <span class="vec lc">s</span>f.</figcaption>
             </div>
 
             <div class="fig-block">
@@ -854,6 +893,197 @@
       </div>
     </div>
 
+
+    <!-- SECTION 2 -->
+    <div class="section-card" id="section-2">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <div class="section-header">
+          <span class="section-num">Section 2</span>
+          <span class="section-title">Le graphique de la position en fonction du temps</span>
+          <svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="section-body">
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+          <symbol id="house" viewBox="0 0 30 28"><path d="M2 13 L15 2 L28 13 Z" fill="#163a5c"/><rect x="5" y="13" width="20" height="13" fill="#fff" stroke="#0d1b2e" stroke-width="1.6"/><rect x="12.5" y="17" width="5" height="9" fill="#2bc4d4"/></symbol>
+          <symbol id="ic-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+          <symbol id="ic-ko" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9l6 6M15 9l-6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+        </defs></svg>
+
+        <p>Un film, c'est une suite de photos prises à intervalles réguliers. Décrire un mouvement, c'est pareil : on note où se trouve le corps à des instants bien choisis, puis on relie les points. Cette section t'apprend à construire et à lire cette « carte du mouvement » : le graphique de la position <em>x</em> en fonction du temps <em>t</em>.</p>
+
+        <div class="def-box">
+          <div class="def-label">Définition — Mouvement rectiligne uniforme (MRU)</div>
+          <p>Un <strong>mouvement rectiligne uniforme (MRU)</strong> est un mouvement en ligne droite se produisant à vitesse constante. Ainsi, pour des intervalles de temps égaux, les distances parcourues sont égales.</p>
+        </div>
+        <p>Le nom dit tout : le mouvement est <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">rectiligne</span><span class="term-pop" role="tooltip"><span class="term-pop-word">rectiligne</span><span class="term-pop-ety">Du latin <em>rectus</em> (« droit ») + <em>linea</em> (« ligne »)</span><span class="term-pop-body">Rectiligne : qui suit une ligne droite. Le corps ne tourne jamais.</span></span></span> et <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">uniforme</span><span class="term-pop" role="tooltip"><span class="term-pop-word">uniforme</span><span class="term-pop-ety">Du latin <em>unus</em> (« un ») + <em>forma</em> (« forme »)</span><span class="term-pop-body">Uniforme : « d'une seule forme », toujours pareil. Ici, la vitesse ne change pas.</span></span></span>.</p>
+
+        <div class="subsection" id="decouper-le-mouvement">
+          <div class="subsection-title">2.1 Découper le mouvement en intervalles</div>
+          <p>Pour décrire le mouvement d'un corps, on doit connaître ses positions à différents moments. Il suffit de découper le mouvement en <strong>intervalles de temps appropriés</strong>. À toi de jouer : pour décrire le trajet d'une automobile d'une ville à l'autre, quel intervalle choisirais-tu?</p>
+          <div class="iv-opts">
+            <button class="iv-btn" data-ok="0" data-fb="<b>Trop petit.</b> D'une milliseconde à l'autre, la voiture a à peine bougé : on obtiendrait une avalanche d'informations superflues." onclick="ivPick(this)">1 milliseconde</button>
+            <button class="iv-btn" data-ok="1" data-fb="<b>Adéquat.</b> C'est l'intervalle généralement utilisé pour décrire le trajet d'une automobile d'une ville à l'autre." onclick="ivPick(this)">1 heure</button>
+            <button class="iv-btn" data-ok="0" data-fb="<b>Trop grand.</b> Le trajet dure moins d'une année : la durée du mouvement est plus courte que l'intervalle choisi, on ne verrait rien du déplacement." onclick="ivPick(this)">1 année</button>
+          </div>
+          <div class="iv-fb" id="iv-fb" aria-live="polite">Clique sur un intervalle pour voir si le choix est approprié.</div>
+        </div>
+
+        <div class="subsection" id="tableau-et-graphique">
+          <div class="subsection-title">2.2 Le tableau et le graphique</div>
+          <p>On peut représenter le mouvement d'un corps de deux façons : par un <strong>tableau</strong> des valeurs de la position à différents temps, ou, plus visuellement, par un <strong>graphique de la position en fonction du temps</strong>. Les deux contiennent exactement la même information.</p>
+          <div class="lab">
+            <div class="lab-title">Laboratoire — Un enfant marche à vitesse constante, toujours dans le même sens</div>
+            <div class="lab-grid">
+              <div class="table-wrap"><table class="data-table"><thead><tr><th>t (s)</th><th>x (m)</th></tr></thead><tbody>
+                <tr><td>0</td><td>0</td></tr><tr><td>50</td><td>37,5</td></tr><tr><td>100</td><td>75,0</td></tr><tr><td>150</td><td>112,5</td></tr></tbody></table></div>
+              <div class="lab-gr">
+                <svg viewBox="0 0 360 210" style="width:100%;height:auto;" role="img" aria-label="Graphique de la position d'un enfant en fonction du temps : une droite qui monte de 0 m à 112,5 m en 150 s">
+                  <g font-family="Inter,sans-serif" font-size="11" fill="#5c6b78"><line x1="40" y1="10" x2="40" y2="170" stroke="#d7e0e6"/><text x="40" y="186" text-anchor="middle">0</text><line x1="140" y1="10" x2="140" y2="170" stroke="#d7e0e6"/><text x="140" y="186" text-anchor="middle">50</text><line x1="240" y1="10" x2="240" y2="170" stroke="#d7e0e6"/><text x="240" y="186" text-anchor="middle">100</text><line x1="340" y1="10" x2="340" y2="170" stroke="#d7e0e6"/><text x="340" y="186" text-anchor="middle">150</text><line x1="40" y1="170.0" x2="340" y2="170.0" stroke="#d7e0e6"/><text x="34" y="174.0" text-anchor="end">0</text><line x1="40" y1="116.7" x2="340" y2="116.7" stroke="#d7e0e6"/><text x="34" y="120.7" text-anchor="end">40</text><line x1="40" y1="63.3" x2="340" y2="63.3" stroke="#d7e0e6"/><text x="34" y="67.3" text-anchor="end">80</text><line x1="40" y1="10.0" x2="340" y2="10.0" stroke="#d7e0e6"/><text x="34" y="14.0" text-anchor="end">120</text><circle cx="40" cy="170.0" r="3.6" fill="#16212c"/><circle cx="140" cy="120.0" r="3.6" fill="#16212c"/><circle cx="240" cy="70.0" r="3.6" fill="#16212c"/><circle cx="340" cy="20.0" r="3.6" fill="#16212c"/>
+                    <text x="190" y="206" text-anchor="middle">Temps t (s)</text><text transform="rotate(-90 9 90)" x="9" y="90" text-anchor="middle">Position x (m)</text></g>
+                  <line x1="40" y1="170" x2="340" y2="170" stroke="#0d1b2e" stroke-width="2"/><line x1="40" y1="170" x2="40" y2="10" stroke="#0d1b2e" stroke-width="2"/>
+                  <line x1="40" y1="170" x2="340" y2="20" stroke="#163a5c" stroke-width="2.4"/>
+                  <line id="kid-v" stroke="#dd4a3a" stroke-width="1.4" stroke-dasharray="4 3"/><line id="kid-h" stroke="#dd4a3a" stroke-width="1.4" stroke-dasharray="4 3"/>
+                  <circle id="kid-dot" r="6" fill="#dd4a3a" stroke="#fff" stroke-width="2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="lab-ctl"><label for="kid-t" style="font-size:13px;font-weight:600;">Instant t</label><input type="range" id="kid-t" min="0" max="150" step="10" value="0" oninput="kidRender(+this.value)"></div>
+            <div class="lab-read" id="kid-out"></div>
+            <p style="margin-top:14px;font-size:14px;"><strong>Vérifions la définition.</strong> Prenons des intervalles de temps égaux (50 s) et regardons la distance parcourue dans chacun, d'après le tableau :</p>
+            <div><span class="chip">0 → 50 s : 37,5 − 0 = 37,5 m</span><span class="chip">50 → 100 s : 75,0 − 37,5 = 37,5 m</span><span class="chip">100 → 150 s : 112,5 − 75,0 = 37,5 m</span></div>
+            <p style="margin-top:10px;font-size:14px;">Intervalles égaux, distances égales : c'est bien un MRU. Sur le graphique, cela donne <strong>une seule droite</strong>, car tout le mouvement se fait à la même vitesse et dans le même sens. Et comme la droite est continue, elle te permet de lire la position <em>entre</em> deux mesures : déplace le curseur pour essayer.</p>
+          </div>
+        </div>
+
+        <div class="subsection" id="mru-successifs">
+          <div class="subsection-title">2.3 Plusieurs MRU à la suite</div>
+          <p>Pour représenter une suite de mouvements rectilignes uniformes différents, le graphique de la position en fonction du temps est constitué de <strong>plusieurs segments de droite</strong>. Chaque segment est un MRU. L'exemple suivant te montre comment construire un tel graphique, étape par étape.</p>
+          <div class="note-box">
+            <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg> Pour aller plus loin<span class="note-subtitle">Lire un segment d'un coup d'œil</span></span>
+              <svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="note-body"><p>Un segment qui <strong>monte</strong> : <em>x</em> augmente, le corps avance dans le sens positif de l'axe. Un segment qui <strong>descend</strong> : <em>x</em> diminue, il avance dans le sens négatif. Un segment <strong>horizontal</strong> : <em>x</em> ne change pas pendant que le temps passe, le corps est immobile. Plus un segment est incliné, plus le corps parcourt de distance en peu de temps; la section 3 transformera cette idée en calcul.</p></div>
+          </div>
+        </div>
+
+        <div class="exemple-box" id="exemple-camelot">
+          <div class="exemple-header"><div class="exemple-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg> Exemple — Le camelot <span class="exemple-subtitle">Construire un tableau, puis un graphique</span></div></div>
+          <div class="exemple-body">
+            <p>Un camelot livre le journal. Sa voiture est stationnée devant la maison C. Voici son parcours, chaque étape se faisant à vitesse constante :</p>
+            <div class="exemple-donnees">
+              <div class="exemple-donnees-label">Données — durée de chaque étape</div>
+              <ul class="legs">
+                <li>① Il marche de la voiture (C) jusqu'à la maison D : <b>70 s</b></li>
+                <li>② Il marche encore jusqu'à la maison E : <b>60 s</b></li>
+                <li>③ Il revient à sa voiture en joggant : <b>35 s</b></li>
+                <li>④ Il s'arrête à sa voiture pour prendre un journal : <b>20 s</b></li>
+                <li>⑤ Il se rend à la maison A : <b>120 s</b></li>
+                <li>⑥ Il revient à sa voiture : <b>90 s</b></li>
+              </ul>
+            </div>
+            <p class="exemple-question">a) Construis un tableau de la position en fonction du temps, puis b) trace le graphique.</p>
+            <p>On place l'<strong>origine</strong> à la maison C et on <strong>oriente l'axe positif vers la maison D</strong>. Sur le schéma du manuel, les maisons sont donc aux positions <em>x</em><sub>A</sub> = −100 m, <em>x</em><sub>C</sub> = 0 m, <em>x</em><sub>D</sub> = 60 m et <em>x</em><sub>E</sub> = 100 m.</p>
+            <div class="note-box" style="margin-top:0;border-color:var(--flame);background:#fdf5f4">
+              <div style="padding:12px 18px;font-size:14px;color:#8b2218;line-height:1.6"><strong>Attention au piège du temps.</strong> Les durées de l'énoncé sont celles de chaque étape. La colonne <em>t</em> du tableau doit contenir l'<strong>instant écoulé depuis le départ</strong> : 70 s, puis 70 + 60 = 130 s, puis 130 + 35 = 165 s, et ainsi de suite.</div>
+            </div>
+            <div class="lab" style="margin-top:6px">
+              <div class="lab-title">Laboratoire — Déplace le curseur et regarde le graphique se construire</div>
+              <svg viewBox="0 0 545 125" style="width:100%;height:auto;" role="img" aria-label="Rue avec cinq maisons A à E et une voiture devant la maison C; le camelot se déplace sur l'axe de position">
+                <line x1="20" y1="95" x2="500" y2="95" stroke="#0d1b2e" stroke-width="2.4"/>
+                <g stroke="#0d1b2e" stroke-width="2"><line x1="40" y1="90" x2="40" y2="100"/><line x1="150" y1="90" x2="150" y2="100"/><line x1="260" y1="90" x2="260" y2="100"/><line x1="370" y1="90" x2="370" y2="100"/><line x1="480" y1="90" x2="480" y2="100"/></g>
+                <g font-family="Inter,sans-serif" font-size="11" fill="#5c6b78" text-anchor="middle"><text x="40" y="113">−100</text><text x="150" y="113">−50</text><text x="260" y="113">0</text><text x="370" y="113">50</text><text x="480" y="113">100</text><text x="506" y="99" text-anchor="start">x (m)</text></g>
+                <g font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#163a5c" text-anchor="middle">
+                  <use href="#house" x="25" y="26" width="30" height="28"/><text x="40" y="20">A</text>
+                  <use href="#house" x="135" y="26" width="30" height="28"/><text x="150" y="20">B</text>
+                  <use href="#house" x="245" y="26" width="30" height="28"/><text x="260" y="20">C</text>
+                  <use href="#house" x="377" y="26" width="30" height="28"/><text x="392" y="20">D</text>
+                  <use href="#house" x="465" y="26" width="30" height="28"/><text x="480" y="20">E</text></g>
+                <rect x="241" y="72" width="38" height="14" rx="4" fill="#4f90b8"/><circle cx="249" cy="88" r="3.5" fill="#0d1b2e"/><circle cx="271" cy="88" r="3.5" fill="#0d1b2e"/>
+                <g id="cam-man"><circle cx="0" cy="64" r="5.5" fill="#dd4a3a"/><line x1="0" y1="70" x2="0" y2="88" stroke="#dd4a3a" stroke-width="3" stroke-linecap="round"/></g>
+              </svg>
+              <div class="lab-grid" style="margin-top:12px">
+                <div class="table-wrap"><table class="data-table"><thead><tr><th>t (s)</th><th>x (m)</th></tr></thead><tbody>
+                  <tr id="cam-r0"><td>0</td><td>0</td></tr><tr id="cam-r1"><td>70</td><td>60</td></tr><tr id="cam-r2"><td>130</td><td>100</td></tr><tr id="cam-r3"><td>165</td><td>0</td></tr><tr id="cam-r4"><td>185</td><td>0</td></tr><tr id="cam-r5"><td>305</td><td>−100</td></tr><tr id="cam-r6"><td>395</td><td>0</td></tr></tbody></table></div>
+                <div class="lab-gr">
+                  <svg viewBox="0 0 520 290" style="width:100%;height:auto;" role="img" aria-label="Graphique de la position du camelot en fonction du temps, formé de six segments de droite">
+                    <g font-family="Inter,sans-serif" font-size="11" fill="#5c6b78"><line x1="50.0" y1="15" x2="50.0" y2="265" stroke="#d7e0e6"/><line x1="106.2" y1="15" x2="106.2" y2="265" stroke="#d7e0e6"/><line x1="162.5" y1="15" x2="162.5" y2="265" stroke="#d7e0e6"/><line x1="218.8" y1="15" x2="218.8" y2="265" stroke="#d7e0e6"/><line x1="275.0" y1="15" x2="275.0" y2="265" stroke="#d7e0e6"/><line x1="331.2" y1="15" x2="331.2" y2="265" stroke="#d7e0e6"/><line x1="387.5" y1="15" x2="387.5" y2="265" stroke="#d7e0e6"/><line x1="443.8" y1="15" x2="443.8" y2="265" stroke="#d7e0e6"/><line x1="500.0" y1="15" x2="500.0" y2="265" stroke="#d7e0e6"/><line x1="50" y1="265.0" x2="500" y2="265.0" stroke="#d7e0e6"/><text x="44" y="269.0" text-anchor="end">−150</text><line x1="50" y1="223.3" x2="500" y2="223.3" stroke="#d7e0e6"/><text x="44" y="227.3" text-anchor="end">−100</text><line x1="50" y1="181.7" x2="500" y2="181.7" stroke="#d7e0e6"/><text x="44" y="185.7" text-anchor="end">−50</text><line x1="50" y1="140.0" x2="500" y2="140.0" stroke="#d7e0e6"/><text x="44" y="144.0" text-anchor="end">0</text><line x1="50" y1="98.3" x2="500" y2="98.3" stroke="#d7e0e6"/><text x="44" y="102.3" text-anchor="end">50</text><line x1="50" y1="56.7" x2="500" y2="56.7" stroke="#d7e0e6"/><text x="44" y="60.7" text-anchor="end">100</text><line x1="50" y1="15.0" x2="500" y2="15.0" stroke="#d7e0e6"/><text x="44" y="19.0" text-anchor="end">150</text><text x="50.0" y="156" text-anchor="middle">0</text><text x="162.5" y="156" text-anchor="middle">100</text><text x="275.0" y="156" text-anchor="middle">200</text><text x="387.5" y="156" text-anchor="middle">300</text><text x="500.0" y="156" text-anchor="middle">400</text>
+                      <text x="275" y="284" text-anchor="middle">Temps t (s)</text><text transform="rotate(-90 11 140)" x="11" y="140" text-anchor="middle">Position x (m)</text></g>
+                    <line x1="50" y1="140" x2="500" y2="140" stroke="#0d1b2e" stroke-width="2"/><line x1="50" y1="15" x2="50" y2="265" stroke="#0d1b2e" stroke-width="2"/>
+                    <polyline id="cam-s0" fill="none" stroke="#163a5c" stroke-width="3"/><polyline id="cam-s1" fill="none" stroke="#1f8fa0" stroke-width="3"/><polyline id="cam-s2" fill="none" stroke="#dd4a3a" stroke-width="3"/>
+                    <polyline id="cam-s3" fill="none" stroke="#7d8b96" stroke-width="3"/><polyline id="cam-s4" fill="none" stroke="#4f90b8" stroke-width="3"/><polyline id="cam-s5" fill="none" stroke="#0d5a66" stroke-width="3"/>
+                    <circle id="cam-k0" cx="50.0" cy="140.0" r="3.6" fill="#fff" stroke="#16212c" stroke-width="1.6" opacity="0"/><circle id="cam-k1" cx="128.8" cy="90.0" r="3.6" fill="#fff" stroke="#16212c" stroke-width="1.6" opacity="0"/><circle id="cam-k2" cx="196.2" cy="56.7" r="3.6" fill="#fff" stroke="#16212c" stroke-width="1.6" opacity="0"/><circle id="cam-k3" cx="235.6" cy="140.0" r="3.6" fill="#fff" stroke="#16212c" stroke-width="1.6" opacity="0"/><circle id="cam-k4" cx="258.1" cy="140.0" r="3.6" fill="#fff" stroke="#16212c" stroke-width="1.6" opacity="0"/><circle id="cam-k5" cx="393.1" cy="223.3" r="3.6" fill="#fff" stroke="#16212c" stroke-width="1.6" opacity="0"/><circle id="cam-k6" cx="494.4" cy="140.0" r="3.6" fill="#fff" stroke="#16212c" stroke-width="1.6" opacity="0"/>
+                    <circle id="cam-dot" r="6" fill="#dd4a3a" stroke="#fff" stroke-width="2"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="lab-ctl">
+                <button class="lab-btn" id="cam-play" onclick="camPlay(this)">▶ Lecture</button>
+                <label for="cam-t" style="font-size:13px;font-weight:600;">Instant t</label>
+                <input type="range" id="cam-t" min="0" max="395" step="1" value="0" oninput="camSet(+this.value)">
+              </div>
+              <div class="lab-read" id="cam-out"></div>
+              <p class="lab-phase" id="cam-phase"></p>
+            </div>
+            <p>Le graphique est une <strong>succession de six mouvements rectilignes uniformes distincts</strong>. Ces mouvements sont caractérisés par des vitesses et des sens différents. Remarque ce que fait l'étape ④ : le camelot est arrêté, et le segment est horizontal.</p>
+            <p class="exemple-question">Pour relier à la section 1</p>
+            <div class="formula">Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 0 m = 0 m<br>L = 60 + 40 + 100 + 0 + 100 + 100 = 400 m</div>
+            <div class="exemple-reponse">Le camelot revient à sa voiture : son déplacement est nul, mais il a parcouru 400 m.</div>
+          </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s2">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 2<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <div class="quiz-score-bar"><span class="quiz-score-label">0 / 5</span><progress class="quiz-progress" value="0" max="5"></progress></div>
+          <div class="quiz-q" data-qi="0">
+            <div class="quiz-q-label">Vrai ou faux</div>
+            <div class="quiz-q-text">Sur un graphique de la position en fonction du temps, un segment horizontal signifie que le corps est immobile.</div>
+            <div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button><button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button></div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. La position ne change pas pendant que le temps passe : c'est l'arrêt de 20 s du camelot à sa voiture.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>C'est vrai : un segment horizontal veut dire que <em>x</em> reste le même alors que <em>t</em> avance, donc que le corps est immobile.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="1">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Combien de mouvements rectilignes uniformes distincts forment le graphique du camelot?</div>
+            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 4</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 5</button><button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> 6</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 7</button></div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Il y a six segments, un par étape, y compris l'arrêt (vitesse nulle, mais constante).</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Il y a six étapes dans le parcours, donc six segments. L'arrêt à la voiture compte aussi : c'est un MRU de vitesse nulle.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="2">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Dans le tableau d'un mouvement en plusieurs étapes, que faut-il inscrire dans la colonne du temps?</div>
+            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> La durée de chaque étape</button><button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> L'instant écoulé depuis le départ</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> La différence entre deux positions</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> La durée de la dernière étape seulement</button></div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Chaque ligne du tableau est un instant <em>t</em> mesuré depuis le départ : 70 s, 130 s, 165 s, 185 s…</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Le tableau donne la position à chaque instant <em>t</em>, mesuré depuis le départ. Il faut donc additionner les durées : 70 s, 130 s, 165 s, 185 s…</span></div>
+          </div>
+          <div class="quiz-q" data-qi="3">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">À quel instant le camelot arrive-t-il à la maison A?</div>
+            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 120 s</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 185 s</button><button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> 305 s</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 395 s</button></div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Il quitte sa voiture à 185 s et met 120 s pour atteindre A : 185 + 120 = 305 s.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Attention : 120 s est la durée de l'étape, pas l'instant. Il part à 185 s, donc il arrive à 185 + 120 = 305 s.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="4">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Entre t = 130 s et t = 165 s, quel est le déplacement du camelot?</div>
+            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 100 m</button><button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> −100 m</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 35 m</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> −35 m</button></div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 100 m = −100 m : il revient de la maison E vers sa voiture, dans le sens négatif de l'axe.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 100 m = −100 m. Il part de la maison E (100 m) et arrive à sa voiture (0 m); 35 s est une durée, pas un déplacement.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </main>
 
@@ -900,7 +1130,7 @@ function toggleQuiz(btn) {
 
 // ── Sidebar active link ────────────────────────────────────
 const tocLinks = document.querySelectorAll('.toc-link');
-const sectionIds = ['intro','section-1'];
+const sectionIds = ['intro','section-1','section-2'];
 
 window.addEventListener('scroll', () => {
   let current = '';
@@ -962,6 +1192,8 @@ let matchIndex = -1;
 
 function doSearch(query) {
   contentEl.innerHTML = originalHTML;
+  contentEl.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+  mruInit();
   const countEl = document.getElementById('search-count');
   matchIndex = -1;
   lastQuery = query;
@@ -1120,6 +1352,40 @@ function initQuizBlock(block) {
 }
 
 document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+
+// ── Section 2 : laboratoires interactifs ────────────────────
+const MRU_FMT=v=>(Math.round(v*10)/10).toString().replace('-','\u2212').replace('.',',');
+function ivPick(b){b.parentNode.querySelectorAll('.iv-btn').forEach(x=>x.classList.remove('ok','ko'));b.classList.add(b.dataset.ok==='1'?'ok':'ko');document.getElementById('iv-fb').innerHTML=b.dataset.fb;}
+function kidRender(t){const g=id=>document.getElementById(id);if(!g('kid-dot'))return;
+  const x=0.75*t,px=40+2*t,py=170-x*4/3;
+  g('kid-dot').setAttribute('cx',px);g('kid-dot').setAttribute('cy',py);
+  [['kid-v',px,170,px,py],['kid-h',40,py,px,py]].forEach(a=>{const l=g(a[0]);l.setAttribute('x1',a[1]);l.setAttribute('y1',a[2]);l.setAttribute('x2',a[3]);l.setAttribute('y2',a[4]);});
+  g('kid-out').textContent='t = '+t+' s   \u2192   x = '+MRU_FMT(x)+' m';}
+const CAM_T=[0,70,130,165,185,305,395],CAM_X=[0,60,100,0,0,-100,0];
+const CAM_TXT=['Mouvement \u2460 : il marche à vitesse constante vers la maison D.','Mouvement \u2461 : il poursuit à vitesse constante jusqu\u2019à la maison E.','Mouvement \u2462 : il revient en joggant, à vitesse constante, jusqu\u2019à sa voiture.','Mouvement \u2463 : il est arrêté à sa voiture, sa position ne change pas.','Mouvement \u2464 : il se rend à vitesse constante à la maison A.','Mouvement \u2465 : il revient à vitesse constante à sa voiture.'];
+let camT=0,camRAF=null;
+function camX(t){for(let i=0;i<6;i++)if(t<=CAM_T[i+1])return CAM_X[i]+(CAM_X[i+1]-CAM_X[i])*(t-CAM_T[i])/(CAM_T[i+1]-CAM_T[i]);return 0;}
+function camRender(t){const g=id=>document.getElementById(id);if(!g('cam-dot'))return;
+  const gx=v=>50+1.125*v,gy=v=>140-v*125/150,x=camX(t);let ph=0,row=0;
+  for(let i=0;i<6;i++)if(t>CAM_T[i])ph=i;
+  for(let i=0;i<7;i++){if(t>=CAM_T[i])row=i;g('cam-k'+i).setAttribute('opacity',t>=CAM_T[i]?1:0);g('cam-r'+i).classList.remove('on');}
+  g('cam-r'+row).classList.add('on');
+  for(let i=0;i<6;i++){const a=CAM_T[i],b=Math.min(t,CAM_T[i+1]);g('cam-s'+i).setAttribute('points',t>a?gx(a)+','+gy(CAM_X[i])+' '+gx(b)+','+gy(camX(b)):'');}
+  g('cam-dot').setAttribute('cx',gx(t));g('cam-dot').setAttribute('cy',gy(x));
+  g('cam-man').setAttribute('transform','translate('+(260+2.2*x)+',0)');
+  g('cam-out').textContent='t = '+Math.round(t)+' s   \u2192   x = '+MRU_FMT(x)+' m   (valeurs entre deux lignes du tableau : interpol\u00e9es)';
+  g('cam-phase').textContent=CAM_TXT[ph];}
+function camSet(t){camT=t;camRender(t);}
+function camPlay(btn){const s=document.getElementById('cam-t');
+  if(camRAF){cancelAnimationFrame(camRAF);camRAF=null;btn.textContent='\u25b6 Lecture';return;}
+  if(camT>=395)camT=0;btn.textContent='\u275a\u275a Pause';let last=null;
+  const step=ts=>{if(last===null)last=ts;camT=Math.min(395,camT+(ts-last)/1000*40);last=ts;s.value=Math.round(camT);camRender(camT);
+    if(camT>=395){camRAF=null;btn.textContent='\u25b6 Lecture';return;}camRAF=requestAnimationFrame(step);};
+  camRAF=requestAnimationFrame(step);}
+function mruInit(){if(camRAF){cancelAnimationFrame(camRAF);camRAF=null;}
+  const k=document.getElementById('kid-t'),c=document.getElementById('cam-t');
+  if(k)kidRender(+k.value);if(c){camT=+c.value;camRender(camT);}}
+mruInit();
 </script>
 </body>
 </html>
