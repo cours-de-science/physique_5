@@ -251,6 +251,12 @@
   .quiz-reset:hover { background: #eef2fa; }
 
   .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* === VECTEUR : flèche dessinée en CSS (le caractère Unicode combinant U+20D7 n'existe pas dans Inter ni JetBrains Mono) === */
+  .vec { position: relative; display: inline-block; line-height: 1; --vy: -.03em; }
+  .vec.lc { --vy: .13em; }
+  .vec::before { content: ""; position: absolute; left: .05em; right: .02em; top: calc(var(--vy) - .0125em); border-top: .075em solid currentColor; }
+  .vec::after { content: ""; position: absolute; right: .02em; top: calc(var(--vy) - .06em); width: .16em; height: .16em; box-sizing: border-box; border-top: .075em solid currentColor; border-right: .075em solid currentColor; transform: rotate(45deg); }
 </style>
 </head>
 <body>
@@ -945,7 +951,7 @@
 
           <p>La vitesse, à l'inverse, est une grandeur vectorielle. Dire qu'une balle « se déplace à 4,1 m/s » ne renseigne pas sur la direction de son mouvement : il faut préciser, par exemple, qu'elle « se déplace à 4,1 m/s vers la droite » pour la décrire complètement. Un vecteur se représente graphiquement par une flèche caractérisée par deux propriétés : sa <strong>norme</strong> (aussi appelée « module »), qui correspond à sa longueur, et son <strong>orientation</strong>.</p>
 
-          <p>Dans un texte ou une équation, on indique qu'une grandeur est vectorielle en surmontant sa lettre d'une petite flèche — par exemple, la vitesse s'écrit V⃗. La norme de ce vecteur, c'est-à-dire sa grandeur seule (sans l'information d'orientation), s'écrit simplement V, sans flèche. Ce chapitre ne traite que de vecteurs à deux dimensions, c'est-à-dire situés dans un plan.</p>
+          <p>Dans un texte ou une équation, on indique qu'une grandeur est vectorielle en surmontant sa lettre d'une petite flèche — par exemple, la vitesse s'écrit <span class="vec">V</span>. La norme de ce vecteur, c'est-à-dire sa grandeur seule (sans l'information d'orientation), s'écrit simplement V, sans flèche. Ce chapitre ne traite que de vecteurs à deux dimensions, c'est-à-dire situés dans un plan.</p>
 
           <div class="table-wrap">
             <table class="data-table">
@@ -1053,7 +1059,7 @@
           <p>Quand on utilise un système de référence basé sur des coordonnées cartésiennes, les vecteurs peuvent être décomposés en deux <span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">composantes</span><span class="term-pop" role="tooltip"><span class="term-pop-word">composante</span><span class="term-pop-ety">Du latin componere, « mettre ensemble »</span><span class="term-pop-body">Projection orthogonale d'un vecteur sur un axe d'un système de coordonnées. Un vecteur à deux dimensions possède une composante en x et une composante en y, dont la somme (vectorielle) redonne le vecteur d'origine.</span></span></span> : une composante en x et une composante en y (voir la figure 7).</p>
 
           <div class="formula">V<sub>x</sub> = V·cos θ &nbsp;&nbsp;&nbsp; V<sub>y</sub> = V·sin θ</div>
-          <p class="formula-caption">où V est la norme du vecteur V⃗, et θ, son orientation mesurée par rapport à l'axe des x positifs.</p>
+          <p class="formula-caption">où V est la norme du vecteur <span class="vec">V</span>, et θ, son orientation mesurée par rapport à l'axe des x positifs.</p>
 
           <p>Puisque les fonctions sinus et cosinus peuvent prendre des valeurs négatives, les composantes d'un vecteur peuvent elles aussi être négatives. La composante en x est positive lorsque le vecteur pointe dans le sens positif de l'axe des x, et négative dans le cas contraire. Il en va de même pour la composante en y. La figure 7 illustre un cas où les deux composantes sont positives (a), et un cas où la composante en x est négative alors que la composante en y est positive (b).</p>
 
@@ -1122,7 +1128,7 @@
             </div>
           </div>
 
-          <p style="margin-top:24px;">L'opération inverse est tout aussi utile : lorsqu'on connaît les composantes x et y d'un vecteur, on peut en calculer la norme et l'orientation. Puisque le vecteur, sa composante en x et sa composante en y forment un triangle rectangle (voir la figure 8), la relation de Pythagore permet de trouver la norme du vecteur V⃗ :</p>
+          <p style="margin-top:24px;">L'opération inverse est tout aussi utile : lorsqu'on connaît les composantes x et y d'un vecteur, on peut en calculer la norme et l'orientation. Puisque le vecteur, sa composante en x et sa composante en y forment un triangle rectangle (voir la figure 8), la relation de Pythagore permet de trouver la norme du vecteur <span class="vec">V</span> :</p>
 
           <div class="fig-block">
             <div class="fig-inner">
@@ -1143,7 +1149,7 @@
                 <text x="70" y="145" font-family="Barlow Condensed, sans-serif" font-size="14" font-weight="700" fill="var(--indigo-dark)">V</text>
               </svg>
             </div>
-            <figcaption>Figure 8 — Le vecteur V⃗, sa composante Vx et sa composante Vy forment un triangle rectangle : la norme V du vecteur correspond donc à l'hypoténuse de ce triangle.</figcaption>
+            <figcaption>Figure 8 — Le vecteur <span class="vec">V</span>, sa composante Vx et sa composante Vy forment un triangle rectangle : la norme V du vecteur correspond donc à l'hypoténuse de ce triangle.</figcaption>
           </div>
 
           <div class="formula">V = √(V<sub>x</sub>² + V<sub>y</sub>²)</div>
@@ -1226,7 +1232,7 @@
             <figcaption>Figure 9 — La somme de plusieurs vecteurs est un vecteur : on place les vecteurs à additionner bout à bout, et le vecteur résultant relie l'origine du premier à l'extrémité du dernier.</figcaption>
           </div>
 
-          <p>Une première façon de trouver la norme et l'orientation d'un vecteur résultant consiste à utiliser une méthode graphique : on trace les vecteurs à additionner à l'échelle, bout à bout, à l'aide d'une règle et d'un rapporteur d'angle, puis on mesure directement la norme et l'orientation du vecteur résultant sur le schéma. Par exemple, si un joueur de football est plaqué simultanément par deux adversaires exerçant chacun une force sur lui — F⃗1, mesurant 2,5 cm sur le schéma (soit 2,5 × 10² N à l'échelle 1 cm = 100 N) et orientée à 40°, et F⃗2, mesurant 1,5 cm (1,5 × 10² N) et orientée à 190° — on peut redessiner ces deux vecteurs bout à bout et mesurer directement le vecteur résultant : celui-ci mesure environ 1,4 cm, ce qui correspond à une force résultante F⃗R d'environ 1,4 × 10² N, orientée à environ 72°.</p>
+          <p>Une première façon de trouver la norme et l'orientation d'un vecteur résultant consiste à utiliser une méthode graphique : on trace les vecteurs à additionner à l'échelle, bout à bout, à l'aide d'une règle et d'un rapporteur d'angle, puis on mesure directement la norme et l'orientation du vecteur résultant sur le schéma. Par exemple, si un joueur de football est plaqué simultanément par deux adversaires exerçant chacun une force sur lui — <span class="vec">F</span>1, mesurant 2,5 cm sur le schéma (soit 2,5 × 10² N à l'échelle 1 cm = 100 N) et orientée à 40°, et <span class="vec">F</span>2, mesurant 1,5 cm (1,5 × 10² N) et orientée à 190° — on peut redessiner ces deux vecteurs bout à bout et mesurer directement le vecteur résultant : celui-ci mesure environ 1,4 cm, ce qui correspond à une force résultante <span class="vec">F</span>R d'environ 1,4 × 10² N, orientée à environ 72°.</p>
 
           <p>La méthode graphique est valide, mais il est difficile d'en tirer un résultat très précis : on lui préfère généralement la <strong>méthode des composantes</strong>. Cette méthode repose sur le fait que la composante x du vecteur résultant d'une addition correspond à la somme des composantes x des vecteurs additionnés, et il en va de même pour les composantes y :</p>
 
@@ -1237,15 +1243,15 @@
             <div class="example-header">Exemple — L'addition de deux déplacements</div>
             <div class="example-body">
               <p>Lors d'une randonnée guidée par une application de géolocalisation, une personne se déplace d'abord de 400 m à 30,0°, puis de 800 m à 125,0°. L'axe des x est orienté vers l'est et l'axe des y, vers le nord. Quel est le déplacement total de cette personne?</p>
-              <div class="example-data">s⃗<sub>1</sub> = 400 m à 30,0° &nbsp;|&nbsp; s⃗<sub>2</sub> = 800 m à 125,0° &nbsp;|&nbsp; s⃗<sub>R</sub> = ?</div>
+              <div class="example-data"><span class="vec lc">s</span><sub>1</sub> = 400 m à 30,0° &nbsp;|&nbsp; <span class="vec lc">s</span><sub>2</sub> = 800 m à 125,0° &nbsp;|&nbsp; <span class="vec lc">s</span><sub>R</sub> = ?</div>
               <ol class="example-steps">
-                <li><span class="step-num">1</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>1</sub> :</p><div class="step-calc">s<sub>1x</sub> = s<sub>1</sub>·cos θ = 400 m × cos 30,0° = 346 m<br>s<sub>1y</sub> = s<sub>1</sub>·sin θ = 400 m × sin 30,0° = 200 m</div></div></li>
-                <li><span class="step-num">2</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>2</sub> :</p><div class="step-calc">s<sub>2x</sub> = s<sub>2</sub>·cos θ = 800 m × cos 125,0° = -459 m<br>s<sub>2y</sub> = s<sub>2</sub>·sin θ = 800 m × sin 125,0° = 655 m</div></div></li>
+                <li><span class="step-num">1</span><div class="step-content"><p>Calculer les composantes de <span class="vec lc">s</span><sub>1</sub> :</p><div class="step-calc">s<sub>1x</sub> = s<sub>1</sub>·cos θ = 400 m × cos 30,0° = 346 m<br>s<sub>1y</sub> = s<sub>1</sub>·sin θ = 400 m × sin 30,0° = 200 m</div></div></li>
+                <li><span class="step-num">2</span><div class="step-content"><p>Calculer les composantes de <span class="vec lc">s</span><sub>2</sub> :</p><div class="step-calc">s<sub>2x</sub> = s<sub>2</sub>·cos θ = 800 m × cos 125,0° = -459 m<br>s<sub>2y</sub> = s<sub>2</sub>·sin θ = 800 m × sin 125,0° = 655 m</div></div></li>
                 <li><span class="step-num">3</span><div class="step-content"><p>Additionner les composantes :</p><div class="step-calc">s<sub>Rx</sub> = s<sub>1x</sub> + s<sub>2x</sub> = 346 m + (-459 m) = -113 m<br>s<sub>Ry</sub> = s<sub>1y</sub> + s<sub>2y</sub> = 200 m + 655 m = 855 m</div></div></li>
-                <li><span class="step-num">4</span><div class="step-content"><p>Calculer la norme de s⃗<sub>R</sub> :</p><div class="step-calc">s<sub>R</sub> = √(s<sub>Rx</sub>² + s<sub>Ry</sub>²) = √((-113 m)² + (855 m)²) = 862 m</div></div></li>
-                <li><span class="step-num">5</span><div class="step-content"><p>Calculer α, puis l'orientation de s⃗<sub>R</sub> (s<sub>Rx</sub> négative, s<sub>Ry</sub> positive → θ entre 90° et 180°) :</p><div class="step-calc">α = tan⁻¹(|855 m / -113 m|) = 82,5° &nbsp;→&nbsp; θ = 180° - 82,5° = 97,5°</div></div></li>
+                <li><span class="step-num">4</span><div class="step-content"><p>Calculer la norme de <span class="vec lc">s</span><sub>R</sub> :</p><div class="step-calc">s<sub>R</sub> = √(s<sub>Rx</sub>² + s<sub>Ry</sub>²) = √((-113 m)² + (855 m)²) = 862 m</div></div></li>
+                <li><span class="step-num">5</span><div class="step-content"><p>Calculer α, puis l'orientation de <span class="vec lc">s</span><sub>R</sub> (s<sub>Rx</sub> négative, s<sub>Ry</sub> positive → θ entre 90° et 180°) :</p><div class="step-calc">α = tan⁻¹(|855 m / -113 m|) = 82,5° &nbsp;→&nbsp; θ = 180° - 82,5° = 97,5°</div></div></li>
               </ol>
-              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Le déplacement total est s⃗<sub>R</sub> = 862 m à 97,5°.</span></p>
+              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Le déplacement total est <span class="vec lc">s</span><sub>R</sub> = 862 m à 97,5°.</span></p>
             </div>
           </div>
         </div>
@@ -1255,7 +1261,7 @@
 
           <p>En arithmétique, soustraire un nombre équivaut à additionner son opposé (par exemple, 8 - 5 = 8 + (-5)). Il en va de même avec les vecteurs : soustraire un vecteur équivaut à additionner son opposé.</p>
 
-          <div class="formula">V⃗<sub>1</sub> - V⃗<sub>2</sub> = V⃗<sub>1</sub> + (-V⃗<sub>2</sub>)</div>
+          <div class="formula"><span class="vec">V</span><sub>1</sub> - <span class="vec">V</span><sub>2</sub> = <span class="vec">V</span><sub>1</sub> + (-<span class="vec">V</span><sub>2</sub>)</div>
 
           <div class="def-box">
             <div class="def-label">Définition</div>
@@ -1292,24 +1298,24 @@
                 </g>
               </svg>
             </div>
-            <figcaption>Figure 10 — (a) Deux vecteurs opposés ont la même norme, mais une orientation qui diffère de 180°. (b) Pour soustraire graphiquement V⃗ de U⃗, on dessine le vecteur opposé -V⃗ à l'extrémité de U⃗; le vecteur résultant W⃗ part de l'origine de U⃗ et se termine à l'extrémité de -V⃗.</figcaption>
+            <figcaption>Figure 10 — (a) Deux vecteurs opposés ont la même norme, mais une orientation qui diffère de 180°. (b) Pour soustraire graphiquement <span class="vec">V</span> de <span class="vec">U</span>, on dessine le vecteur opposé -<span class="vec">V</span> à l'extrémité de <span class="vec">U</span>; le vecteur résultant <span class="vec">W</span> part de l'origine de <span class="vec">U</span> et se termine à l'extrémité de -<span class="vec">V</span>.</figcaption>
           </div>
 
-          <p>Comme pour l'addition, la méthode des composantes est plus précise que la méthode graphique pour effectuer une soustraction vectorielle. Pour soustraire le vecteur V⃗<sub>2</sub> du vecteur V⃗<sub>1</sub>, il suffit de soustraire les composantes de V⃗<sub>2</sub> de celles de V⃗<sub>1</sub> — ce qui revient à trouver les composantes du vecteur opposé -V⃗<sub>2</sub> et à les additionner à celles de V⃗<sub>1</sub>.</p>
+          <p>Comme pour l'addition, la méthode des composantes est plus précise que la méthode graphique pour effectuer une soustraction vectorielle. Pour soustraire le vecteur <span class="vec">V</span><sub>2</sub> du vecteur <span class="vec">V</span><sub>1</sub>, il suffit de soustraire les composantes de <span class="vec">V</span><sub>2</sub> de celles de <span class="vec">V</span><sub>1</sub> — ce qui revient à trouver les composantes du vecteur opposé -<span class="vec">V</span><sub>2</sub> et à les additionner à celles de <span class="vec">V</span><sub>1</sub>.</p>
 
           <div class="example-box">
             <div class="example-header">Exemple — La soustraction de deux déplacements</div>
             <div class="example-body">
               <p>Lors d'une activité d'orientation en forêt, une équipe doit atteindre un point situé à 800 m à 95,0° par rapport à son point de départ. Or, un cours d'eau l'empêche d'avancer en ligne droite : elle doit d'abord contourner l'obstacle par un trajet de 550 m à 120,0°. Quel déplacement complémentaire doit-elle ensuite effectuer pour atteindre sa destination?</p>
-              <div class="example-data">s⃗<sub>R</sub> = 800 m à 95,0° &nbsp;|&nbsp; s⃗<sub>1</sub> = 550 m à 120,0° &nbsp;|&nbsp; s⃗<sub>2</sub> = ?</div>
+              <div class="example-data"><span class="vec lc">s</span><sub>R</sub> = 800 m à 95,0° &nbsp;|&nbsp; <span class="vec lc">s</span><sub>1</sub> = 550 m à 120,0° &nbsp;|&nbsp; <span class="vec lc">s</span><sub>2</sub> = ?</div>
               <ol class="example-steps">
-                <li><span class="step-num">1</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>R</sub> :</p><div class="step-calc">s<sub>Rx</sub> = 800 m × cos 95,0° = -69,7 m<br>s<sub>Ry</sub> = 800 m × sin 95,0° = 797 m</div></div></li>
-                <li><span class="step-num">2</span><div class="step-content"><p>Calculer les composantes de s⃗<sub>1</sub> :</p><div class="step-calc">s<sub>1x</sub> = 550 m × cos 120,0° = -275 m<br>s<sub>1y</sub> = 550 m × sin 120,0° = 476 m</div></div></li>
-                <li><span class="step-num">3</span><div class="step-content"><p>Soustraire les composantes de s⃗<sub>1</sub> de celles de s⃗<sub>R</sub> :</p><div class="step-calc">s<sub>2x</sub> = s<sub>Rx</sub> - s<sub>1x</sub> = -69,7 m - (-275 m) = 205 m<br>s<sub>2y</sub> = s<sub>Ry</sub> - s<sub>1y</sub> = 797 m - 476 m = 321 m</div></div></li>
-                <li><span class="step-num">4</span><div class="step-content"><p>Calculer la norme de s⃗<sub>2</sub> :</p><div class="step-calc">s<sub>2</sub> = √((205 m)² + (321 m)²) = 381 m</div></div></li>
+                <li><span class="step-num">1</span><div class="step-content"><p>Calculer les composantes de <span class="vec lc">s</span><sub>R</sub> :</p><div class="step-calc">s<sub>Rx</sub> = 800 m × cos 95,0° = -69,7 m<br>s<sub>Ry</sub> = 800 m × sin 95,0° = 797 m</div></div></li>
+                <li><span class="step-num">2</span><div class="step-content"><p>Calculer les composantes de <span class="vec lc">s</span><sub>1</sub> :</p><div class="step-calc">s<sub>1x</sub> = 550 m × cos 120,0° = -275 m<br>s<sub>1y</sub> = 550 m × sin 120,0° = 476 m</div></div></li>
+                <li><span class="step-num">3</span><div class="step-content"><p>Soustraire les composantes de <span class="vec lc">s</span><sub>1</sub> de celles de <span class="vec lc">s</span><sub>R</sub> :</p><div class="step-calc">s<sub>2x</sub> = s<sub>Rx</sub> - s<sub>1x</sub> = -69,7 m - (-275 m) = 205 m<br>s<sub>2y</sub> = s<sub>Ry</sub> - s<sub>1y</sub> = 797 m - 476 m = 321 m</div></div></li>
+                <li><span class="step-num">4</span><div class="step-content"><p>Calculer la norme de <span class="vec lc">s</span><sub>2</sub> :</p><div class="step-calc">s<sub>2</sub> = √((205 m)² + (321 m)²) = 381 m</div></div></li>
                 <li><span class="step-num">5</span><div class="step-content"><p>Calculer α, puis l'orientation (s<sub>2x</sub> et s<sub>2y</sub> sont toutes deux positives → θ entre 0° et 90°) :</p><div class="step-calc">α = tan⁻¹(|321 m / 205 m|) = 57,4° &nbsp;→&nbsp; θ = α = 57,4°</div></div></li>
               </ol>
-              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Le déplacement complémentaire à effectuer est s⃗<sub>2</sub> = 381 m à 57,4°.</span></p>
+              <p class="example-answer"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Le déplacement complémentaire à effectuer est <span class="vec lc">s</span><sub>2</sub> = 381 m à 57,4°.</span></p>
             </div>
           </div>
         </div>
@@ -1339,7 +1345,7 @@
 
           <div class="quiz-q" data-qi="1">
             <div class="quiz-q-label">Choix multiple — calcul</div>
-            <div class="quiz-q-text">Un vecteur force F⃗ a une norme de 50,0 N et une orientation de 210,0°. Quelles sont ses composantes x et y?</div>
+            <div class="quiz-q-text">Un vecteur force <span class="vec">F</span> a une norme de 50,0 N et une orientation de 210,0°. Quelles sont ses composantes x et y?</div>
             <div class="quiz-options">
               <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Fx = -43,3 N; Fy = -25,0 N</button>
               <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Fx = 43,3 N; Fy = 25,0 N</button>
@@ -1352,7 +1358,7 @@
 
           <div class="quiz-q" data-qi="2">
             <div class="quiz-q-label">Choix multiple — calcul</div>
-            <div class="quiz-q-text">Un vecteur V⃗ a pour composantes Vx = -12,0 m et Vy = 9,00 m. Quelles sont sa norme et son orientation?</div>
+            <div class="quiz-q-text">Un vecteur <span class="vec">V</span> a pour composantes Vx = -12,0 m et Vy = 9,00 m. Quelles sont sa norme et son orientation?</div>
             <div class="quiz-options">
               <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 15,0 m à 143,1°</button>
               <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 15,0 m à 36,9°</button>
@@ -1365,18 +1371,18 @@
 
           <div class="quiz-q" data-qi="3">
             <div class="quiz-q-label">Vrai ou faux</div>
-            <div class="quiz-q-text">Si la norme du vecteur V⃗1 est de 3 m et que celle du vecteur V⃗2 est de 4 m, alors la norme du vecteur V⃗R qui correspond à V⃗1 + V⃗2 sera nécessairement de 7 m.</div>
+            <div class="quiz-q-text">Si la norme du vecteur <span class="vec">V</span>1 est de 3 m et que celle du vecteur <span class="vec">V</span>2 est de 4 m, alors la norme du vecteur <span class="vec">V</span>R qui correspond à <span class="vec">V</span>1 + <span class="vec">V</span>2 sera nécessairement de 7 m.</div>
             <div class="quiz-options">
               <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
               <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
             </div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La norme de la résultante dépend de l'orientation relative des deux vecteurs. Elle ne vaut 7 m que si V⃗1 et V⃗2 pointent exactement dans la même direction; par exemple, si les deux vecteurs sont plutôt perpendiculaires, la résultante mesurerait √(3² + 4²) = 5 m.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : la norme de la résultante dépend de l'orientation relative des deux vecteurs, pas seulement de leurs normes. Si V⃗1 et V⃗2 sont perpendiculaires, par exemple, la résultante mesurerait √(3² + 4²) = 5 m plutôt que 7 m.</span></div>
+            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La norme de la résultante dépend de l'orientation relative des deux vecteurs. Elle ne vaut 7 m que si <span class="vec">V</span>1 et <span class="vec">V</span>2 pointent exactement dans la même direction; par exemple, si les deux vecteurs sont plutôt perpendiculaires, la résultante mesurerait √(3² + 4²) = 5 m.</span></div>
+            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : la norme de la résultante dépend de l'orientation relative des deux vecteurs, pas seulement de leurs normes. Si <span class="vec">V</span>1 et <span class="vec">V</span>2 sont perpendiculaires, par exemple, la résultante mesurerait √(3² + 4²) = 5 m plutôt que 7 m.</span></div>
           </div>
 
           <div class="quiz-q" data-qi="4">
             <div class="quiz-q-label">Choix multiple — calcul</div>
-            <div class="quiz-q-text">On additionne le vecteur A⃗ = 6,00 m à 0° et le vecteur B⃗ = 8,00 m à 90°. Quelles sont la norme et l'orientation du vecteur résultant?</div>
+            <div class="quiz-q-text">On additionne le vecteur <span class="vec">A</span> = 6,00 m à 0° et le vecteur <span class="vec">B</span> = 8,00 m à 90°. Quelles sont la norme et l'orientation du vecteur résultant?</div>
             <div class="quiz-options">
               <button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 10,0 m à 53,1°</button>
               <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 14,0 m à 53,1°</button>
