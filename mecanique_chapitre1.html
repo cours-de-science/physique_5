@@ -316,9 +316,91 @@
   .vec.lc { --vy: .13em; }
   .vec::before { content: ""; position: absolute; left: .05em; right: .02em; top: calc(var(--vy) - .0125em); border-top: .075em solid currentColor; }
   .vec::after { content: ""; position: absolute; right: .02em; top: calc(var(--vy) - .06em); width: .16em; height: .16em; box-sizing: border-box; border-top: .075em solid currentColor; border-right: .075em solid currentColor; transform: rotate(45deg); }
+
+  /* === INTERACTIONS ÉLARGIES : pauses-réflexion + nouveaux types de questions === */
+  .reflect { margin: 26px 0; border: 1.5px solid var(--indigo-light); border-left-width: 5px; border-radius: 0 10px 10px 0; background: #f3f8fb; padding: 16px 20px 18px; }
+  .reflect-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo-mid); display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+  .reflect-label .icon-sm { width: 16px; height: 16px; flex-shrink: 0; }
+  .reflect-q { font-size: 15px; font-weight: 500; color: var(--indigo-dark); line-height: 1.55; margin: 0 0 12px; }
+  .reflect-input, .quiz-open-input { display: block; width: 100%; box-sizing: border-box; font: inherit; font-size: 14px; line-height: 1.5; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); resize: vertical; min-height: 78px; }
+  .reflect-input:read-only, .quiz-open-input:read-only { background: #f6f9fb; color: var(--muted); }
+  .reflect-input:focus, .quiz-open-input:focus, .quiz-num-input:focus, .quiz-blank:focus { outline: 2px solid var(--amber); outline-offset: 1px; border-color: var(--indigo-mid); }
+  .reflect-actions, .quiz-open-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+  .reflect-btn, .quiz-validate { padding: 9px 18px; border-radius: 8px; border: none; background: var(--indigo-mid); color: #fff; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s, opacity .15s; }
+  .reflect-btn:hover:not(:disabled), .quiz-validate:hover:not(:disabled) { background: var(--indigo-dark); }
+  .reflect-btn:disabled, .quiz-validate:disabled { opacity: .45; cursor: not-allowed; }
+  .reflect-hint, .quiz-open-hint { font-size: 12.5px; color: var(--muted); }
+  .reflect-answer { margin-top: 14px; padding: 14px 16px; background: #eaf8fa; border-left: 4px solid var(--amber-dim); border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.65; color: var(--text); }
+  .reflect-answer[hidden], .quiz-model[hidden] { display: none; }
+  .reflect-answer-label, .quiz-model-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--amber-dim); margin-bottom: 6px; }
+  .reflect-answer p, .quiz-model p { margin: 0 0 8px; font-size: 14px; }
+  .reflect-answer p:last-child, .quiz-model p:last-child { margin-bottom: 0; }
+
+  .quiz-block.mini { margin-top: 30px; margin-bottom: 8px; padding-top: 20px; padding-bottom: 20px; }
+  .quiz-block.mini .quiz-block-bar { background: var(--indigo-mid); }
+  .quiz-block.mini .quiz-block-bar:hover { background: var(--indigo-dark); }
+
+  .quiz-hint { font-size: 12.5px; color: var(--flame); margin-top: 8px; min-height: 0; }
+  .quiz-hint:empty { display: none; }
+  .quiz-q .quiz-validate { margin-top: 12px; }
+  .quiz-feedback .fb-text sub { font-size: .75em; }
+
+  .quiz-checks { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-check { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; cursor: pointer; font-size: 14px; line-height: 1.5; transition: background .15s, border-color .15s; }
+  .quiz-check:hover { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-check input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--indigo-mid); flex-shrink: 0; }
+  .quiz-check .ck-text { flex: 1; }
+  .quiz-check .ck-tag { margin-left: auto; padding-left: 10px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .quiz-check.good { background: #e8f8ef; border-color: #2da262; color: #1a6640; cursor: default; }
+  .quiz-check.bad { background: #fdecea; border-color: #d94f3d; color: #8b2218; cursor: default; }
+  .quiz-check.missed { background: #fffbea; border: 1.5px dashed #d4a017; color: #7a5c00; cursor: default; }
+
+  .quiz-num { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .quiz-num-input { width: 140px; font-family: var(--mono); font-size: 15px; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); }
+  .quiz-num-input.ok { border-color: #2da262; background: #e8f8ef; color: #1a6640; }
+  .quiz-num-input.ko { border-color: #d94f3d; background: #fdecea; color: #8b2218; }
+  .quiz-unit { font-family: var(--mono); font-size: 14px; color: var(--muted); }
+  .quiz-num .quiz-validate { margin-top: 0; }
+
+  .quiz-fill { font-size: 15px; line-height: 2.3; color: var(--text); margin-bottom: 4px; }
+  .quiz-blank { font: inherit; font-size: 14px; padding: 4px 8px; border: 1.5px solid var(--indigo-light); border-radius: 6px; background: #fff; color: var(--indigo-dark); margin: 0 3px; max-width: 100%; cursor: pointer; }
+  .quiz-blank.ok { border-color: #2da262; background: #e8f8ef; color: #1a6640; }
+  .quiz-blank.ko { border-color: #d94f3d; background: #fdecea; color: #8b2218; }
+  .quiz-blank:disabled { opacity: 1; cursor: default; }
+
+  .quiz-match { display: flex; flex-direction: column; gap: 8px; }
+  .qm-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; }
+  .qm-term { flex: 1 1 240px; font-size: 14px; line-height: 1.5; }
+  .qm-row .quiz-blank { margin: 0; flex: 0 1 210px; }
+
+  .quiz-order { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; counter-reset: ord; }
+  .quiz-order li { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; font-size: 14px; line-height: 1.45; }
+  .quiz-order li::before { counter-increment: ord; content: counter(ord); font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); width: 20px; flex-shrink: 0; text-align: center; }
+  .quiz-order .ord-text { flex: 1; }
+  .ord-btns { display: flex; gap: 4px; }
+  .ord-btn { width: 32px; height: 30px; border: 1.5px solid var(--border); border-radius: 6px; background: #f6f9fb; cursor: pointer; color: var(--indigo-mid); font-size: 14px; line-height: 1; padding: 0; }
+  .ord-btn:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .ord-btn:disabled { opacity: .3; cursor: default; }
+  .quiz-order li.ok { border-color: #2da262; background: #e8f8ef; }
+  .quiz-order li.ko { border-color: #d94f3d; background: #fdecea; }
+
+  .quiz-model { margin-top: 14px; padding: 14px 16px; background: #eaf8fa; border-left: 4px solid var(--amber-dim); border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.65; color: var(--text); }
+  .quiz-self { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(31,143,160,.3); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .quiz-self > span { flex-basis: 100%; font-size: 13px; font-weight: 600; color: var(--indigo-dark); }
+  .quiz-self-btn { padding: 8px 14px; border: 1.5px solid var(--indigo-mid); background: #fff; border-radius: 8px; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; color: var(--indigo-dark); transition: background .15s; }
+  .quiz-self-btn:hover:not(:disabled) { background: #eef2fa; }
+  .quiz-self-btn:disabled { opacity: .5; cursor: default; }
+  .quiz-self-btn.chosen { opacity: 1; background: var(--indigo-mid); color: #fff; }
+
+  @media (max-width: 768px) {
+    .reflect { padding: 14px 14px 16px; }
+    .qm-row .quiz-blank { flex: 1 1 100%; }
+    .quiz-num-input { width: 120px; }
+  }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="q-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1" fill="none" stroke="currentColor" stroke-width="2"/></symbol><symbol id="q-ko" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9l6 6M15 9l-6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol></defs></svg>
 
 <button id="menu-toggle" aria-label="Menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
 
@@ -427,32 +509,40 @@
 
           <p>En physique, le mot « corps » peut désigner à peu près n'importe quel objet en mouvement : une planète aussi bien qu'un wagon de métro ou une bille. Pour simplifier l'analyse, on traite généralement ces corps comme des particules ponctuelles — des objets mathématiques sans dimension. Ce qui compte, c'est la position qu'ils occupent, pas leur forme ni leur taille.</p>
 
+          <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">La Terre est-elle un « point »? Compare deux situations : (1) décrire le trajet de la Terre autour du Soleil; (2) décrire où se trouve Montréal sur la Terre. Dans laquelle peut-on traiter la Terre comme une particule ponctuelle, et pourquoi?</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p><strong>(1) Oui.</strong> La Terre mesure environ 12 700 km de diamètre, mais elle est à environ 150 millions de km du Soleil : sa taille est minuscule devant les distances en jeu, on peut donc la réduire à un point.</p><p><strong>(2) Non.</strong> Ici, c'est justement un endroit <em>sur</em> la Terre qui nous intéresse : sa taille et sa forme comptent.</p><p>Un corps peut être traité comme un point quand ses dimensions sont négligeables par rapport aux distances du problème.</p>
+            </div>
+          </div>
+
+
           <p>De façon générale, la position d'un corps se représente par un vecteur position, noté <span class="vec lc">s</span>, qui part de l'origine du système de référence et pointe vers le corps. Dans un système de coordonnées cartésiennes, ce vecteur se décompose en une composante horizontale x et une composante verticale y (figure 1.1).</p>
 
           <div class="fig-block">
             <div class="fig-inner">
-              <svg viewBox="0 0 360 260" style="width:100%;max-width:340px;height:auto;" role="img" aria-label="Un vecteur position part de l'origine et pointe vers un corps; ses composantes x et y sont indiquées par des lignes pointillées">
-                <defs>
-                  <marker id="arrow-pos" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                    <path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/>
-                  </marker>
-                </defs>
+              <svg viewBox="0 0 360 260" style="width:100%;max-width:340px;height:auto;" role="img" aria-label="Un vecteur position part de l'origine et pointe vers un corps; ses composantes x et y sont indiquées par des lignes pointillées; l'angle thêta est mesuré entre l'axe x et le vecteur">
+                <defs><marker id="arrow-pos" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker></defs>
                 <line x1="40" y1="220" x2="330" y2="220" stroke="var(--indigo-dark)" stroke-width="2.4"/>
                 <line x1="40" y1="220" x2="40" y2="20" stroke="var(--indigo-dark)" stroke-width="2.4"/>
-                <text x="336" y="224" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-dark)">x</text>
-                <text x="24" y="24" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-dark)">y</text>
-                <text x="18" y="236" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">O</text>
-                <circle cx="250" cy="80" r="5" fill="var(--indigo-mid)"/>
-                <text x="260" y="76" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">corps</text>
-                <line x1="40" y1="220" x2="250" y2="80" stroke="var(--flame)" stroke-width="2.6" marker-end="url(#arrow-pos)"/>
-                <text x="130" y="140" font-family="Inter, sans-serif" font-size="14" fill="var(--flame)" font-style="italic">s</text><path d="M132.2,128.5 H139.2 M136.4,126.6 L139.2,128.5 L136.4,130.4" fill="none" stroke="var(--flame)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="338" y="225" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-dark)" font-style="italic">x</text>
+                <text x="36" y="14" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-dark)" text-anchor="end" font-style="italic">y</text>
+                <text x="32" y="236" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="end">O</text>
                 <line x1="250" y1="80" x2="250" y2="220" stroke="#9aa7b0" stroke-width="1.4" stroke-dasharray="4 3"/>
                 <line x1="40" y1="80" x2="250" y2="80" stroke="#9aa7b0" stroke-width="1.4" stroke-dasharray="4 3"/>
-                <text x="240" y="240" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">x</text>
-                <text x="12" y="84" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">y</text>
-                <path d="M64,220 A24,24 0 0 1 83,199" fill="none" stroke="var(--amber-dim)" stroke-width="1.6"/>
-                <text x="68" y="204" font-family="Inter, sans-serif" font-size="12" fill="var(--amber-dim)">θ</text>
-              </svg>
+                <text x="250" y="238" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)" text-anchor="middle" font-style="italic">x</text>
+                <text x="32" y="84" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)" text-anchor="end" font-style="italic">y</text>
+                <line x1="40" y1="220" x2="243.8" y2="84.2" stroke="var(--flame)" stroke-width="2.6" marker-end="url(#arrow-pos)"/>
+                <circle cx="250" cy="80" r="5" fill="var(--indigo-mid)"/>
+                <text x="261" y="72" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">corps</text>
+                <path d="M74.0,220.0 A34,34 0 0 0 68.3,201.1" fill="none" stroke="var(--amber-dim)" stroke-width="1.8"/>
+                <text x="89.8" y="209.4" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">θ</text>
+                <text x="135.6" y="140.9" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="var(--flame)" font-style="italic">s</text><path d="M130.3,128.1 H140.9 M137.5,125.4 L140.9,128.1 L137.5,130.7" fill="none" stroke="var(--flame)" stroke-width="1.44" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </div>
             <figcaption>Figure 1.1 — Dans un système de référence cartésien, la position d'un corps est représentée par un vecteur <span class="vec lc">s</span> partant de l'origine O; ses composantes x et y donnent les coordonnées du point occupé par le corps.</figcaption>
           </div>
@@ -478,10 +568,10 @@
 
           <p>Ces deux choix sont arbitraires : rien, dans la physique du mouvement, n'impose de placer l'origine à un endroit plutôt qu'à un autre. Les figures 1.2 et 1.3 illustrent ce point à l'aide d'un même wagon de métro, analysé à partir de deux origines différentes.</p>
 
-          <div class="fig-row">
+          <div>
             <div class="fig-block">
               <div class="fig-inner">
-                <svg viewBox="0 0 640 150" style="width:100%;height:auto;" role="img" aria-label="Ligne de métro avec origine à la station C : un wagon se déplace de la station C à la station E">
+                <svg viewBox="0 0 690 150" style="width:100%;height:auto;" role="img" aria-label="Ligne de métro avec origine à la station C : un wagon se déplace de la station C à la station E">
                   <defs>
                     <marker id="arrow-depl-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                       <path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/>
@@ -505,16 +595,16 @@
                   <text x="450" y="30" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">Δx (wagon)</text>
                   <circle cx="320" cy="95" r="6" fill="var(--flame)"/>
                   <circle cx="600" cy="95" r="6" fill="var(--indigo-mid)"/>
-                  <text x="320" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle">xᵢ</text>
-                  <text x="600" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xf</text>
+                  <text x="320" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle">x<tspan dy="3.5" font-size="9">i</tspan></text>
+                  <text x="600" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">x<tspan dy="3.5" font-size="9">f</tspan></text>
                 </svg>
               </div>
-              <figcaption>Figure 1.2 — Un wagon se déplace de la station C à la station E. En plaçant l'origine à la station C, on obtient xᵢ = 0 km et xf = 2,0 km.</figcaption>
+              <figcaption>Figure 1.2 — Un wagon se déplace de la station C à la station E. En plaçant l'origine à la station C, on obtient x<sub>i</sub> = 0 km et x<sub>f</sub> = 2,0 km.</figcaption>
             </div>
 
             <div class="fig-block">
               <div class="fig-inner">
-                <svg viewBox="0 0 640 150" style="width:100%;height:auto;" role="img" aria-label="Même ligne de métro, mais avec l'origine à la station A">
+                <svg viewBox="0 0 690 150" style="width:100%;height:auto;" role="img" aria-label="Même ligne de métro, mais avec l'origine à la station A">
                   <defs>
                     <marker id="arrow-depl-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                       <path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/>
@@ -538,11 +628,22 @@
                   <text x="450" y="30" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">Δx (wagon)</text>
                   <circle cx="320" cy="95" r="6" fill="var(--flame)"/>
                   <circle cx="600" cy="95" r="6" fill="var(--indigo-mid)"/>
-                  <text x="320" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle">xᵢ</text>
-                  <text x="600" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xf</text>
+                  <text x="320" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle">x<tspan dy="3.5" font-size="9">i</tspan></text>
+                  <text x="600" y="72" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">x<tspan dy="3.5" font-size="9">f</tspan></text>
                 </svg>
               </div>
-              <figcaption>Figure 1.3 — Le même mouvement, analysé avec l'origine à la station A : on obtient cette fois xᵢ = 2,0 km et xf = 4,0 km. Le wagon n'a pas changé de comportement — seuls les nombres utilisés pour le décrire ont changé.</figcaption>
+              <figcaption>Figure 1.3 — Le même mouvement, analysé avec l'origine à la station A : on obtient cette fois x<sub>i</sub> = 2,0 km et x<sub>f</sub> = 4,0 km. Le wagon n'a pas changé de comportement — seuls les nombres utilisés pour le décrire ont changé.</figcaption>
+            </div>
+          </div>
+
+                    <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">Un ami t'écrit : « Je suis à 5 km. » Que te manque-t-il pour savoir où il se trouve vraiment?</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p>À 5 km <strong>de quoi</strong>? Il manque un point de référence — l'<em>origine</em> — sans lequel « 5 km » ne situe rien.</p><p>Il manque aussi le <strong>sens</strong> : 5 km vers où? C'est le rôle de l'<em>orientation</em> de l'axe.</p><p>Une position n'a de sens que par rapport à un système de référence : c'est exactement ce qu'on fixe en choisissant une origine et une orientation.</p>
             </div>
           </div>
 
@@ -555,6 +656,72 @@
               <p>Il n'existe pas, en physique, de position « absolue » qui ne dépendrait d'aucun référentiel : même la Terre, qu'on croit spontanément immobile, tourne sur elle-même et file autour du Soleil. Un système de positionnement satellite (GPS) ne fait rien d'autre, au fond, que choisir un référentiel pratique — centré sur la Terre — et y calculer ta position par triangulation à partir de plusieurs satellites. Le choix d'un référentiel n'est donc jamais une vérité physique en soi, seulement une convention utile.</p>
             </div>
           </div>
+        
+          <div class="quiz-block mini" data-quiz="s1-1" data-done="la sous-section 1.1 est maîtrisée." data-reread="la sous-section 1.1">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 1.1<span class="quiz-block-subtitle">Position · 4 questions</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 4</span>
+            <progress class="quiz-progress" value="0" max="4"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0" data-type="fill">
+            <div class="quiz-q-label">Compléter la phrase</div>
+            <div class="quiz-q-text">Choisis le bon mot dans chaque liste.</div>
+            <div class="quiz-fill">Pour décrire une position, on choisit d'abord un <select class="quiz-blank" data-answer="système de référence" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="chronomètre">chronomètre</option><option value="système de référence">système de référence</option><option value="thermomètre">thermomètre</option></select>. Sur un axe, il faut ensuite fixer son <select class="quiz-blank" data-answer="origine" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="poids">poids</option><option value="volume">volume</option><option value="origine">origine</option></select> (le point où x = 0) et son <select class="quiz-blank" data-answer="orientation" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="masse">masse</option><option value="orientation">orientation</option><option value="température">température</option></select> (le sens des x positifs). Ces deux choix sont <select class="quiz-blank" data-answer="arbitraires" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="imposés par la nature">imposés par la nature</option><option value="faux">faux</option><option value="arbitraires">arbitraires</option></select> : ils changent les nombres utilisés, jamais le mouvement réel.</div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Le système de référence, l'origine et l'orientation sont des choix faits au départ. Ils sont arbitraires, mais il faut les conserver tout au long de l'analyse.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Relis le début de la sous-section 1.1 : une position n'a de sens que par rapport à un système de référence, et sur un axe on choisit une origine (x = 0) et une orientation (le sens positif). Ces choix sont arbitraires.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="1" data-type="mcq">
+            <div class="quiz-q-label">Choix multiple</div>
+            <div class="quiz-q-text">Au même instant, Marie note que le corps est à x = +3 m et Paul note qu'il est à x = −2 m, sur la même rue. Peuvent-ils avoir raison tous les deux?</div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Non : la position d'un corps est une valeur unique, qui ne dépend d'aucun choix.</button>
+              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Oui : ils ont pu choisir une origine (ou une orientation) différente pour leur axe.</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Non : l'un des deux a forcément fait une erreur de mesure.</button>
+              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Oui, mais seulement si le corps s'est déplacé entre leurs deux mesures.</button>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Chacun a son système de référence : les nombres diffèrent, mais le corps est au même endroit réel (voir les figures 1.2 et 1.3).</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Dans les figures 1.2 et 1.3, le même wagon a des positions différentes selon l'origine choisie. Deux observateurs peuvent donc noter des valeurs différentes sans qu'aucun ne se trompe.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="2" data-type="num" data-answer="3.4" data-tol="0.01" data-traps="[{&quot;v&quot;: 1.4, &quot;msg&quot;: &quot;Tu as réutilisé la valeur du premier système.&quot;}, {&quot;v&quot;: -0.6, &quot;msg&quot;: &quot;Tu as soustrait au lieu d&#x27;additionner.&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">Dans le système de la figure 1.2 (origine à la station C), la station D est à +1,4 km. Dans celui de la figure 1.3 (origine à la station A), la station C est à 2,0 km. Dans le système de la figure 1.3, à quelle position se trouve la station D?</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">km</span>
+              <button class="quiz-validate" type="button">Valider</button>
+            </div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. L'origine est passée de C à A, 2,0 km plus à gauche : toutes les positions augmentent de 2,0 km. 1,4 + 2,0 = 3,4 km.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Quand on recule l'origine de C vers A (2,0 km vers la gauche), toutes les positions augmentent de 2,0 km : 1,4 + 2,0 = 3,4 km. On peut le vérifier sur la figure 1.3.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="3" data-type="multi">
+            <div class="quiz-q-label">Plusieurs bonnes réponses</div>
+            <div class="quiz-q-text">Quelles affirmations sur la position d'un corps sont correctes? (Coche toutes les bonnes réponses.)</div>
+            <div class="quiz-checks">
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Elle dépend du système de référence choisi.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Elle peut être négative.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Elle est une propriété du corps, la même quelle que soit l'origine choisie.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Dans un mouvement rectiligne, un seul axe suffit pour la décrire.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Changer l'origine de l'axe change la trajectoire réelle du corps.</span><span class="ck-tag" aria-live="polite"></span></label>
+            </div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. La position dépend du référentiel (origine et orientation), elle peut être négative, et un axe suffit en ligne droite.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Rappelle-toi : la position est toujours relative à un système de référence, donc ses valeurs changent avec l'origine; mais le mouvement réel, lui, ne change jamais. Un signe négatif indique seulement qu'on est du côté négatif de l'axe.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
         </div>
 
         <div class="subsection" id="le-deplacement">
@@ -574,30 +741,41 @@
 
           <p>Le signe de Δx renseigne sur le sens du mouvement par rapport à l'orientation choisie pour l'axe : un déplacement positif indique un mouvement vers les x positifs, un déplacement négatif, un mouvement vers les x négatifs. Sa valeur absolue indique, elle, l'ampleur du déplacement — à quel point la position a changé.</p>
 
+          <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">L'axe est orienté vers l'est et un corps a un déplacement Δx = −3 m. Dans quelle direction s'est-il déplacé? Et si l'axe avait été orienté vers l'ouest, que vaudrait Δx pour ce même mouvement?</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p>Avec l'axe vers l'est, Δx négatif signifie un mouvement vers les x négatifs : <strong>3 m vers l'ouest</strong>.</p><p>Si l'axe pointe vers l'ouest, ce même mouvement (3 m vers l'ouest) va vers les x positifs : <strong>Δx = +3 m</strong>.</p><p>Le mouvement n'a pas changé. Seul le signe a changé, parce qu'il dépend de l'orientation choisie pour l'axe.</p>
+            </div>
+          </div>
+
+
           <div class="fig-row">
             <div class="fig-block">
               <div class="fig-inner">
-                <svg viewBox="0 0 280 220" style="width:100%;max-width:280px;height:auto;" role="img" aria-label="Cas général en deux dimensions : deux vecteurs position et un vecteur déplacement entre leurs extrémités">
-                  <defs>
-                    <marker id="arrow-si" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
-                    <marker id="arrow-sf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
-                    <marker id="arrow-ds" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker>
-                  </defs>
-                  <line x1="30" y1="190" x2="260" y2="190" stroke="var(--indigo-dark)" stroke-width="2"/>
+                <svg viewBox="0 0 280 226" style="width:100%;max-width:280px;height:auto;" role="img" aria-label="Cas général en deux dimensions : deux vecteurs position et un vecteur déplacement entre leurs extrémités">
+                  <defs><marker id="arrow-si" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker><marker id="arrow-sf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker><marker id="arrow-ds" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker></defs>
+                  <line x1="30" y1="190" x2="262" y2="190" stroke="var(--indigo-dark)" stroke-width="2"/>
                   <line x1="30" y1="190" x2="30" y2="20" stroke="var(--indigo-dark)" stroke-width="2"/>
-                  <text x="20" y="200" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">O</text>
+                  <text x="268" y="194" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)" font-style="italic">x</text>
+                  <text x="26" y="14" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)" text-anchor="end" font-style="italic">y</text>
+                  <text x="22" y="204" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="end">O</text>
+                  <line x1="110" y1="90" x2="110" y2="190" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
+                  <line x1="210" y1="50" x2="210" y2="190" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
                   <line x1="30" y1="190" x2="110" y2="90" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-si)"/>
                   <line x1="30" y1="190" x2="210" y2="50" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-sf)"/>
                   <line x1="110" y1="90" x2="210" y2="50" stroke="var(--flame)" stroke-width="2.4" stroke-dasharray="5 3" marker-end="url(#arrow-ds)"/>
-                  <text x="60" y="150" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s<tspan dy="3.2" font-size="9.4">i</tspan></text><path d="M60.9,139.3 H67.4 M64.8,137.6 L67.4,139.3 L64.8,141.1" fill="none" stroke="var(--indigo-mid)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
-                  <text x="150" y="55" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)">s<tspan dy="3.2" font-size="9.4">f</tspan></text><path d="M150.9,44.3 H157.4 M154.8,42.6 L157.4,44.3 L154.8,46.1" fill="none" stroke="var(--indigo-mid)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
-                  <text x="118" y="70" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)">Δ<tspan x="127.5">s</tspan></text><path d="M128.4,59.3 H134.9 M132.3,57.5 L134.9,59.3 L132.3,61.1" fill="none" stroke="var(--flame)" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
-                  <line x1="110" y1="190" x2="110" y2="90" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
-                  <line x1="210" y1="190" x2="210" y2="50" stroke="#9aa7b0" stroke-width="1.2" stroke-dasharray="3 3"/>
-                  <text x="150" y="205" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)">Δx</text>
-                </svg>
+                  <text x="55.0" y="137.0" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-mid)">s</text><text x="59.5" y="140.4" text-anchor="start" font-family="Inter, sans-serif" font-size="9.8" fill="var(--indigo-mid)">i</text><path d="M50.4,125.8 H59.6 M56.7,123.5 L59.6,125.8 L56.7,128.1" fill="none" stroke="var(--indigo-mid)" stroke-width="1.26" stroke-linecap="round" stroke-linejoin="round"/>
+                  <text x="134.0" y="142.0" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="var(--indigo-mid)">s</text><text x="138.5" y="145.4" text-anchor="start" font-family="Inter, sans-serif" font-size="9.8" fill="var(--indigo-mid)">f</text><path d="M129.4,130.8 H138.6 M135.7,128.5 L138.6,130.8 L135.7,133.1" fill="none" stroke="var(--indigo-mid)" stroke-width="1.26" stroke-linecap="round" stroke-linejoin="round"/>
+                  <text x="158.4" y="56.0" text-anchor="end" font-family="Inter, sans-serif" font-size="14" fill="var(--flame)">Δ</text><text x="163.0" y="56.0" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="var(--flame)">s</text><path d="M158.4,44.8 H167.6 M164.7,42.5 L167.6,44.8 L164.7,47.1" fill="none" stroke="var(--flame)" stroke-width="1.26" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M110,200 V204 H210 V200" fill="none" stroke="#9aa7b0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <text x="160.0" y="219" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Δx</text>
+                  </svg>
               </div>
-              <figcaption>Figure 1.4a — Cas général : le déplacement Δ<span class="vec lc">s</span> relie l'extrémité du vecteur position initiale <span class="vec lc">s</span>ᵢ à celle du vecteur position finale <span class="vec lc">s</span>f.</figcaption>
+              <figcaption>Figure 1.4a — Cas général : le déplacement Δ<span class="vec lc">s</span> relie l'extrémité du vecteur position initiale <span class="vec lc">s</span><sub>i</sub> à celle du vecteur position finale <span class="vec lc">s</span><sub>f</sub>.</figcaption>
             </div>
 
             <div class="fig-block">
@@ -610,8 +788,8 @@
                   <text x="264" y="84" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x</text>
                   <circle cx="70" cy="80" r="5" fill="var(--indigo-mid)"/>
                   <circle cx="210" cy="80" r="5" fill="var(--indigo-mid)"/>
-                  <text x="70" y="65" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xᵢ</text>
-                  <text x="210" y="65" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">xf</text>
+                  <text x="70" y="65" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">x<tspan dy="3.5" font-size="9">i</tspan></text>
+                  <text x="210" y="65" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">x<tspan dy="3.5" font-size="9">f</tspan></text>
                   <path d="M70,45 C130,25 150,25 210,45" fill="none" stroke="var(--flame)" stroke-width="2.2" marker-end="url(#arrow-dx1d)"/>
                   <text x="140" y="20" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)" text-anchor="middle">Δx</text>
                 </svg>
@@ -624,35 +802,119 @@
 
           <div class="fig-block">
             <div class="fig-inner">
-              <svg viewBox="0 0 640 190" style="width:100%;height:auto;" role="img" aria-label="Deux wagons empruntent des trajets différents mais aboutissent au même déplacement">
-                <defs>
-                  <marker id="arrow-w1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/></marker>
-                  <marker id="arrow-w2a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
-                  <marker id="arrow-w2b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
-                </defs>
-                <line x1="20" y1="100" x2="620" y2="100" stroke="var(--indigo-dark)" stroke-width="3"/>
-                <text x="624" y="104" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x</text>
-                <g font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">
-                  <text x="40" y="130">Station A</text>
-                  <text x="208" y="130">Station B</text>
-                  <text x="320" y="130" fill="var(--flame)" font-weight="700">Station C</text>
-                  <text x="516" y="130">Station D</text>
-                  <text x="600" y="130">Station E</text>
-                </g>
-                <circle cx="40" cy="100" r="5" fill="#9aa7b0"/><circle cx="208" cy="100" r="5" fill="#9aa7b0"/>
-                <circle cx="320" cy="100" r="6" fill="var(--flame)"/><circle cx="516" cy="100" r="5" fill="#9aa7b0"/>
-                <circle cx="600" cy="100" r="6" fill="var(--indigo-mid)"/>
-                <path d="M320,70 C420,45 500,45 596,68" fill="none" stroke="var(--amber-dim)" stroke-width="2.6" marker-end="url(#arrow-w1)"/>
-                <text x="450" y="42" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">Wagon 1 — direct</text>
-                <path d="M320,150 C220,175 90,175 42,152" fill="none" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-w2a)"/>
-                <path d="M40,155 C220,185 480,185 596,150" fill="none" stroke="var(--indigo-mid)" stroke-width="2.2" marker-end="url(#arrow-w2b)"/>
-                <text x="320" y="180" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)" text-anchor="middle">Wagon 2 — via la station A</text>
-              </svg>
+              <svg viewBox="0 0 690 232" style="width:100%;height:auto;" role="img" aria-label="Deux wagons empruntent des trajets différents mais aboutissent au même déplacement : le wagon 1 va directement de C à E; le wagon 2 va de C à A puis de A à E">
+                <defs><marker id="arrow-w1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/></marker><marker id="arrow-w2a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker><marker id="arrow-w2b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker></defs>
+                <line x1="40" y1="72" x2="40" y2="218" stroke="#c4cfd7" stroke-width="1.3" stroke-dasharray="4 4"/>
+                <line x1="320" y1="72" x2="320" y2="218" stroke="#c4cfd7" stroke-width="1.3" stroke-dasharray="4 4"/>
+                <line x1="600" y1="72" x2="600" y2="218" stroke="#c4cfd7" stroke-width="1.3" stroke-dasharray="4 4"/>
+                <line x1="20" y1="64" x2="640" y2="64" stroke="var(--indigo-dark)" stroke-width="3"/>
+                <text x="646" y="68" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)" font-style="italic">x</text>
+                <circle cx="40" cy="64" r="5" fill="#9aa7b0"/>
+                <text x="40" y="50" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station A</text>
+                <circle cx="208" cy="64" r="5" fill="#9aa7b0"/>
+                <text x="208" y="50" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station B</text>
+                <circle cx="320" cy="64" r="6" fill="var(--flame)"/>
+                <text x="320" y="50" font-family="Inter, sans-serif" font-size="12" fill="var(--flame)" text-anchor="middle" font-weight="700">Station C</text>
+                <circle cx="516" cy="64" r="5" fill="#9aa7b0"/>
+                <text x="516" y="50" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station D</text>
+                <circle cx="600" cy="64" r="6" fill="var(--indigo-mid)"/>
+                <text x="600" y="50" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station E</text>
+                <circle cx="320" cy="106" r="3.6" fill="var(--amber-dim)"/>
+                <line x1="320" y1="106" x2="594" y2="106" stroke="var(--amber-dim)" stroke-width="3" marker-end="url(#arrow-w1)"/>
+                <text x="460.0" y="97" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">Wagon 1 — trajet direct (C → E)</text>
+                <circle cx="320" cy="156" r="3.6" fill="var(--indigo-mid)"/>
+                <line x1="320" y1="156" x2="46" y2="156" stroke="var(--indigo-mid)" stroke-width="3" marker-end="url(#arrow-w2a)"/>
+                <text x="180.0" y="147" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)" text-anchor="middle">Wagon 2 — ① de C vers A</text>
+                <circle cx="40" cy="206" r="3.6" fill="var(--indigo-mid)"/>
+                <line x1="40" y1="206" x2="594" y2="206" stroke="var(--indigo-mid)" stroke-width="3" marker-end="url(#arrow-w2b)"/>
+                <text x="460.0" y="197" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)" text-anchor="middle">Wagon 2 — ② de A vers E</text>
+                </svg>
             </div>
-            <figcaption>Figure 1.5 — Le wagon 1 va directement de C à E; le wagon 2 va d'abord de C à A avant de rebrousser chemin jusqu'à E. En prenant l'origine à la station C, les deux trajets donnent le même déplacement : Δx = xf − xᵢ = 2,0 km − 0 km = 2,0 km. Le wagon 2 a pourtant parcouru un chemin beaucoup plus long.</figcaption>
+            <figcaption>Figure 1.5 — Le wagon 1 va directement de C à E; le wagon 2 va d'abord de C à A avant de rebrousser chemin jusqu'à E. En prenant l'origine à la station C, les deux trajets donnent le même déplacement : Δx = x<sub>f</sub> − x<sub>i</sub> = 2,0 km − 0 km = 2,0 km. Le wagon 2 a pourtant parcouru un chemin beaucoup plus long.</figcaption>
+          </div>
+
+                    <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">Le wagon 2 fait un grand détour, mais son déplacement est le même que celui du wagon 1. Un ami conclut : « Alors le déplacement ne nous apprend presque rien sur le trajet. » A-t-il raison? Qu'est-ce que le déplacement nous dit, et qu'est-ce qu'il ne nous dit pas?</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p>Il a <strong>en partie</strong> raison. Le déplacement donne le <em>bilan</em> du mouvement : de quelle position à quelle position, dans quel sens et de combien. C'est très utile pour résumer un changement de position.</p><p>Mais il ne dit <strong>rien du chemin</strong> : on ne sait pas si le corps a fait un détour, un aller-retour ou s'il est allé tout droit. C'est précisément ce manque qui justifie une nouvelle grandeur : la distance parcourue.</p>
+            </div>
           </div>
 
           <p>C'est précisément cette limite du déplacement — son indifférence totale au chemin suivi — qui appelle une nouvelle grandeur : la distance parcourue, qui fait l'objet de la prochaine sous-section.</p>
+        
+          <div class="quiz-block mini" data-quiz="s1-2" data-done="la sous-section 1.2 est maîtrisée." data-reread="la sous-section 1.2">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 1.2<span class="quiz-block-subtitle">Déplacement · 4 questions</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 4</span>
+            <progress class="quiz-progress" value="0" max="4"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0" data-type="num" data-answer="7.0" data-tol="0.01" data-traps="[{&quot;v&quot;: 3.0, &quot;msg&quot;: &quot;Tu as additionné les positions.&quot;}, {&quot;v&quot;: -7.0, &quot;msg&quot;: &quot;Tu as fait x&lt;sub&gt;i&lt;/sub&gt; − x&lt;sub&gt;f&lt;/sub&gt; : l&#x27;ordre compte.&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">Une balle roule de x<sub>i</sub> = −2,0 m à x<sub>f</sub> = 5,0 m. Quel est son déplacement Δx?</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">m</span>
+              <button class="quiz-validate" type="button">Valider</button>
+            </div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Δx = x<sub>f</sub> − x<sub>i</sub> = 5,0 − (−2,0) = +7,0 m. Le signe positif indique un mouvement vers les x positifs.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Δx = x<sub>f</sub> − x<sub>i</sub> = 5,0 m − (−2,0 m) = +7,0 m. Attention : soustraire un nombre négatif revient à additionner.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="1" data-type="order">
+            <div class="quiz-q-label">Remettre dans l'ordre</div>
+            <div class="quiz-q-text">Remets dans l'ordre les étapes pour déterminer le déplacement d'un corps en mouvement rectiligne. <span style="font-weight:400;color:var(--muted)">(Utilise les flèches ↑ ↓.)</span></div>
+            <ol class="quiz-order">
+              <li data-pos="1"><span class="ord-text">Choisir l'origine et l'orientation de l'axe</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="2"><span class="ord-text">Repérer la position initiale (x<sub>i</sub>) et la position finale (x<sub>f</sub>) sur l'axe</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="3"><span class="ord-text">Calculer Δx = x<sub>f</sub> − x<sub>i</sub></span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="4"><span class="ord-text">Interpréter le signe de Δx pour connaître le sens du mouvement</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+            </ol>
+            <button class="quiz-validate" type="button">Valider l'ordre</button>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. On fixe d'abord le cadre (l'axe), on lit les deux positions, on calcule la différence, puis on interprète le signe.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">On ne peut pas lire une position avant d'avoir un axe, ni interpréter un signe avant d'avoir calculé Δx. Reprends l'ordre logique.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="2" data-type="match">
+            <div class="quiz-q-label">Associer</div>
+            <div class="quiz-q-text">L'axe est orienté vers la droite. Associe chaque mouvement du chariot à son déplacement Δx.</div>
+            <div class="quiz-match">
+              <div class="qm-row"><span class="qm-term">Le chariot passe de x = 2 m à x = 9 m</span><select class="quiz-blank" data-answer="+7 m" aria-label="Associe : Le chariot passe de x = 2 m à x = 9 m"><option value="">Choisis…</option><option value="−13 m">−13 m</option><option value="+7 m">+7 m</option><option value="0 m">0 m</option><option value="−7 m">−7 m</option><option value="+13 m">+13 m</option></select></div>
+              <div class="qm-row"><span class="qm-term">Le chariot passe de x = 9 m à x = 2 m</span><select class="quiz-blank" data-answer="−7 m" aria-label="Associe : Le chariot passe de x = 9 m à x = 2 m"><option value="">Choisis…</option><option value="−13 m">−13 m</option><option value="+7 m">+7 m</option><option value="0 m">0 m</option><option value="−7 m">−7 m</option><option value="+13 m">+13 m</option></select></div>
+              <div class="qm-row"><span class="qm-term">Le chariot part de x = 4 m, va jusqu'à x = 10 m, puis revient à x = 4 m</span><select class="quiz-blank" data-answer="0 m" aria-label="Associe : Le chariot part de x = 4 m, va jusqu&#x27;à x = 10 m, puis revient à x = 4 m"><option value="">Choisis…</option><option value="−13 m">−13 m</option><option value="+7 m">+7 m</option><option value="0 m">0 m</option><option value="−7 m">−7 m</option><option value="+13 m">+13 m</option></select></div>
+              <div class="qm-row"><span class="qm-term">Le chariot passe de x = −3 m à x = 10 m</span><select class="quiz-blank" data-answer="+13 m" aria-label="Associe : Le chariot passe de x = −3 m à x = 10 m"><option value="">Choisis…</option><option value="−13 m">−13 m</option><option value="+7 m">+7 m</option><option value="0 m">0 m</option><option value="−7 m">−7 m</option><option value="+13 m">+13 m</option></select></div>
+            </div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. 9 − 2 = +7; 2 − 9 = −7; 4 − 4 = 0 (même position au départ et à l'arrivée); 10 − (−3) = +13.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Applique Δx = x<sub>f</sub> − x<sub>i</sub> à chaque ligne : 9 − 2 = +7 m; 2 − 9 = −7 m; 4 − 4 = 0 m (le détour ne compte pas); 10 − (−3) = +13 m.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="3" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">Le déplacement d'un corps est Δx = −5 m. Peux-tu dire par où il est passé? Qu'est-ce que tu peux affirmer avec certitude, et qu'est-ce que tu ne peux pas savoir?</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>On sait avec certitude que la position finale est <strong>5 m plus loin vers les x négatifs</strong> que la position initiale.</p><p>On ne sait <strong>pas</strong> par où le corps est passé : il a pu aller tout droit, ou faire un grand détour vers les x positifs avant de revenir. Le déplacement ne dépend que du départ et de l'arrivée, jamais du chemin (voir la figure 1.5).</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as distingué le bilan du mouvement (départ → arrivée) du chemin réellement suivi.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste, puis reprends la figure 1.5 : deux trajets très différents peuvent donner exactement le même Δx.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
         </div>
 
         <div class="subsection" id="la-distance-parcourue">
@@ -687,6 +949,18 @@
           </div>
 
           <p>Pour le wagon 1, L = |2,0 km| = 2,0 km : la distance parcourue égale le déplacement, puisqu'il n'y a qu'un seul segment. Pour le wagon 2, L = |−2,0 km| + |4,0 km| = 6,0 km : une distance trois fois plus grande que son déplacement, malgré un déplacement identique à celui du wagon 1. C'est bien la preuve que déplacement et distance parcourue sont deux grandeurs distinctes, qui ne coïncident que dans le cas particulier d'un mouvement en une seule direction.</p>
+
+          <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">Un troisième wagon part de la station C, roule jusqu'à la station E, puis revient à la station C. <strong>Sans calculer en détail</strong> : quel est son déplacement? Sa distance parcourue? Compare avec les wagons 1 et 2.</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p>Il termine là où il a commencé : son déplacement est <strong>nul</strong> (Δx = 0 km).</p><p>Il a roulé 2,0 km à l'aller et 2,0 km au retour : sa distance parcourue est <strong>L = 4,0 km</strong>.</p><p>Un déplacement nul n'empêche donc pas une longue distance parcourue : les deux grandeurs répondent à des questions différentes.</p>
+            </div>
+          </div>
+
 
           <div class="note-box">
             <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
@@ -740,39 +1014,39 @@
 
               <div class="fig-block">
                 <div class="fig-inner">
-                  <svg viewBox="0 0 640 165" style="width:100%;height:auto;" role="img" aria-label="Ligne de métro avec cinq stations et un trajet A vers D, D vers E, puis retour de E vers D">
-                    <defs>
-                      <marker id="arrow-leg1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker>
-                      <marker id="arrow-leg2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/></marker>
-                      <marker id="arrow-leg3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker>
-                    </defs>
-                    <line x1="20" y1="110" x2="620" y2="110" stroke="var(--indigo-dark)" stroke-width="3"/>
-                    <text x="624" y="114" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x (km)</text>
-                    <g stroke="var(--indigo-dark)" stroke-width="2">
-                      <line x1="40" y1="103" x2="40" y2="117"/>
-                      <line x1="208" y1="103" x2="208" y2="117"/>
-                      <line x1="320" y1="103" x2="320" y2="117"/>
-                      <line x1="516" y1="103" x2="516" y2="117"/>
-                      <line x1="600" y1="103" x2="600" y2="117"/>
-                    </g>
-                    <g font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">
-                      <text x="40" y="140">Station A</text><text x="40" y="153" fill="var(--text)">0 km</text>
-                      <text x="208" y="140">Station B</text><text x="208" y="153" fill="var(--text)">1,2 km</text>
-                      <text x="320" y="140">Station C</text><text x="320" y="153" fill="var(--text)">2,0 km</text>
-                      <text x="516" y="140">Station D</text><text x="516" y="153" fill="var(--text)">3,4 km</text>
-                      <text x="600" y="140">Station E</text><text x="600" y="153" fill="var(--text)">4,0 km</text>
-                    </g>
-                    <g font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="middle">
-                      <text x="124" y="98">1,2 km</text><text x="264" y="98">0,8 km</text><text x="418" y="98">1,4 km</text><text x="558" y="98">0,6 km</text>
-                    </g>
-                    <path d="M40,45 C220,10 380,10 512,42" fill="none" stroke="var(--indigo-mid)" stroke-width="2.4" marker-end="url(#arrow-leg1)"/>
-                    <text x="270" y="14" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-mid)" text-anchor="middle">① A → D</text>
-                    <path d="M320,72 C400,55 470,55 512,66" fill="none" stroke="var(--amber-dim)" stroke-width="2.4" marker-end="url(#arrow-leg2)"/>
-                    <text x="440" y="48" font-family="Inter, sans-serif" font-size="12" fill="var(--amber-dim)" text-anchor="middle">② D → E</text>
-                    <path d="M596,72 C570,86 545,86 520,74" fill="none" stroke="var(--flame)" stroke-width="2.4" marker-end="url(#arrow-leg3)"/>
-                    <text x="558" y="90" font-family="Inter, sans-serif" font-size="11" fill="var(--flame)" text-anchor="middle">③ E → D</text>
-                    <circle cx="40" cy="110" r="6" fill="var(--indigo-mid)"/>
-                    <circle cx="516" cy="110" r="6" fill="var(--flame)"/>
+                  <svg viewBox="0 0 690 214" style="width:100%;height:auto;" role="img" aria-label="Ligne de métro avec cinq stations et un trajet A vers D, D vers E, puis retour de E vers D">
+                  <defs><marker id="arrow-leg1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--indigo-mid)"/></marker><marker id="arrow-leg2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--amber-dim)"/></marker><marker id="arrow-leg3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--flame)"/></marker></defs>
+                  <line x1="40" y1="26" x2="40" y2="150" stroke="#c4cfd7" stroke-width="1.3" stroke-dasharray="4 4"/>
+                  <line x1="516" y1="26" x2="516" y2="150" stroke="#c4cfd7" stroke-width="1.3" stroke-dasharray="4 4"/>
+                  <line x1="600" y1="26" x2="600" y2="150" stroke="#c4cfd7" stroke-width="1.3" stroke-dasharray="4 4"/>
+                  <circle cx="40" cy="40" r="3.6" fill="var(--indigo-mid)"/>
+                  <line x1="40" y1="40" x2="510" y2="40" stroke="var(--indigo-mid)" stroke-width="2.8" marker-end="url(#arrow-leg1)"/>
+                  <text x="278.0" y="31" font-family="Inter, sans-serif" font-size="13" fill="var(--indigo-mid)" text-anchor="middle">① A → D</text>
+                  <circle cx="516" cy="82" r="3.6" fill="var(--amber-dim)"/>
+                  <line x1="516" y1="82" x2="594" y2="82" stroke="var(--amber-dim)" stroke-width="2.8" marker-end="url(#arrow-leg2)"/>
+                  <text x="558.0" y="73" font-family="Inter, sans-serif" font-size="13" fill="var(--amber-dim)" text-anchor="middle">② D → E</text>
+                  <circle cx="600" cy="118" r="3.6" fill="var(--flame)"/>
+                  <line x1="600" y1="118" x2="522" y2="118" stroke="var(--flame)" stroke-width="2.8" marker-end="url(#arrow-leg3)"/>
+                  <text x="558.0" y="109" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)" text-anchor="middle">③ E → D</text>
+                  <line x1="20" y1="150" x2="640" y2="150" stroke="var(--indigo-dark)" stroke-width="3"/>
+                  <text x="646" y="154" font-family="Inter, sans-serif" font-size="12" fill="var(--indigo-dark)">x (km)</text>
+                  <g stroke="var(--indigo-dark)" stroke-width="2"><line x1="40" y1="143" x2="40" y2="157"/><line x1="208" y1="143" x2="208" y2="157"/><line x1="320" y1="143" x2="320" y2="157"/><line x1="516" y1="143" x2="516" y2="157"/><line x1="600" y1="143" x2="600" y2="157"/></g>
+                  <circle cx="40" cy="150" r="6" fill="var(--indigo-mid)"/>
+                  <circle cx="516" cy="150" r="6" fill="var(--flame)"/>
+                  <text x="124.0" y="141" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="middle">1,2 km</text>
+                  <text x="264.0" y="141" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="middle">0,8 km</text>
+                  <text x="418.0" y="141" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="middle">1,4 km</text>
+                  <text x="558.0" y="141" font-family="Inter, sans-serif" font-size="11" fill="var(--muted)" text-anchor="middle">0,6 km</text>
+                  <text x="40" y="176" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station A</text>
+                  <text x="40" y="191" font-family="Inter, sans-serif" font-size="12" fill="var(--text)" text-anchor="middle">0 km</text>
+                  <text x="208" y="176" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station B</text>
+                  <text x="208" y="191" font-family="Inter, sans-serif" font-size="12" fill="var(--text)" text-anchor="middle">1,2 km</text>
+                  <text x="320" y="176" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station C</text>
+                  <text x="320" y="191" font-family="Inter, sans-serif" font-size="12" fill="var(--text)" text-anchor="middle">2,0 km</text>
+                  <text x="516" y="176" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station D</text>
+                  <text x="516" y="191" font-family="Inter, sans-serif" font-size="12" fill="var(--text)" text-anchor="middle">3,4 km</text>
+                  <text x="600" y="176" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Station E</text>
+                  <text x="600" y="191" font-family="Inter, sans-serif" font-size="12" fill="var(--text)" text-anchor="middle">4,0 km</text>
                   </svg>
                 </div>
                 <figcaption>Le wagon part de la station A ①, roule jusqu'à D, poursuit jusqu'à E ②, puis revient à D ③ — sa position finale est donc celle de la station D.</figcaption>
@@ -799,90 +1073,199 @@
               <div class="exemple-reponse">La distance parcourue par le wagon est de 4,6 km.</div>
             </div>
           </div>
-        </div>
+        
+          <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">Pour chaque question, dis si tu utiliserais le <strong>déplacement</strong> ou la <strong>distance parcourue</strong> : (a) la quantité d'essence consommée pendant un trajet; (b) à quelle distance en ligne droite on se retrouve de son point de départ; (c) l'usure des semelles d'un coureur.</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p><strong>(a) Distance parcourue.</strong> L'essence dépend du chemin réellement roulé, pas seulement du départ et de l'arrivée.</p><p><strong>(b) Déplacement</strong> (sa valeur absolue) : seules comptent la position de départ et la position d'arrivée.</p><p><strong>(c) Distance parcourue.</strong> Les semelles s'usent à chaque pas, même si le coureur finit là où il a commencé.</p>
+            </div>
+          </div>
 
-        <div class="quiz-block" data-quiz="s1">
+          <div class="quiz-block mini" data-quiz="s1-3" data-done="la sous-section 1.3 est maîtrisée." data-reread="la sous-section 1.3">
           <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
-            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 1<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 1.3<span class="quiz-block-subtitle">Distance parcourue · 4 questions</span></span>
             <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="quiz-body">
-          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
+          <p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p>
           <div class="quiz-score-bar">
-            <span class="quiz-score-label">0 / 6</span>
-            <progress class="quiz-progress" value="0" max="6"></progress>
+            <span class="quiz-score-label">0 / 4</span>
+            <progress class="quiz-progress" value="0" max="4"></progress>
           </div>
 
-          <div class="quiz-q" data-qi="0">
-            <div class="quiz-q-label">Vrai ou faux</div>
-            <div class="quiz-q-text">Le choix de l'origine d'un axe influence la physique réelle du mouvement étudié.</div>
-            <div class="quiz-options">
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
-              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+          <div class="quiz-q" data-qi="0" data-type="num" data-answer="13" data-tol="0.01" data-traps="[{&quot;v&quot;: 3, &quot;msg&quot;: &quot;C&#x27;est la valeur du déplacement, pas celle de la distance.&quot;}, {&quot;v&quot;: 5, &quot;msg&quot;: &quot;Tu n&#x27;as compté que le trajet de retour.&quot;}, {&quot;v&quot;: 11, &quot;msg&quot;: &quot;Tu as ajouté la position finale (3 m) au lieu de la longueur du retour (5 m).&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">Un cycliste part de x = 0 m, roule jusqu'à x = 8 m, puis fait demi-tour et s'arrête à x = 3 m. Quelle est la distance parcourue L?</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">m</span>
+              <button class="quiz-validate" type="button">Valider</button>
             </div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. L'origine est un choix arbitraire : elle change les valeurs numériques de xᵢ et xf, mais jamais le mouvement réel du corps.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : comme le montrent les figures 1.2 et 1.3, changer l'origine change les valeurs de xᵢ et xf, mais jamais le comportement physique du corps.</span></div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Deux segments : à l'aller, |8 − 0| = 8 m; au retour, |3 − 8| = |−5| = 5 m. L = 8 + 5 = 13 m.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Découpe en deux segments, car le cycliste change de sens : à l'aller |Δx<sub>1</sub>| = |8 − 0| = 8 m; au retour |Δx<sub>2</sub>| = |3 − 8| = 5 m. L = 8 + 5 = 13 m.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="1" data-type="multi">
+            <div class="quiz-q-label">Plusieurs bonnes réponses</div>
+            <div class="quiz-q-text">Quelles affirmations sur la distance parcourue L sont vraies? (Coche toutes les bonnes réponses.)</div>
+            <div class="quiz-checks">
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Elle ne peut pas être négative.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Elle dépend du chemin suivi par le corps.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Elle est toujours égale au déplacement.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Elle a un sens (positif ou négatif), comme Δx.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Elle est égale à |Δx| quand le corps garde le même sens du début à la fin.</span><span class="ck-tag" aria-live="polite"></span></label>
+            </div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. L est un scalaire toujours positif ou nul, qui dépend du chemin; elle égale |Δx| seulement sans changement de sens.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Rappelle-toi : L est une grandeur scalaire (pas de sens, jamais négative) qui mesure la longueur du chemin. Elle égale |Δx| seulement si le corps ne change jamais de sens.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="2" data-type="fill">
+            <div class="quiz-q-label">Compléter la phrase</div>
+            <div class="quiz-q-text">Choisis le bon mot dans chaque liste.</div>
+            <div class="quiz-fill">Quand un corps change de sens, on <select class="quiz-blank" data-answer="découpe" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="ignore">ignore</option><option value="répète">répète</option><option value="découpe">découpe</option></select> son mouvement en segments à sens unique, puis on <select class="quiz-blank" data-answer="additionne" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="additionne">additionne</option><option value="soustrait">soustrait</option><option value="divise">divise</option></select> la <select class="quiz-blank" data-answer="valeur absolue" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="moyenne">moyenne</option><option value="valeur absolue">valeur absolue</option><option value="racine carrée">racine carrée</option></select> du déplacement de chaque segment pour obtenir la distance parcourue L.</div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. L = |Δx<sub>1</sub>| + |Δx<sub>2</sub>| + … + |Δx<sub>n</sub>|.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Relis la formule de la sous-section 1.3 : L = |Δx<sub>1</sub>| + |Δx<sub>2</sub>| + … + |Δx<sub>n</sub>|. On découpe, on prend la valeur absolue de chaque segment, puis on additionne.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="3" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">Un élève affirme : « La distance parcourue peut parfois être plus petite que la valeur absolue du déplacement. » Qu'en penses-tu? Justifie.</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>L'affirmation est <strong>fausse</strong>. La distance parcourue est la longueur du chemin réellement suivi; le chemin le plus court entre deux points est le trajet direct.</p><p>En mouvement rectiligne, on a donc toujours <strong>L ≥ |Δx|</strong>, avec égalité seulement quand le corps ne change jamais de sens. Dès qu'il rebrousse chemin, L devient plus grande que |Δx|.</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as compris que le chemin suivi ne peut pas être plus court que le trajet direct.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Pense au wagon 2 : |Δx| = 2,0 km mais L = 6,0 km. Peut-on trouver un exemple où L serait plus petite que |Δx|?</span></div>
           </div>
 
-          <div class="quiz-q" data-qi="1">
-            <div class="quiz-q-label">Choix multiple</div>
-            <div class="quiz-q-text">Un cycliste part d'un point situé à x = 3 m et termine à x = −5 m. Quel est son déplacement?</div>
-            <div class="quiz-options">
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 8 m</button>
-              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> −8 m</button>
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> −2 m</button>
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 2 m</button>
-            </div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Δx = xf − xᵢ = −5 m − 3 m = −8 m. Le signe négatif indique un mouvement vers les x négatifs.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>Δx = xf − xᵢ = −5 m − 3 m = −8 m. N'oublie pas de soustraire la position initiale, avec son signe, de la position finale.</span></div>
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s1" data-done="la section est maîtrisée." data-reread="cette section">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Révision finale — Section 1<span class="quiz-block-subtitle">Mets tout ensemble · 8 questions</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Révision de toute la section : calculs, vocabulaire, ordre des étapes, situations de la vie courante et questions de réflexion. Prends le temps d'écrire tes réponses avec tes mots avant de regarder les pistes.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 8</span>
+            <progress class="quiz-progress" value="0" max="8"></progress>
           </div>
 
-          <div class="quiz-q" data-qi="2">
-            <div class="quiz-q-label">Choix multiple</div>
-            <div class="quiz-q-text">Reprends le cycliste de la question précédente (xᵢ = 3 m, xf = −5 m), mais on précise cette fois qu'il a d'abord roulé jusqu'à x = 6 m avant de revenir à x = −5 m. Quelle est la distance parcourue?</div>
-            <div class="quiz-options">
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 8 m</button>
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 3 m</button>
-              <button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> 14 m</button>
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> −8 m</button>
+          <div class="quiz-q" data-qi="0" data-type="num" data-answer="-8" data-tol="0.01" data-traps="[{&quot;v&quot;: 8, &quot;msg&quot;: &quot;Le signe compte : le cycliste termine du côté négatif de l&#x27;axe.&quot;}, {&quot;v&quot;: -2, &quot;msg&quot;: &quot;Tu as additionné les positions au lieu de les soustraire.&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">Un cycliste part de x = 3 m, roule jusqu'à x = 6 m, puis fait demi-tour jusqu'à x = −5 m. Quel est son déplacement Δx?</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">m</span>
+              <button class="quiz-validate" type="button">Valider</button>
             </div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Segment 1 (3 m → 6 m) : |6 − 3| = 3 m. Segment 2 (6 m → −5 m) : |−5 − 6| = 11 m. L = 3 m + 11 m = 14 m.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>Il faut découper le trajet en deux segments unidirectionnels : 3 m → 6 m (3 m), puis 6 m → −5 m (11 m). En additionnant : L = 3 m + 11 m = 14 m.</span></div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Δx = x<sub>f</sub> − x<sub>i</sub> = −5 − 3 = −8 m. Seules comptent les positions de départ et d'arrivée, pas le détour par x = 6 m. Le signe négatif indique un déplacement net vers les x négatifs.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Δx = x<sub>f</sub> − x<sub>i</sub> = −5 m − 3 m = −8 m. Le détour par x = 6 m n'intervient pas, et le signe négatif indique un déplacement net vers les x négatifs.</span></div>
           </div>
-
-          <div class="quiz-q" data-qi="3">
-            <div class="quiz-q-label">Vrai ou faux</div>
-            <div class="quiz-q-text">La distance parcourue peut être négative si le corps se déplace vers les x négatifs.</div>
-            <div class="quiz-options">
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">V</span> Vrai</button>
-              <button class="quiz-option" data-correct="true"><span class="opt-letter">F</span> Faux</button>
+          <div class="quiz-q" data-qi="1" data-type="num" data-answer="14" data-tol="0.01" data-traps="[{&quot;v&quot;: 8, &quot;msg&quot;: &quot;C&#x27;est |Δx|, qui ignore le détour.&quot;}, {&quot;v&quot;: 11, &quot;msg&quot;: &quot;Tu as oublié le premier segment (de 3 m à 6 m).&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">Pour le même cycliste (de x = 3 m jusqu'à 6 m, puis demi-tour jusqu'à x = −5 m), quelle est la distance parcourue L?</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">m</span>
+              <button class="quiz-validate" type="button">Valider</button>
             </div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. La distance parcourue est une grandeur scalaire toujours positive ou nulle — c'est justement ce qui la distingue du déplacement, qui peut être négatif.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est faux : la distance parcourue est une grandeur scalaire, toujours positive ou nulle. C'est le déplacement (une grandeur vectorielle) qui peut être négatif.</span></div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Segment 1 : |6 − 3| = 3 m. Segment 2 : |−5 − 6| = 11 m. L = 3 + 11 = 14 m.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Découpe en deux segments à sens unique : de 3 m à 6 m (|Δx| = 3 m), puis de 6 m à −5 m (|Δx| = |−11| = 11 m). L = 3 + 11 = 14 m.</span></div>
           </div>
-
-          <div class="quiz-q" data-qi="4">
-            <div class="quiz-q-label">Choix multiple</div>
-            <div class="quiz-q-text">Dans quel cas la distance parcourue est-elle égale à la valeur absolue du déplacement?</div>
-            <div class="quiz-options">
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> Uniquement si le corps revient à son point de départ</button>
-              <button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> Lorsque le corps se déplace dans un seul et même sens du début à la fin</button>
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Toujours, peu importe le trajet</button>
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Jamais</button>
+          <div class="quiz-q" data-qi="2" data-type="match">
+            <div class="quiz-q-label">Associer</div>
+            <div class="quiz-q-text">Associe chaque grandeur à sa description.</div>
+            <div class="quiz-match">
+              <div class="qm-row"><span class="qm-term">Position</span><select class="quiz-blank" data-answer="Endroit où se trouve le corps, par rapport à un système de référence" aria-label="Associe : Position"><option value="">Choisis…</option><option value="Longueur totale du chemin suivi, toujours positive ou nulle">Longueur totale du chemin suivi, toujours positive ou nulle</option><option value="Endroit où se trouve le corps, par rapport à un système de référence">Endroit où se trouve le corps, par rapport à un système de référence</option><option value="Ensemble des points occupés par le corps durant son mouvement">Ensemble des points occupés par le corps durant son mouvement</option><option value="Variation de position (position finale − position initiale), avec un signe">Variation de position (position finale − position initiale), avec un signe</option></select></div>
+              <div class="qm-row"><span class="qm-term">Déplacement</span><select class="quiz-blank" data-answer="Variation de position (position finale − position initiale), avec un signe" aria-label="Associe : Déplacement"><option value="">Choisis…</option><option value="Longueur totale du chemin suivi, toujours positive ou nulle">Longueur totale du chemin suivi, toujours positive ou nulle</option><option value="Endroit où se trouve le corps, par rapport à un système de référence">Endroit où se trouve le corps, par rapport à un système de référence</option><option value="Ensemble des points occupés par le corps durant son mouvement">Ensemble des points occupés par le corps durant son mouvement</option><option value="Variation de position (position finale − position initiale), avec un signe">Variation de position (position finale − position initiale), avec un signe</option></select></div>
+              <div class="qm-row"><span class="qm-term">Distance parcourue</span><select class="quiz-blank" data-answer="Longueur totale du chemin suivi, toujours positive ou nulle" aria-label="Associe : Distance parcourue"><option value="">Choisis…</option><option value="Longueur totale du chemin suivi, toujours positive ou nulle">Longueur totale du chemin suivi, toujours positive ou nulle</option><option value="Endroit où se trouve le corps, par rapport à un système de référence">Endroit où se trouve le corps, par rapport à un système de référence</option><option value="Ensemble des points occupés par le corps durant son mouvement">Ensemble des points occupés par le corps durant son mouvement</option><option value="Variation de position (position finale − position initiale), avec un signe">Variation de position (position finale − position initiale), avec un signe</option></select></div>
+              <div class="qm-row"><span class="qm-term">Trajectoire</span><select class="quiz-blank" data-answer="Ensemble des points occupés par le corps durant son mouvement" aria-label="Associe : Trajectoire"><option value="">Choisis…</option><option value="Longueur totale du chemin suivi, toujours positive ou nulle">Longueur totale du chemin suivi, toujours positive ou nulle</option><option value="Endroit où se trouve le corps, par rapport à un système de référence">Endroit où se trouve le corps, par rapport à un système de référence</option><option value="Ensemble des points occupés par le corps durant son mouvement">Ensemble des points occupés par le corps durant son mouvement</option><option value="Variation de position (position finale − position initiale), avec un signe">Variation de position (position finale − position initiale), avec un signe</option></select></div>
             </div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact. Sans changement de sens, il n'y a qu'un seul segment, et L = |Δx| — comme pour le wagon 1 des figures 1.2 et 1.5.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>La bonne réponse : cette égalité ne tient que lorsque le corps ne change jamais de sens — un seul segment, sans détour.</span></div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Position, déplacement, distance parcourue et trajectoire sont quatre notions distinctes : ne les confonds pas.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Relis les définitions des sous-sections 1.1 à 1.3. La position décrit un endroit; le déplacement, un changement de position (avec signe); la distance parcourue, la longueur du chemin; la trajectoire, l'ensemble des points visités.</span></div>
           </div>
-
-          <div class="quiz-q" data-qi="5">
-            <div class="quiz-q-label">Vrai ou faux</div>
-            <div class="quiz-q-text">Si un corps revient exactement à son point de départ, son déplacement est nul, mais la distance parcourue peut être très grande.</div>
-            <div class="quiz-options">
-              <button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button>
-              <button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button>
+          <div class="quiz-q" data-qi="3" data-type="multi">
+            <div class="quiz-q-label">Plusieurs bonnes réponses</div>
+            <div class="quiz-q-text">Dans quelles situations le déplacement est-il nul alors que la distance parcourue ne l'est pas? (Coche toutes les bonnes réponses.)</div>
+            <div class="quiz-checks">
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Une coureuse fait un tour complet de piste et revient à son point de départ.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Une voiture roule de Montréal à Québec.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Un élève fait un aller-retour jusqu'à la cafétéria.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Un wagon reste immobile en station.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Un joggeur fait une boucle autour d'un parc.</span><span class="ck-tag" aria-live="polite"></span></label>
             </div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg><span>Exact — comme le coureur qui termine une boucle : xf = xᵢ, donc Δx = 0, même si la distance réellement parcourue est bien supérieure à zéro.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>C'est vrai : revenir au point de départ donne xf = xᵢ, donc Δx = 0, mais chaque mètre parcouru en chemin s'ajoute quand même à la distance parcourue.</span></div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Dès qu'on revient au point de départ, Δx = 0 alors que L > 0. Pour le wagon immobile, les deux valent 0; pour Montréal-Québec, le déplacement n'est pas nul.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Le déplacement est nul quand on revient à son point de départ; la distance parcourue, elle, ne l'est que si le corps n'a pas bougé du tout. Un voyage Montréal-Québec n'a pas un déplacement nul, et un wagon immobile a L = 0.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="4" data-type="order">
+            <div class="quiz-q-label">Remettre dans l'ordre</div>
+            <div class="quiz-q-text">Remets dans l'ordre les étapes pour calculer la distance parcourue quand le corps change de sens. <span style="font-weight:400;color:var(--muted)">(Utilise les flèches ↑ ↓.)</span></div>
+            <ol class="quiz-order">
+              <li data-pos="1"><span class="ord-text">Repérer où le corps change de sens</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="2"><span class="ord-text">Découper le mouvement en segments à sens unique</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="3"><span class="ord-text">Calculer le déplacement Δx de chaque segment</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="4"><span class="ord-text">Prendre la valeur absolue de chaque Δx</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="5"><span class="ord-text">Additionner ces valeurs absolues pour obtenir L</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+            </ol>
+            <button class="quiz-validate" type="button">Valider l'ordre</button>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. On repère les changements de sens, on découpe, on calcule chaque Δx, on prend la valeur absolue puis on additionne.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">On ne peut pas additionner avant d'avoir pris les valeurs absolues, ni calculer les Δx avant d'avoir découpé. Reprends la méthode de la sous-section 1.3.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="5" data-type="fill">
+            <div class="quiz-q-label">Compléter la phrase</div>
+            <div class="quiz-q-text">Choisis le bon mot dans chaque liste.</div>
+            <div class="quiz-fill">Un déplacement de −6 m signifie que la position finale est 6 m plus loin vers les <select class="quiz-blank" data-answer="x négatifs" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="x positifs">x positifs</option><option value="x négatifs">x négatifs</option><option value="y positifs">y positifs</option></select> que la position initiale. La distance parcourue est alors <select class="quiz-blank" data-answer="au moins" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="au plus">au plus</option><option value="exactement">exactement</option><option value="au moins">au moins</option></select> égale à <select class="quiz-blank" data-answer="6 m" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="−6 m">−6 m</option><option value="6 m">6 m</option><option value="0 m">0 m</option></select>, et elle vaut 6 m seulement si le corps <select class="quiz-blank" data-answer="ne change jamais de sens" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="change de sens en route">change de sens en route</option><option value="ne change jamais de sens">ne change jamais de sens</option><option value="reste immobile">reste immobile</option></select>.</div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. L ≥ |Δx| : la distance parcourue ne peut pas être plus petite que la valeur absolue du déplacement, et elle l'égale seulement sans changement de sens.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Le signe négatif indique le sens (vers les x négatifs). La distance parcourue n'est jamais négative et vaut au moins |Δx| = 6 m; elle vaut exactement 6 m seulement si le corps ne rebrousse jamais chemin.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="6" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">Une conductrice fait le tour du pâté de maisons et revient se stationner devant chez elle. Qu'affiche l'odomètre de sa voiture? Que vaut son déplacement? Pourquoi la physique a-t-elle besoin de ces deux grandeurs?</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>L'odomètre a <strong>augmenté</strong> (par exemple de 800 m) : il mesure la distance parcourue. Son déplacement est <strong>nul</strong>, puisqu'elle est revenue à son point de départ.</p><p>Les deux répondent à des questions différentes : « combien de chemin a été fait? » (essence, usure, effort) et « où suis-je par rapport au départ? ». Aucune des deux ne remplace l'autre.</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu relies les deux grandeurs à des questions concrètes différentes.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la rubrique « À quoi ça sert? » de la sous-section 1.3, puis compare avec la piste.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="7" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">On inverse l'orientation de l'axe (les x positifs pointent maintenant vers la gauche, l'origine ne change pas). Qu'arrive-t-il à la position d'un corps? Au déplacement? À la distance parcourue? Et au mouvement réel du corps?</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>Les <strong>positions</strong> changent de signe (x = 4 m devient x = −4 m). Le <strong>déplacement</strong> change aussi de signe (Δx = +7 m devient −7 m), car il indique le sens par rapport à l'axe.</p><p>La <strong>distance parcourue ne change pas</strong> : c'est une longueur, un scalaire toujours positif. Le <strong>mouvement réel</strong> du corps est exactement le même : seules les étiquettes numériques changent.</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as bien séparé ce qui dépend des choix (signes) de ce qui n'en dépend pas (L, le mouvement réel).</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Rappelle-toi la figure 1.2 et 1.3 : changer le système de référence change les nombres, jamais le mouvement. Seule L, un scalaire, ne change pas de valeur.</span></div>
           </div>
 
           <div class="quiz-result-msg"></div>
@@ -927,6 +1310,18 @@
             <button class="iv-btn" data-ok="0" data-fb="<b>Trop grand.</b> Le trajet dure moins d'une année : la durée du mouvement est plus courte que l'intervalle choisi, on ne verrait rien du déplacement." onclick="ivPick(this)">1 année</button>
           </div>
           <div class="iv-fb" id="iv-fb" aria-live="polite">Clique sur un intervalle pour voir si le choix est approprié.</div>
+
+          <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">Tu veux décrire (a) la croissance d'un haricot, (b) le vol d'un colibri, (c) le trajet d'un avion de Montréal à Vancouver. Quel intervalle de temps choisirais-tu pour chacun? Quelle règle guide ton choix?</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p>Par exemple : (a) <strong>quelques heures ou un jour</strong> — une plante change très lentement; (b) <strong>une fraction de seconde</strong> — les ailes et le corps bougent très vite; (c) <strong>quelques minutes à une heure</strong>.</p><p>La règle : l'intervalle doit être assez court pour <em>voir</em> le corps changer de position, mais assez long pour éviter une avalanche de mesures inutiles. Il dépend donc de la rapidité du mouvement étudié.</p>
+            </div>
+          </div>
+
         </div>
 
         <div class="subsection" id="tableau-et-graphique">
@@ -954,11 +1349,86 @@
             <div><span class="chip">0 → 50 s : 37,5 − 0 = 37,5 m</span><span class="chip">50 → 100 s : 75,0 − 37,5 = 37,5 m</span><span class="chip">100 → 150 s : 112,5 − 75,0 = 37,5 m</span></div>
             <p style="margin-top:10px;font-size:14px;">Intervalles égaux, distances égales : c'est bien un MRU. Sur le graphique, cela donne <strong>une seule droite</strong>, car tout le mouvement se fait à la même vitesse et dans le même sens. Et comme la droite est continue, elle te permet de lire la position <em>entre</em> deux mesures : déplace le curseur pour essayer.</p>
           </div>
+        
+          <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">Si l'enfant marchait deux fois plus vite, qu'est-ce qui changerait dans le tableau? Et sur le graphique? Serait-ce encore un mouvement rectiligne uniforme?</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p>Pour les mêmes instants (0, 50, 100, 150 s), les positions <strong>doubleraient</strong> : 0; 75; 150; 225 m.</p><p>Sur le graphique, la droite serait <strong>deux fois plus inclinée</strong>.</p><p>Ce serait encore un MRU : la vitesse est différente, mais elle reste constante, donc le graphique reste une seule droite.</p>
+            </div>
+          </div>
+
+          <div class="quiz-block mini" data-quiz="s2-2" data-done="la sous-section 2.2 est maîtrisée." data-reread="la sous-section 2.2">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 2.2<span class="quiz-block-subtitle">Tableau et graphique · 3 questions</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 3</span>
+            <progress class="quiz-progress" value="0" max="3"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0" data-type="num" data-answer="60" data-tol="0.01" data-traps="[{&quot;v&quot;: 37.5, &quot;msg&quot;: &quot;C&#x27;est la position à t = 50 s.&quot;}, {&quot;v&quot;: 75, &quot;msg&quot;: &quot;C&#x27;est la position à t = 100 s.&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">L'enfant du laboratoire avance à vitesse constante : il est à 37,5 m à t = 50 s et à 75,0 m à t = 100 s. Où se trouve-t-il à t = 80 s, si son mouvement reste uniforme?</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">m</span>
+              <button class="quiz-validate" type="button">Valider</button>
+            </div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Il parcourt 37,5 m toutes les 50 s, soit 0,75 m par seconde : 0,75 × 80 = 60 m. On peut aussi lire 60 m sur la droite du graphique.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Le mouvement est uniforme : 37,5 m toutes les 50 s, donc 0,75 m par seconde. À t = 80 s : 0,75 × 80 = 60 m. (Autre façon : 30 s après t = 50 s, il a avancé de 0,75 × 30 = 22,5 m de plus : 37,5 + 22,5 = 60 m.)</span></div>
+          </div>
+          <div class="quiz-q" data-qi="1" data-type="fill">
+            <div class="quiz-q-label">Compléter la phrase</div>
+            <div class="quiz-q-text">Choisis le bon mot dans chaque liste.</div>
+            <div class="quiz-fill">Un mouvement rectiligne uniforme se représente sur un graphique de x en fonction de t par <select class="quiz-blank" data-answer="une seule droite" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="une courbe">une courbe</option><option value="plusieurs segments de droite">plusieurs segments de droite</option><option value="une seule droite">une seule droite</option></select>, car sa vitesse est <select class="quiz-blank" data-answer="constante" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="nulle">nulle</option><option value="variable">variable</option><option value="constante">constante</option></select>. Plus la droite est <select class="quiz-blank" data-answer="inclinée" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="éloignée">éloignée</option><option value="inclinée">inclinée</option><option value="courte">courte</option></select>, plus le corps parcourt de distance en peu de temps.</div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Une vitesse constante donne une droite, et son inclinaison traduit la rapidité du mouvement.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Relis la sous-section 2.2 : un MRU a une vitesse constante, donc une seule droite; plus elle est inclinée, plus le corps parcourt de distance en peu de temps.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="2" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">Le graphique te permet de lire la position de l'enfant à t = 80 s, alors que le tableau ne contient pas cette valeur. Quelle hypothèse sur le mouvement fais-tu en lisant la position <em>entre</em> deux mesures? Que se passerait-il si elle était fausse?</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>On suppose que l'enfant a gardé <strong>la même vitesse</strong> entre les deux mesures : le mouvement est uniforme, donc la droite relie bien les points.</p><p>Si l'enfant s'était arrêté ou avait couru entre 50 s et 100 s, la position réelle à 80 s serait différente de celle lue sur la droite. La lecture n'est valable que si le mouvement est uniforme entre les points.</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as compris que lire « entre » deux mesures suppose un mouvement uniforme.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste : la droite continue n'est fiable que si la vitesse reste constante entre les mesures.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
         </div>
 
         <div class="subsection" id="mru-successifs">
           <div class="subsection-title">2.3 Plusieurs MRU à la suite</div>
           <p>Pour représenter une suite de mouvements rectilignes uniformes différents, le graphique de la position en fonction du temps est constitué de <strong>plusieurs segments de droite</strong>. Chaque segment est un MRU. L'exemple suivant te montre comment construire un tel graphique, étape par étape.</p>
+
+          <div class="reflect">
+            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <p class="reflect-q">Avant de voir l'exemple : pourquoi ne peut-on pas représenter « marche, arrêt, puis jogging » par une seule droite sur un graphique de la position en fonction du temps?</p>
+            <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
+            <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
+            <div class="reflect-answer" hidden>
+              <div class="reflect-answer-label">Piste de réponse</div>
+              <p>Une droite correspond à <strong>une seule vitesse, toujours la même</strong>. Ici, la vitesse change : le corps marche, s'arrête (vitesse nulle), puis joggue.</p><p>Chaque changement de vitesse change l'inclinaison de la courbe : il faut donc <strong>un segment de droite par étape</strong>, et chaque segment est un MRU.</p>
+            </div>
+          </div>
+
           <div class="note-box">
             <button class="note-bar" aria-expanded="false" onclick="toggleNote(this)">
               <span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg> Pour aller plus loin<span class="note-subtitle">Lire un segment d'un coup d'œil</span></span>
@@ -1031,50 +1501,164 @@
             <div class="formula">Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 0 m = 0 m<br>L = 60 + 40 + 100 + 0 + 100 + 100 = 400 m</div>
             <div class="exemple-reponse">Le camelot revient à sa voiture : son déplacement est nul, mais il a parcouru 400 m.</div>
           </div>
-        </div>
-
-        <div class="quiz-block" data-quiz="s2">
+        
+          <div class="quiz-block mini" data-quiz="s2-3" data-done="la sous-section 2.3 est maîtrisée." data-reread="la sous-section 2.3">
           <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
-            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Exercices — Section 2<span class="quiz-block-subtitle">Clique pour t'exercer</span></span>
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 2.3<span class="quiz-block-subtitle">Plusieurs MRU · 3 questions</span></span>
             <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="quiz-body">
-          <p class="quiz-intro">Clique sur une réponse pour la valider. La bonne réponse s'affiche immédiatement.</p>
-          <div class="quiz-score-bar"><span class="quiz-score-label">0 / 5</span><progress class="quiz-progress" value="0" max="5"></progress></div>
-          <div class="quiz-q" data-qi="0">
-            <div class="quiz-q-label">Vrai ou faux</div>
-            <div class="quiz-q-text">Sur un graphique de la position en fonction du temps, un segment horizontal signifie que le corps est immobile.</div>
-            <div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">V</span> Vrai</button><button class="quiz-option" data-correct="false"><span class="opt-letter">F</span> Faux</button></div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. La position ne change pas pendant que le temps passe : c'est l'arrêt de 20 s du camelot à sa voiture.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>C'est vrai : un segment horizontal veut dire que <em>x</em> reste le même alors que <em>t</em> avance, donc que le corps est immobile.</span></div>
+          <p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 3</span>
+            <progress class="quiz-progress" value="0" max="3"></progress>
           </div>
-          <div class="quiz-q" data-qi="1">
-            <div class="quiz-q-label">Choix multiple</div>
-            <div class="quiz-q-text">Combien de mouvements rectilignes uniformes distincts forment le graphique du camelot?</div>
-            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 4</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 5</button><button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> 6</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 7</button></div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Il y a six segments, un par étape, y compris l'arrêt (vitesse nulle, mais constante).</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Il y a six étapes dans le parcours, donc six segments. L'arrêt à la voiture compte aussi : c'est un MRU de vitesse nulle.</span></div>
+
+          <div class="quiz-q" data-qi="0" data-type="num" data-answer="130" data-tol="0.01" data-traps="[{&quot;v&quot;: 60, &quot;msg&quot;: &quot;60 s est la durée de l&#x27;étape ②, pas l&#x27;instant où elle se termine.&quot;}, {&quot;v&quot;: 70, &quot;msg&quot;: &quot;70 s est l&#x27;instant où se termine l&#x27;étape ①.&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">Le camelot marche 70 s (étape ①), puis 60 s (étape ②). À quel instant t, mesuré depuis le départ, se termine l'étape ②?</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">s</span>
+              <button class="quiz-validate" type="button">Valider</button>
+            </div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Les durées s'additionnent depuis le départ : 70 + 60 = 130 s.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">La colonne du temps contient des instants mesurés depuis le départ : on additionne les durées des étapes précédentes. 70 + 60 = 130 s.</span></div>
           </div>
-          <div class="quiz-q" data-qi="2">
-            <div class="quiz-q-label">Choix multiple</div>
-            <div class="quiz-q-text">Dans le tableau d'un mouvement en plusieurs étapes, que faut-il inscrire dans la colonne du temps?</div>
-            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> La durée de chaque étape</button><button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> L'instant écoulé depuis le départ</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> La différence entre deux positions</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> La durée de la dernière étape seulement</button></div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Chaque ligne du tableau est un instant <em>t</em> mesuré depuis le départ : 70 s, 130 s, 165 s, 185 s…</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Le tableau donne la position à chaque instant <em>t</em>, mesuré depuis le départ. Il faut donc additionner les durées : 70 s, 130 s, 165 s, 185 s…</span></div>
+          <div class="quiz-q" data-qi="1" data-type="match">
+            <div class="quiz-q-label">Associer</div>
+            <div class="quiz-q-text">Associe chaque allure d'un segment du graphique x(t) à ce que fait le corps.</div>
+            <div class="quiz-match">
+              <div class="qm-row"><span class="qm-term">Le segment monte</span><select class="quiz-blank" data-answer="Il avance dans le sens positif de l&#x27;axe" aria-label="Associe : Le segment monte"><option value="">Choisis…</option><option value="Il est immobile (x ne change pas)">Il est immobile (x ne change pas)</option><option value="Le temps s&#x27;arrête">Le temps s'arrête</option><option value="Il parcourt plus de distance en moins de temps">Il parcourt plus de distance en moins de temps</option><option value="Il avance dans le sens négatif de l&#x27;axe">Il avance dans le sens négatif de l'axe</option><option value="Il avance dans le sens positif de l&#x27;axe">Il avance dans le sens positif de l'axe</option></select></div>
+              <div class="qm-row"><span class="qm-term">Le segment descend</span><select class="quiz-blank" data-answer="Il avance dans le sens négatif de l&#x27;axe" aria-label="Associe : Le segment descend"><option value="">Choisis…</option><option value="Il est immobile (x ne change pas)">Il est immobile (x ne change pas)</option><option value="Le temps s&#x27;arrête">Le temps s'arrête</option><option value="Il parcourt plus de distance en moins de temps">Il parcourt plus de distance en moins de temps</option><option value="Il avance dans le sens négatif de l&#x27;axe">Il avance dans le sens négatif de l'axe</option><option value="Il avance dans le sens positif de l&#x27;axe">Il avance dans le sens positif de l'axe</option></select></div>
+              <div class="qm-row"><span class="qm-term">Le segment est horizontal</span><select class="quiz-blank" data-answer="Il est immobile (x ne change pas)" aria-label="Associe : Le segment est horizontal"><option value="">Choisis…</option><option value="Il est immobile (x ne change pas)">Il est immobile (x ne change pas)</option><option value="Le temps s&#x27;arrête">Le temps s'arrête</option><option value="Il parcourt plus de distance en moins de temps">Il parcourt plus de distance en moins de temps</option><option value="Il avance dans le sens négatif de l&#x27;axe">Il avance dans le sens négatif de l'axe</option><option value="Il avance dans le sens positif de l&#x27;axe">Il avance dans le sens positif de l'axe</option></select></div>
+              <div class="qm-row"><span class="qm-term">Le segment est plus incliné que les autres</span><select class="quiz-blank" data-answer="Il parcourt plus de distance en moins de temps" aria-label="Associe : Le segment est plus incliné que les autres"><option value="">Choisis…</option><option value="Il est immobile (x ne change pas)">Il est immobile (x ne change pas)</option><option value="Le temps s&#x27;arrête">Le temps s'arrête</option><option value="Il parcourt plus de distance en moins de temps">Il parcourt plus de distance en moins de temps</option><option value="Il avance dans le sens négatif de l&#x27;axe">Il avance dans le sens négatif de l'axe</option><option value="Il avance dans le sens positif de l&#x27;axe">Il avance dans le sens positif de l'axe</option></select></div>
+            </div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. La pente d'un segment renseigne sur le sens (monte ou descend), sur l'arrêt (horizontal) et sur la rapidité (inclinaison).</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Relis la rubrique « Pour aller plus loin » de la sous-section 2.3 : un segment qui monte = sens positif, qui descend = sens négatif, horizontal = immobile, et plus il est incliné, plus le corps va vite.</span></div>
           </div>
-          <div class="quiz-q" data-qi="3">
-            <div class="quiz-q-label">Choix multiple</div>
+          <div class="quiz-q" data-qi="2" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">Dans l'exemple du camelot, suppose qu'il marche <em>deux fois plus vite</em> pendant l'étape ①, tout le reste étant identique. Comment le graphique serait-il modifié? Que deviendraient les segments suivants?</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>Le segment ① serait <strong>deux fois plus incliné</strong> : le camelot atteindrait la maison D (60 m) en 35 s au lieu de 70 s.</p><p>Comme il arriverait 35 s plus tôt, <strong>tous les segments suivants seraient décalés de 35 s vers la gauche</strong>, sans changer de forme. Le graphique se terminerait à 360 s au lieu de 395 s.</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as anticipé l'effet sur la pente et sur le décalage des segments suivants.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste : doubler la vitesse divise par deux la durée de l'étape, ce qui raccourcit tout le parcours.</span></div>
+          </div>
+
+          <div class="quiz-result-msg"></div>
+          <button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button>
+          </div>
+        </div>
+        </div>
+
+        <div class="quiz-block" data-quiz="s2" data-done="la section est maîtrisée." data-reread="cette section">
+          <button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)">
+            <svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Révision finale — Section 2<span class="quiz-block-subtitle">Mets tout ensemble · 7 questions</span></span>
+            <svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="quiz-body">
+          <p class="quiz-intro">Révision de toute la section : calculs, vocabulaire, ordre des étapes, situations de la vie courante et questions de réflexion. Prends le temps d'écrire tes réponses avec tes mots avant de regarder les pistes.</p>
+          <div class="quiz-score-bar">
+            <span class="quiz-score-label">0 / 7</span>
+            <progress class="quiz-progress" value="0" max="7"></progress>
+          </div>
+
+          <div class="quiz-q" data-qi="0" data-type="fill">
+            <div class="quiz-q-label">Compléter la phrase</div>
+            <div class="quiz-q-text">Choisis le bon mot dans chaque liste.</div>
+            <div class="quiz-fill">Dans le tableau d'un mouvement en plusieurs étapes, la colonne du temps contient <select class="quiz-blank" data-answer="l&#x27;instant écoulé depuis le départ" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="la durée de chaque étape">la durée de chaque étape</option><option value="la vitesse du corps">la vitesse du corps</option><option value="l&#x27;instant écoulé depuis le départ">l'instant écoulé depuis le départ</option></select>, obtenu en <select class="quiz-blank" data-answer="additionnant" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="additionnant">additionnant</option><option value="soustrayant">soustrayant</option><option value="multipliant">multipliant</option></select> les durées des étapes précédentes.</div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Chaque ligne du tableau est un instant t mesuré depuis le départ : 70 s, 130 s, 165 s, 185 s, 305 s, 395 s pour le camelot.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Le tableau donne la position à chaque instant t mesuré depuis le départ, pas la durée des étapes. Il faut donc additionner les durées : 70, 70 + 60 = 130, etc.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="1" data-type="num" data-answer="305" data-tol="0.01" data-traps="[{&quot;v&quot;: 120, &quot;msg&quot;: &quot;120 s est la durée de l&#x27;étape ⑤, pas l&#x27;instant d&#x27;arrivée.&quot;}, {&quot;v&quot;: 185, &quot;msg&quot;: &quot;185 s est l&#x27;instant où le camelot repart de sa voiture.&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
             <div class="quiz-q-text">À quel instant le camelot arrive-t-il à la maison A?</div>
-            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 120 s</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 185 s</button><button class="quiz-option" data-correct="true"><span class="opt-letter">C</span> 305 s</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 395 s</button></div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Il quitte sa voiture à 185 s et met 120 s pour atteindre A : 185 + 120 = 305 s.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Attention : 120 s est la durée de l'étape, pas l'instant. Il part à 185 s, donc il arrive à 185 + 120 = 305 s.</span></div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">s</span>
+              <button class="quiz-validate" type="button">Valider</button>
+            </div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Il quitte sa voiture à 185 s et met 120 s pour atteindre A : 185 + 120 = 305 s.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">On additionne les durées depuis le départ : 70 + 60 + 35 + 20 + 120 = 305 s. (Le 120 s n'est que la durée de l'étape ⑤.)</span></div>
           </div>
-          <div class="quiz-q" data-qi="4">
-            <div class="quiz-q-label">Choix multiple</div>
-            <div class="quiz-q-text">Entre t = 130 s et t = 165 s, quel est le déplacement du camelot?</div>
-            <div class="quiz-options"><button class="quiz-option" data-correct="false"><span class="opt-letter">A</span> 100 m</button><button class="quiz-option" data-correct="true"><span class="opt-letter">B</span> −100 m</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 35 m</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> −35 m</button></div>
-            <div class="quiz-feedback ok"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ok"/></svg><span>Exact. Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 100 m = −100 m : il revient de la maison E vers sa voiture, dans le sens négatif de l'axe.</span></div>
-            <div class="quiz-feedback ko"><svg class="icon-sm" aria-hidden="true"><use href="#ic-ko"/></svg><span>Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 100 m = −100 m. Il part de la maison E (100 m) et arrive à sa voiture (0 m); 35 s est une durée, pas un déplacement.</span></div>
+          <div class="quiz-q" data-qi="2" data-type="num" data-answer="-100" data-tol="0.01" data-traps="[{&quot;v&quot;: 100, &quot;msg&quot;: &quot;Le signe compte : sur le graphique, ce segment descend.&quot;}]">
+            <div class="quiz-q-label">Calcul</div>
+            <div class="quiz-q-text">Entre t = 130 s et t = 165 s, quel est le déplacement du camelot? (Il part de la maison E, à x = 100 m, et revient à sa voiture, à x = 0 m.)</div>
+            <div class="quiz-num">
+              <input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?">
+              <span class="quiz-unit">m</span>
+              <button class="quiz-validate" type="button">Valider</button>
+            </div>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 100 m = −100 m : il revient de la maison E vers sa voiture, donc vers les x négatifs.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Δx = x<sub>f</sub> − x<sub>i</sub> = 0 m − 100 m = −100 m. Le signe est négatif : le camelot se déplace vers les x négatifs (le graphique descend).</span></div>
+          </div>
+          <div class="quiz-q" data-qi="3" data-type="order">
+            <div class="quiz-q-label">Remettre dans l'ordre</div>
+            <div class="quiz-q-text">Remets dans l'ordre les étapes pour construire le graphique d'un mouvement en plusieurs étapes. <span style="font-weight:400;color:var(--muted)">(Utilise les flèches ↑ ↓.)</span></div>
+            <ol class="quiz-order">
+              <li data-pos="1"><span class="ord-text">Choisir l'origine et l'orientation de l'axe des positions</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="2"><span class="ord-text">Convertir les durées des étapes en instants écoulés depuis le départ</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="3"><span class="ord-text">Calculer la position à la fin de chaque étape et remplir le tableau</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="4"><span class="ord-text">Placer les points (t, x) sur le graphique</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+              <li data-pos="5"><span class="ord-text">Relier les points consécutifs par des segments de droite</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li>
+            </ol>
+            <button class="quiz-validate" type="button">Valider l'ordre</button>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. L'axe d'abord, puis les instants, les positions, les points, et enfin les segments qui forment le graphique.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">On ne peut pas placer des points avant d'avoir un tableau, ni relier des points avant de les avoir placés. Reprends la démarche de l'exemple du camelot.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="4" data-type="multi">
+            <div class="quiz-q-label">Plusieurs bonnes réponses</div>
+            <div class="quiz-q-text">Quelles affirmations sur le graphique du camelot sont vraies? (Coche toutes les bonnes réponses.)</div>
+            <div class="quiz-checks">
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Il est formé de six segments, donc de six mouvements rectilignes uniformes.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">L'arrêt à la voiture (étape ④) correspond à un segment horizontal.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Le segment de l'étape ⑤ (vers la maison A) descend.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Le segment de l'étape ② est plus incliné que celui de l'étape ①.</span><span class="ck-tag" aria-live="polite"></span></label>
+              <label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Pendant l'arrêt (étape ④), le temps ne s'écoule plus.</span><span class="ck-tag" aria-live="polite"></span></label>
+            </div>
+            <button class="quiz-validate" type="button">Valider</button>
+            <div class="quiz-hint" aria-live="polite"></div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Six étapes = six segments; l'arrêt est horizontal; aller vers A (x négatif) fait descendre le graphique.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">L'étape ① parcourt 60 m en 70 s et l'étape ② seulement 40 m en 60 s : ① est plus inclinée. Et pendant un arrêt, le temps continue de s'écouler (20 s) : c'est la position qui ne change pas.</span></div>
+          </div>
+          <div class="quiz-q" data-qi="5" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">Une élève trace un graphique x(t) avec un segment parfaitement <strong>vertical</strong>. Que signifierait-il pour le mouvement du corps? Est-ce physiquement possible?</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>Un segment vertical veut dire que <strong>la position change sans que le temps passe</strong> : le corps serait à deux endroits différents au même instant, ou il se téléporterait. Cela demanderait une vitesse infinie.</p><p>C'est <strong>impossible</strong> : un corps réel met toujours un certain temps à changer de position. Un graphique x(t) est donc toujours « penché » (ou horizontal), jamais vertical.</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as relié une propriété du graphique à une réalité physique.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Imagine la lecture du graphique : « à t fixé, x prend plusieurs valeurs ». Que cela voudrait-il dire pour la position du corps à cet instant?</span></div>
+          </div>
+          <div class="quiz-q" data-qi="6" data-type="open">
+            <div class="quiz-q-label">Question de réflexion</div>
+            <div class="quiz-q-text">Léa et Max marchent sur le même trottoir, dans le même sens. Sur un graphique x(t), la droite de Léa est plus inclinée que celle de Max. Que peux-tu dire de leurs mouvements, sans faire de calcul?</div>
+            <textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea>
+            <div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div>
+            <div class="quiz-model" hidden>
+              <div class="quiz-model-label">Piste de réponse</div>
+              <p>Pour la même durée, Léa parcourt <strong>plus de distance</strong> que Max : elle marche <strong>plus vite</strong>.</p><p>Les deux droites étant des droites, leurs mouvements sont des MRU. La section 3 transformera cette idée d'inclinaison en un calcul de vitesse.</p>
+              <div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div>
+            </div>
+            <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu lis l'inclinaison d'une droite comme une information sur la rapidité du mouvement.</span></div>
+            <div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la rubrique « Lire un segment d'un coup d'œil » : plus un segment est incliné, plus le corps parcourt de distance en peu de temps.</span></div>
           </div>
 
           <div class="quiz-result-msg"></div>
@@ -1193,6 +1777,7 @@ let matchIndex = -1;
 function doSearch(query) {
   contentEl.innerHTML = originalHTML;
   contentEl.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+  initReflect(contentEl);
   mruInit();
   const countEl = document.getElementById('search-count');
   matchIndex = -1;
@@ -1201,7 +1786,7 @@ function doSearch(query) {
   if (!query.trim()) { countEl.textContent = ''; return 0; }
 
   const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT);
+  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('option,select,textarea,script,style')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
   const nodes = [];
   while (walker.nextNode()) nodes.push(walker.currentNode);
 
@@ -1272,6 +1857,196 @@ document.addEventListener('click', e => {
 });
 
 // === MOTEUR DE QUIZ INTERACTIFS ===
+// Types de questions (attribut data-type sur .quiz-q) :
+//   mcq    : choix multiple, un clic valide            multi : plusieurs bonnes réponses à cocher
+//   num    : réponse numérique à écrire                fill  : compléter avec des listes déroulantes
+//   match  : associer (listes déroulantes)             order : remettre des étapes dans l'ordre
+//   open   : question de réflexion (piste de réponse + auto-évaluation)
+function qzParseNum(s) {
+  s = String(s).replace(/[\u2212\u2013\u2014]/g, '-').replace(/\s+/g, '').replace(',', '.');
+  const m = s.match(/^[-+]?(\d+\.?\d*|\.\d+)/);
+  return m ? parseFloat(m[0]) : NaN;
+}
+function qzSetKo(q, html) {
+  const t = q.querySelector('.quiz-feedback.ko .fb-text');
+  if (!t) return;
+  if (!('orig' in t.dataset)) t.dataset.orig = t.innerHTML;
+  t.innerHTML = html;
+}
+function qzRestoreFb(q) {
+  q.querySelectorAll('.quiz-feedback .fb-text').forEach(t => { if ('orig' in t.dataset) t.innerHTML = t.dataset.orig; });
+}
+function qzShuffle(arr, seed) {
+  let s = seed * 9301 + 49297;
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor(s / 233280 * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const QUIZ_TYPES = {
+  mcq(q, done) {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    options.forEach(opt => opt.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      const ok = opt.dataset.correct === 'true';
+      options.forEach(o => {
+        o.disabled = true;
+        if (o.dataset.correct === 'true') o.classList.add(o === opt ? 'correct' : 'reveal');
+        else if (o === opt) o.classList.add('wrong');
+      });
+      done(q, ok);
+    }));
+    return () => options.forEach(o => { o.disabled = false; o.classList.remove('correct', 'wrong', 'reveal'); });
+  },
+
+  multi(q, done) {
+    const checks = Array.from(q.querySelectorAll('.quiz-check'));
+    const btn = q.querySelector('.quiz-validate');
+    const hint = q.querySelector('.quiz-hint');
+    btn.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      if (!checks.some(c => c.querySelector('input').checked)) { hint.textContent = 'Coche au moins une réponse avant de valider.'; return; }
+      hint.textContent = '';
+      let all = true;
+      checks.forEach(c => {
+        const inp = c.querySelector('input');
+        const should = c.dataset.correct === 'true';
+        const tag = c.querySelector('.ck-tag');
+        inp.disabled = true;
+        if (inp.checked && should) { c.classList.add('good'); tag.textContent = '✓ Bien vu'; }
+        else if (inp.checked && !should) { c.classList.add('bad'); tag.textContent = '✗ À décocher'; all = false; }
+        else if (!inp.checked && should) { c.classList.add('missed'); tag.textContent = '! À cocher'; all = false; }
+      });
+      btn.disabled = true;
+      done(q, all);
+    });
+    return () => {
+      checks.forEach(c => {
+        c.classList.remove('good', 'bad', 'missed');
+        const i = c.querySelector('input'); i.checked = false; i.disabled = false;
+        c.querySelector('.ck-tag').textContent = '';
+      });
+      btn.disabled = false; hint.textContent = '';
+    };
+  },
+
+  num(q, done) {
+    const input = q.querySelector('.quiz-num-input');
+    const btn = q.querySelector('.quiz-validate');
+    const hint = q.querySelector('.quiz-hint');
+    const ans = parseFloat(q.dataset.answer);
+    const tol = q.dataset.tol !== undefined ? parseFloat(q.dataset.tol) : 0.01;
+    let traps = [];
+    try { traps = JSON.parse(q.dataset.traps || '[]'); } catch (e) { traps = []; }
+    function submit() {
+      if (q.classList.contains('answered')) return;
+      const v = qzParseNum(input.value);
+      if (isNaN(v)) { hint.textContent = 'Écris un nombre (par exemple 12 ou −3,5).'; input.focus(); return; }
+      hint.textContent = '';
+      const ok = Math.abs(v - ans) <= tol + 1e-9;
+      input.disabled = true; btn.disabled = true;
+      input.classList.add(ok ? 'ok' : 'ko');
+      if (!ok) {
+        const t = traps.find(t => Math.abs(v - t.v) <= tol + 1e-9);
+        const base = q.querySelector('.quiz-feedback.ko .fb-text');
+        if (t && base) qzSetKo(q, '<strong>' + t.msg + '</strong> ' + (base.dataset.orig || base.innerHTML));
+      }
+      done(q, ok);
+    }
+    btn.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
+    return () => { input.value = ''; input.disabled = false; input.classList.remove('ok', 'ko'); btn.disabled = false; hint.textContent = ''; };
+  },
+
+  fill(q, done) {
+    const sels = Array.from(q.querySelectorAll('select.quiz-blank'));
+    const btn = q.querySelector('.quiz-validate');
+    const hint = q.querySelector('.quiz-hint');
+    btn.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      if (sels.some(s => !s.value)) { hint.textContent = 'Choisis une réponse dans chaque liste avant de valider.'; return; }
+      hint.textContent = '';
+      let all = true;
+      sels.forEach(s => {
+        const ok = s.value === s.dataset.answer;
+        s.classList.add(ok ? 'ok' : 'ko'); s.disabled = true;
+        if (!ok) all = false;
+      });
+      btn.disabled = true;
+      done(q, all);
+    });
+    return () => { sels.forEach(s => { s.value = ''; s.disabled = false; s.classList.remove('ok', 'ko'); }); btn.disabled = false; hint.textContent = ''; };
+  },
+
+  order(q, done) {
+    const list = q.querySelector('.quiz-order');
+    const btn = q.querySelector('.quiz-validate');
+    const originals = Array.from(list.children);
+    let seed = (parseInt(q.dataset.qi || '1', 10) || 1) * 7 + 3;
+    function layout() {
+      let arr = qzShuffle(originals, seed);
+      const n = originals.length;
+      const same = arr.every((li, i) => li === originals[i]);
+      const rev = arr.every((li, i) => li === originals[n - 1 - i]);
+      if (same || rev) arr = originals.slice(2).concat(originals.slice(0, 2));
+      arr.forEach(li => list.appendChild(li));
+    }
+    layout();
+    list.addEventListener('click', e => {
+      const b = e.target.closest('.ord-btn');
+      if (!b || q.classList.contains('answered')) return;
+      const li = b.closest('li');
+      if (b.classList.contains('ord-up')) { const p = li.previousElementSibling; if (p) list.insertBefore(li, p); }
+      else { const n = li.nextElementSibling; if (n) list.insertBefore(n, li); }
+      b.focus();
+    });
+    btn.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      let all = true;
+      Array.from(list.children).forEach((li, i) => {
+        const ok = parseInt(li.dataset.pos, 10) === i + 1;
+        li.classList.add(ok ? 'ok' : 'ko');
+        if (!ok) all = false;
+      });
+      list.querySelectorAll('.ord-btn').forEach(b => b.disabled = true);
+      btn.disabled = true;
+      done(q, all);
+    });
+    return () => {
+      Array.from(list.children).forEach(li => li.classList.remove('ok', 'ko'));
+      list.querySelectorAll('.ord-btn').forEach(b => b.disabled = false);
+      btn.disabled = false; seed += 5; layout();
+    };
+  },
+
+  open(q, done) {
+    const ta = q.querySelector('.quiz-open-input');
+    const reveal = q.querySelector('.quiz-reveal');
+    const model = q.querySelector('.quiz-model');
+    const selfBtns = Array.from(q.querySelectorAll('.quiz-self-btn'));
+    const need = parseInt(q.dataset.min || '12', 10);
+    ta.addEventListener('input', () => { reveal.disabled = ta.value.trim().length < need; });
+    reveal.addEventListener('click', () => {
+      model.hidden = false; reveal.disabled = true; ta.readOnly = true;
+    });
+    selfBtns.forEach(b => b.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      selfBtns.forEach(x => x.disabled = true);
+      b.classList.add('chosen');
+      done(q, b.dataset.self === '1');
+    }));
+    return () => {
+      ta.value = ''; ta.readOnly = false; reveal.disabled = true; model.hidden = true;
+      selfBtns.forEach(x => { x.disabled = false; x.classList.remove('chosen'); });
+    };
+  }
+};
+QUIZ_TYPES.match = QUIZ_TYPES.fill;
+
 function initQuizBlock(block) {
   const questions = Array.from(block.querySelectorAll('.quiz-q'));
   const total = questions.length;
@@ -1279,6 +2054,8 @@ function initQuizBlock(block) {
   const progressBar = block.querySelector('.quiz-progress');
   const resultMsg = block.querySelector('.quiz-result-msg');
   const resetBtn = block.querySelector('.quiz-reset');
+  const doneMsg = block.dataset.done || 'la section est maîtrisée.';
+  const rereadMsg = block.dataset.reread || 'cette section';
   progressBar.max = total;
 
   function updateScore() {
@@ -1295,9 +2072,9 @@ function initQuizBlock(block) {
       const upIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13l3-3 2 2 3-3.5"/></svg>';
       const bookIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg>';
       let icon, msg, variant;
-      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — la section est maîtrisée.`; variant = 'great'; }
+      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — ${doneMsg}`; variant = 'great'; }
       else if (pct >= 70) { icon = upIcon; msg = `Bon travail : ${correct} / ${total}. Relis les explications des questions manquées.`; variant = 'good'; }
-      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de revoir cette section avant de continuer.`; variant = 'poor'; }
+      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de relire ${rereadMsg} avant de continuer.`; variant = 'poor'; }
       resultMsg.classList.add(variant);
       resultMsg.innerHTML = `${icon}<span>${msg}</span>`;
       resetBtn.style.display = 'inline-block';
@@ -1307,44 +2084,29 @@ function initQuizBlock(block) {
     }
   }
 
+  function conclude(q, isCorrect) {
+    if (q.classList.contains('answered')) return;
+    q.classList.add('answered');
+    q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
+    const fb = q.querySelector(isCorrect ? '.quiz-feedback.ok' : '.quiz-feedback.ko');
+    if (fb) fb.classList.add('show');
+    updateScore();
+  }
+
+  const resets = [];
   questions.forEach(q => {
-    const options = Array.from(q.querySelectorAll('.quiz-option'));
-    const fbOk = q.querySelector('.quiz-feedback.ok');
-    const fbKo = q.querySelector('.quiz-feedback.ko');
-
-    options.forEach(opt => {
-      opt.addEventListener('click', () => {
-        if (q.classList.contains('answered')) return;
-
-        const isCorrect = opt.dataset.correct === 'true';
-        q.classList.add('answered');
-        q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
-
-        options.forEach(o => {
-          o.disabled = true;
-          if (o.dataset.correct === 'true') {
-            o.classList.add(o === opt ? 'correct' : 'reveal');
-          } else if (o === opt) {
-            o.classList.add('wrong');
-          }
-        });
-
-        (isCorrect ? fbOk : fbKo).classList.add('show');
-        updateScore();
-      });
-    });
+    const init = QUIZ_TYPES[q.dataset.type || 'mcq'];
+    if (init) resets.push(init(q, conclude));
   });
 
   block.addEventListener('reset-quiz', () => {
     questions.forEach(q => {
       q.classList.remove('answered');
       delete q.dataset.gotCorrect;
-      q.querySelectorAll('.quiz-option').forEach(o => {
-        o.disabled = false;
-        o.classList.remove('correct', 'wrong', 'reveal');
-      });
       q.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+      qzRestoreFb(q);
     });
+    resets.forEach(r => r && r());
     updateScore();
   });
 
@@ -1352,6 +2114,24 @@ function initQuizBlock(block) {
 }
 
 document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+
+// ── Pauses-réflexion (dans le fil du cours) ─────────────────
+function initReflect(root) {
+  root.querySelectorAll('.reflect').forEach(box => {
+    const ta = box.querySelector('.reflect-input');
+    const btn = box.querySelector('.reflect-btn');
+    const ans = box.querySelector('.reflect-answer');
+    const hint = box.querySelector('.reflect-hint');
+    ta.addEventListener('input', () => { if (!btn.dataset.done) btn.disabled = ta.value.trim().length < 12; });
+    btn.addEventListener('click', () => {
+      ans.hidden = false; btn.disabled = true; btn.dataset.done = '1';
+      btn.textContent = 'Piste affichée'; ta.readOnly = true;
+      if (hint) hint.textContent = 'Compare avec ta réponse : as-tu les mêmes idées principales?';
+    });
+  });
+}
+initReflect(document);
+
 
 // ── Section 2 : laboratoires interactifs ────────────────────
 const MRU_FMT=v=>(Math.round(v*10)/10).toString().replace('-','\u2212').replace('.',',');
