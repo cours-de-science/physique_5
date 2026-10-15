@@ -318,9 +318,17 @@
   .vec::after { content: ""; position: absolute; right: .02em; top: calc(var(--vy) - .06em); width: .16em; height: .16em; box-sizing: border-box; border-top: .075em solid currentColor; border-right: .075em solid currentColor; transform: rotate(45deg); }
 
   /* === INTERACTIONS ÉLARGIES : pauses-réflexion + nouveaux types de questions === */
-  .reflect { margin: 26px 0; border: 1.5px solid var(--indigo-light); border-left-width: 5px; border-radius: 0 10px 10px 0; background: #f3f8fb; padding: 16px 20px 18px; }
-  .reflect-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo-mid); display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+  .reflect { margin: 26px 0; border: 1.5px solid var(--indigo-light); border-left-width: 5px; border-radius: 0 10px 10px 0; background: #f3f8fb; padding: 0; overflow: hidden; }
+  .reflect-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo-mid); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
   .reflect-label .icon-sm { width: 16px; height: 16px; flex-shrink: 0; }
+  /* Pause-réflexion rabattable : une barre cliquable, le contenu se déplie dessous (même mécanisme que les encadrés Zoom / Pour aller plus loin) */
+  .reflect-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: none; border: none; cursor: pointer; padding: 13px 20px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .reflect-bar:hover { background: rgba(79,144,184,.12); }
+  .reflect-subtitle { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .reflect-bar .chevron-r { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--indigo-mid); margin-top: 1px; }
+  .reflect-bar[aria-expanded="true"] .chevron-r { transform: rotate(180deg); }
+  .reflect-body { display: none; padding: 4px 20px 18px; }
+  .reflect-bar[aria-expanded="true"] + .reflect-body { display: block; }
   .reflect-q { font-size: 15px; font-weight: 500; color: var(--indigo-dark); line-height: 1.55; margin: 0 0 12px; }
   .reflect-input, .quiz-open-input { display: block; width: 100%; box-sizing: border-box; font: inherit; font-size: 14px; line-height: 1.5; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); resize: vertical; min-height: 78px; }
   .reflect-input:read-only, .quiz-open-input:read-only { background: #f6f9fb; color: var(--muted); }
@@ -393,7 +401,8 @@
   .quiz-self-btn.chosen { opacity: 1; background: var(--indigo-mid); color: #fff; }
 
   @media (max-width: 768px) {
-    .reflect { padding: 14px 14px 16px; }
+    .reflect-bar { padding: 12px 14px; }
+    .reflect-body { padding: 4px 14px 16px; }
     .qm-row .quiz-blank { flex: 1 1 100%; }
     .quiz-num-input { width: 120px; }
   }
@@ -521,7 +530,11 @@
           <p>En physique, le mot « corps » peut désigner à peu près n'importe quel objet en mouvement : une planète aussi bien qu'un wagon de métro ou une bille. Pour simplifier l'analyse, on traite généralement ces corps comme des particules ponctuelles — des objets mathématiques sans dimension. Ce qui compte, c'est la position qu'ils occupent, pas leur forme ni leur taille.</p>
 
           <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">La Terre est-elle un point?</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">La Terre est-elle un « point »? Compare deux situations : (1) décrire le trajet de la Terre autour du Soleil; (2) décrire où se trouve Montréal sur la Terre. Dans laquelle peut-on traiter la Terre comme une particule ponctuelle, et pourquoi?</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -529,6 +542,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p><strong>(1) Oui.</strong> La Terre mesure environ 12 700 km de diamètre, mais elle est à environ 150 millions de km du Soleil : sa taille est minuscule devant les distances en jeu, on peut donc la réduire à un point.</p><p><strong>(2) Non.</strong> Ici, c'est justement un endroit <em>sur</em> la Terre qui nous intéresse : sa taille et sa forme comptent.</p><p>Un corps peut être traité comme un point quand ses dimensions sont négligeables par rapport aux distances du problème.</p>
             </div>
+          </div>
           </div>
 
 
@@ -648,7 +662,11 @@
           </div>
 
                     <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">« Je suis à 5 km »</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">Un ami t'écrit : « Je suis à 5 km. » Que te manque-t-il pour savoir où il se trouve vraiment?</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -656,6 +674,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p>À 5 km <strong>de quoi</strong>? Il manque un point de référence — l'<em>origine</em> — sans lequel « 5 km » ne situe rien.</p><p>Il manque aussi le <strong>sens</strong> : 5 km vers où? C'est le rôle de l'<em>orientation</em> de l'axe.</p><p>Une position n'a de sens que par rapport à un système de référence : c'est exactement ce qu'on fixe en choisissant une origine et une orientation.</p>
             </div>
+          </div>
           </div>
 
           <div class="note-box">
@@ -753,7 +772,11 @@
           <p>Le signe de Δx renseigne sur le sens du mouvement par rapport à l'orientation choisie pour l'axe : un déplacement positif indique un mouvement vers les x positifs, un déplacement négatif, un mouvement vers les x négatifs. Sa valeur absolue indique, elle, l'ampleur du déplacement — à quel point la position a changé.</p>
 
           <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Et si on inverse l'axe?</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">L'axe est orienté vers l'est et un corps a un déplacement Δx = −3 m. Dans quelle direction s'est-il déplacé? Et si l'axe avait été orienté vers l'ouest, que vaudrait Δx pour ce même mouvement?</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -761,6 +784,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p>Avec l'axe vers l'est, Δx négatif signifie un mouvement vers les x négatifs : <strong>3 m vers l'ouest</strong>.</p><p>Si l'axe pointe vers l'ouest, ce même mouvement (3 m vers l'ouest) va vers les x positifs : <strong>Δx = +3 m</strong>.</p><p>Le mouvement n'a pas changé. Seul le signe a changé, parce qu'il dépend de l'orientation choisie pour l'axe.</p>
             </div>
+          </div>
           </div>
 
 
@@ -786,7 +810,7 @@
                   <text x="160.0" y="219" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)" text-anchor="middle">Δx</text>
                   </svg>
               </div>
-              <figcaption>Figure 1.4a — Cas général : le déplacement Δ<span class="vec lc">s</span> relie l'extrémité du vecteur position initiale <span class="vec lc">s</span><sub>i</sub> à celle du vecteur position finale <span class="vec lc">s</span><sub>f</sub>.</figcaption>
+              <figcaption>Figure 1.4a — Cas général : le déplacement Δ<span class="vec lc">s</span> relie l'extrémité du vecteur position initiale <span class="vec lc">s</span><sub>i</sub> à celle du vecteur position finale <span class="vec lc">s</span><sub>f</sub>. Le Δx marqué sous l'axe n'en est que la composante horizontale.</figcaption>
             </div>
 
             <div class="fig-block">
@@ -805,7 +829,7 @@
                   <text x="140" y="20" font-family="Inter, sans-serif" font-size="13" fill="var(--flame)" text-anchor="middle">Δx</text>
                 </svg>
               </div>
-              <figcaption>Figure 1.4b — Cas rectiligne : les deux positions se trouvent sur le même axe, le vecteur déplacement s'y « aplatit » complètement — Δx suffit alors à tout décrire, sans notation vectorielle.</figcaption>
+              <figcaption>Figure 1.4b — Cas rectiligne : un autre mouvement, dont les deux positions se trouvent déjà sur un même axe. Le vecteur déplacement n'a alors qu'une seule composante : Δx suffit à tout décrire, sans notation vectorielle. Les deux figures ne montrent donc pas un même mouvement vu sous deux angles : la 1.4b est le cas particulier où Δy = 0.</figcaption>
             </div>
           </div>
 
@@ -845,7 +869,11 @@
           </div>
 
                     <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Que nous apprend le déplacement?</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">Deux wagons partent de la station C et arrivent à la station E, située 2,0 km plus loin sur l'axe. Le premier roule en ligne droite; le second fait un grand détour. Leur déplacement est pourtant le même. Un ami conclut : « Alors le déplacement ne nous apprend presque rien sur le trajet. » A-t-il raison? Qu'est-ce que le déplacement nous dit, et qu'est-ce qu'il ne nous dit pas?</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -853,6 +881,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p>Il a <strong>en partie</strong> raison. Le déplacement donne le <em>bilan</em> du mouvement : de quelle position à quelle position, dans quel sens et de combien. C'est très utile pour résumer un changement de position.</p><p>Mais il ne dit <strong>rien du chemin</strong> : on ne sait pas si le corps a fait un détour, un aller-retour ou s'il est allé tout droit. C'est précisément ce manque qui justifie une nouvelle grandeur : la distance parcourue.</p>
             </div>
+          </div>
           </div>
 
           <p>C'est précisément cette limite du déplacement — son indifférence totale au chemin suivi — qui appelle une nouvelle grandeur : la distance parcourue, qui fait l'objet de la prochaine sous-section.</p>
@@ -962,7 +991,11 @@
           <p>Pour le wagon 1, L = |2,0 km| = 2,0 km : la distance parcourue égale le déplacement, puisqu'il n'y a qu'un seul segment. Pour le wagon 2, L = |−2,0 km| + |4,0 km| = 6,0 km : une distance trois fois plus grande que son déplacement, malgré un déplacement identique à celui du wagon 1. C'est bien la preuve que déplacement et distance parcourue sont deux grandeurs distinctes, qui ne coïncident que dans le cas particulier d'un mouvement en une seule direction.</p>
 
           <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Un troisième wagon</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">Sur un axe orienté vers la droite, la station E est à 2,0 km à droite de la station C. Le wagon 1 roule directement de C à E. Le wagon 2 fait un détour : il recule de 2,0 km jusqu'à la station A, puis roule 4,0 km jusqu'à E. Un troisième wagon roule de C jusqu'à E, puis revient à C. Sans calculer en détail : quel est le déplacement du troisième wagon? Sa distance parcourue? Compare avec les wagons 1 et 2.</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -970,6 +1003,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p>Il termine là où il a commencé : son déplacement est <strong>nul</strong> (Δx = 0 km).</p><p>Il a roulé 2,0 km à l'aller et 2,0 km au retour : sa distance parcourue est <strong>L = 4,0 km</strong>.</p><p>Un déplacement nul n'empêche donc pas une longue distance parcourue : les deux grandeurs répondent à des questions différentes.</p><p>Comparaison : le wagon 1 a Δ<em>x</em> = +2,0 km et <em>L</em> = 2,0 km; le wagon 2 a Δ<em>x</em> = +2,0 km et <em>L</em> = 6,0 km; le troisième a Δ<em>x</em> = 0 km et <em>L</em> = 4,0 km. Trois trajets, trois bilans différents.</p>
             </div>
+          </div>
           </div>
 
 
@@ -1086,7 +1120,11 @@
           </div>
         
           <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Déplacement ou distance parcourue?</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">Pour chaque question, dis si tu utiliserais le <strong>déplacement</strong> ou la <strong>distance parcourue</strong> : (a) la quantité d'essence consommée pendant un trajet; (b) à quelle distance en ligne droite on se retrouve de son point de départ; (c) l'usure des semelles d'un coureur.</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -1094,6 +1132,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p><strong>(a) Distance parcourue.</strong> L'essence dépend du chemin réellement roulé, pas seulement du départ et de l'arrivée.</p><p><strong>(b) Déplacement</strong> (sa valeur absolue) : seules comptent la position de départ et la position d'arrivée.</p><p><strong>(c) Distance parcourue.</strong> Les semelles s'usent à chaque pas, même si le coureur finit là où il a commencé.</p>
             </div>
+          </div>
           </div>
 
           <div class="quiz-block mini" data-quiz="s1-3" data-done="la sous-section 1.3 est maîtrisée." data-reread="la sous-section 1.3">
@@ -1323,7 +1362,11 @@
           <div class="iv-fb" id="iv-fb" aria-live="polite">Clique sur un intervalle pour voir si le choix est approprié.</div>
 
           <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Choisir un intervalle de temps</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">Tu veux décrire (a) la croissance d'un haricot, (b) le vol d'un colibri, (c) le trajet d'un avion de Montréal à Vancouver. Quel intervalle de temps choisirais-tu pour chacun? Quelle règle guide ton choix?</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -1331,6 +1374,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p>Par exemple : (a) <strong>quelques heures ou un jour</strong> — une plante change très lentement; (b) <strong>une fraction de seconde</strong> — les ailes et le corps bougent très vite; (c) <strong>quelques minutes à une heure</strong>.</p><p>La règle : l'intervalle doit être assez court pour <em>voir</em> le corps changer de position, mais assez long pour éviter une avalanche de mesures inutiles. Il dépend donc de la rapidité du mouvement étudié.</p>
             </div>
+          </div>
           </div>
 
         </div>
@@ -1362,7 +1406,11 @@
           </div>
         
           <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Et si l'enfant marchait deux fois plus vite?</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">Un enfant marche en ligne droite à vitesse constante : il est à 0 m à t = 0 s, à 37,5 m à 50 s, à 75 m à 100 s et à 112,5 m à 150 s. S'il marchait deux fois plus vite, qu'est-ce qui changerait dans le tableau de sa position en fonction du temps? Et sur le graphique? Serait-ce encore un mouvement rectiligne uniforme?</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -1370,6 +1418,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p>Pour les mêmes instants (0, 50, 100, 150 s), les positions <strong>doubleraient</strong> : 0; 75; 150; 225 m.</p><p>Sur le graphique, la droite serait <strong>deux fois plus inclinée</strong>.</p><p>Ce serait encore un MRU : la vitesse est différente, mais elle reste constante, donc le graphique reste une seule droite.</p>
             </div>
+          </div>
           </div>
 
           <div class="quiz-block mini" data-quiz="s2-2" data-done="la sous-section 2.2 est maîtrisée." data-reread="la sous-section 2.2">
@@ -1430,7 +1479,11 @@
           <p>Pour représenter une suite de mouvements rectilignes uniformes différents, le graphique de la position en fonction du temps est constitué de <strong>plusieurs segments de droite</strong>. Chaque segment est un MRU. L'exemple suivant te montre comment construire un tel graphique, étape par étape.</p>
 
           <div class="reflect">
-            <div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div>
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Avant l'exemple, faisons ceci</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body">
             <p class="reflect-q">Avant de voir l'exemple : pourquoi ne peut-on pas représenter « marche, arrêt, puis jogging » par une seule droite sur un graphique de la position en fonction du temps?</p>
             <textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea>
             <div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div>
@@ -1438,6 +1491,7 @@
               <div class="reflect-answer-label">Piste de réponse</div>
               <p>Une droite correspond à <strong>une seule vitesse, toujours la même</strong>. Ici, la vitesse change : le corps marche, s'arrête (vitesse nulle), puis joggue.</p><p>Chaque changement de vitesse change l'inclinaison de la courbe : il faut donc <strong>un segment de droite par étape</strong>, et chaque segment est un MRU.</p>
             </div>
+          </div>
           </div>
 
           <div class="note-box">
@@ -1695,7 +1749,13 @@
           <div class="exemple-box" id="exemple-cycliste"><div class="exemple-header"><div class="exemple-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg> Exemple — La cycliste <span class="exemple-subtitle">Appliquer v = Δx / Δt, signe compris</span></div></div><div class="exemple-body"><p>Une cycliste est à <em>x</em><sub>1</sub> = −30 m à <em>t</em><sub>i</sub> = 4 s, puis à <em>x</em><sub>2</sub> = 78 m à <em>t</em><sub>f</sub> = 13 s. Plus tard, elle revient de 78 m (à 13 s) jusqu'à 6 m (à 21 s). Quelle est sa vitesse dans chaque trajet?</p>
           <p><strong>Aller :</strong> <em>v</em> = (78 − (−30)) / (13 − 4) = 108 m / 9 s = <strong>+12 m/s</strong>.</p><p><strong>Retour :</strong> <em>v</em> = (6 − 78) / (21 − 13) = −72 m / 8 s = <strong>−9 m/s</strong>.</p>
           <p>Le « − » ne signifie pas qu'elle roule moins vite : à l'aller, elle va plus vite (12 contre 9 m/s). Il indique seulement qu'au retour, elle va vers les <em>x</em> négatifs.</p></div></div>
-          <div class="reflect"><div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div><p class="reflect-q">Une automobile part de chez toi, fait 100 km pour aller visiter un ami, puis revient chez toi. Le tout dure 2 h. Que donnent d / Δt et Δx / Δt? Pourquoi les deux résultats diffèrent-ils?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p>d / Δt = 100 km / 2 h = <strong>50 km/h</strong> : la distance parcourue compte tout le chemin, même l'aller-retour.</p><p>Δx / Δt = 0 / 2 h = <strong>0 km/h</strong> : la position finale est la position initiale, donc le déplacement est nul. Les deux mesures ne répondent pas à la même question : « combien de chemin a-t-on fait? » contre « de combien la position a-t-elle changé? ».</p></div></div>
+          <div class="reflect">
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Un aller-retour de 100 km</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body"><p class="reflect-q">Une automobile part de chez toi, fait 100 km pour aller visiter un ami, puis revient chez toi. Le tout dure 2 h. Que donnent d / Δt et Δx / Δt? Pourquoi les deux résultats diffèrent-ils?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p>d / Δt = 100 km / 2 h = <strong>50 km/h</strong> : la distance parcourue compte tout le chemin, même l'aller-retour.</p><p>Δx / Δt = 0 / 2 h = <strong>0 km/h</strong> : la position finale est la position initiale, donc le déplacement est nul. Les deux mesures ne répondent pas à la même question : « combien de chemin a-t-on fait? » contre « de combien la position a-t-elle changé? ».</p></div></div>
+          </div>
           <div class="quiz-block mini" data-quiz="s3-1" data-done="la sous-section 3.1 est maîtrisée." data-reread="la sous-section 3.1"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 3.1<span class="quiz-block-subtitle">La vitesse · 3 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions rapides pour vérifier que tu as bien compris cette sous-section. Écris tes réponses avec tes mots avant de regarder les pistes.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 3</span><progress class="quiz-progress" value="0" max="3"></progress></div><div class="quiz-q" data-qi="0" data-type="num" data-answer="6" data-tol="0.01" data-traps="[{&quot;v&quot;: 3.75, &quot;msg&quot;: &quot;Tu as divisé par t_f = 8 s. Il faut diviser par la durée Δt = 8 − 3 = 5 s.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Un chariot est à x = 20 m à t = 3 s et à x = 50 m à t = 8 s. Quelle est sa vitesse?</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m/s</span><button class="quiz-validate" type="button">Valider</button></div>
 <div class="quiz-hint" aria-live="polite"></div>
 <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. v = (50 − 20) / (8 − 3) = 30 / 5 = 6 m/s.</span></div>
@@ -1727,7 +1787,13 @@
           <div class="exemple-box" id="exemple-segments"><div class="exemple-header"><div class="exemple-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg> Exemple — Lire trois vitesses <span class="exemple-subtitle">Calculer la pente de chaque segment</span></div></div><div class="exemple-body"><p>Un graphique de la position en fonction du temps (celui du laboratoire ci-dessus) passe par (0 s; 0 m), (4 s; 8 m), (6 s; 8 m) et (10 s; −4 m). Quelle est la vitesse sur chaque segment?</p>
           <p><strong>0 → 4 s :</strong> <em>v</em> = (8 − 0) / (4 − 0) = <strong>+2 m/s</strong>. <strong>4 → 6 s :</strong> <em>v</em> = (8 − 8) / (6 − 4) = <strong>0 m/s</strong>, le corps est immobile. <strong>6 → 10 s :</strong> <em>v</em> = (−4 − 8) / (10 − 6) = −12 m / 4 s = <strong>−3 m/s</strong>.</p>
           <p>Le dernier segment est le plus incliné : c'est celui où la valeur absolue de la vitesse est la plus grande (3 m/s), même si sa pente est négative.</p></div></div>
-          <div class="reflect"><div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div><p class="reflect-q">Deux segments montent tous les deux, mais le premier est deux fois plus incliné que le second. Que peux-tu dire des deux mouvements? Et si le premier montait et le second descendait avec la même inclinaison?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p>Les deux corps vont vers les <em>x</em> positifs, mais le premier a une vitesse <strong>deux fois plus grande</strong>.</p><p>Si l'un montait et l'autre descendait avec la même inclinaison, leurs vitesses auraient la <strong>même valeur absolue</strong> et des <strong>signes opposés</strong> : même rapidité, sens contraires.</p></div></div>
+          <div class="reflect">
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Deux segments qui montent</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body"><p class="reflect-q">Deux segments montent tous les deux, mais le premier est deux fois plus incliné que le second. Que peux-tu dire des deux mouvements? Et si le premier montait et le second descendait avec la même inclinaison?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p>Les deux corps vont vers les <em>x</em> positifs, mais le premier a une vitesse <strong>deux fois plus grande</strong>.</p><p>Si l'un montait et l'autre descendait avec la même inclinaison, leurs vitesses auraient la <strong>même valeur absolue</strong> et des <strong>signes opposés</strong> : même rapidité, sens contraires.</p></div></div>
+          </div>
           <div class="quiz-block mini" data-quiz="s3-2" data-done="la sous-section 3.2 est maîtrisée." data-reread="la sous-section 3.2"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 3.2<span class="quiz-block-subtitle">La pente du graphique · 4 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions rapides pour vérifier que tu as bien compris cette sous-section. Écris tes réponses avec tes mots avant de regarder les pistes.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 4</span><progress class="quiz-progress" value="0" max="4"></progress></div><div class="quiz-q" data-qi="0" data-type="num" data-answer="-2" data-tol="0.01" data-traps="[{&quot;v&quot;: 2, &quot;msg&quot;: &quot;Le signe compte : le segment descend, la vitesse est négative.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Un segment du graphique x(t) descend de (t = 2 s; x = 10 m) à (t = 6 s; x = 2 m). Quelle est la vitesse sur ce segment?</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m/s</span><button class="quiz-validate" type="button">Valider</button></div>
 <div class="quiz-hint" aria-live="polite"></div>
 <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. v = (2 − 10) / (6 − 2) = −8 / 4 = −2 m/s.</span></div>
@@ -1750,7 +1816,13 @@
         <div class="subsection" id="unites-vitesse"><div class="subsection-title">3.3 Les unités de la vitesse</div>
           <p>Une vitesse est un rapport « longueur ÷ temps », donc son unité est toujours une unité de longueur divisée par une unité de temps. L'unité du SI est le <strong>mètre par seconde (m/s)</strong>, mais le km/h reste très courant dans la vie de tous les jours.</p>
           <div class="note-box"><button class="note-bar" aria-expanded="false" onclick="toggleNote(this)"><span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg> Pour aller plus loin<span class="note-subtitle">Pourquoi 1 m/s = 3,6 km/h?</span></span><svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="note-body"><p>Convertis séparément le numérateur et le dénominateur : 1 m = 10<sup>−3</sup> km et 1 s = 1/3 600 h. Donc 1 m/s = 10<sup>−3</sup> km / (1/3 600 h) = 3 600 × 10<sup>−3</sup> km/h = <strong>3,6 km/h</strong>.</p><p>Pour passer de km/h à m/s, on <strong>divise</strong> par 3,6; pour passer de m/s à km/h, on <strong>multiplie</strong> par 3,6. Exemple : 90 km/h ÷ 3,6 = 25 m/s.</p></div></div>
-          <div class="reflect"><div class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion</div><p class="reflect-q">Un nombre en m/s est-il plus grand ou plus petit que le même mouvement exprimé en km/h? Justifie en comparant les unités, sans faire de calcul.</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p><strong>Plus petit.</strong> Le mètre est plus petit que le kilomètre (÷ 1 000) mais la seconde est encore plus petite que l'heure (÷ 3 600) : en 1 s on parcourt peu de mètres, donc le nombre en m/s est plus petit. Cela confirme qu'il faut diviser par 3,6 pour convertir des km/h en m/s.</p></div></div>
+          <div class="reflect">
+            <button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)">
+              <span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Comparer m/s et km/h</span></span>
+              <svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="reflect-body"><p class="reflect-q">Un nombre en m/s est-il plus grand ou plus petit que le même mouvement exprimé en km/h? Justifie en comparant les unités, sans faire de calcul.</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p><strong>Plus petit.</strong> Le mètre est plus petit que le kilomètre (÷ 1 000) mais la seconde est encore plus petite que l'heure (÷ 3 600) : en 1 s on parcourt peu de mètres, donc le nombre en m/s est plus petit. Cela confirme qu'il faut diviser par 3,6 pour convertir des km/h en m/s.</p></div></div>
+          </div>
           <div class="quiz-block mini" data-quiz="s3-3" data-done="la sous-section 3.3 est maîtrisée." data-reread="la sous-section 3.3"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 3.3<span class="quiz-block-subtitle">Les unités · 3 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions rapides pour vérifier que tu as bien compris cette sous-section. Écris tes réponses avec tes mots avant de regarder les pistes.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 3</span><progress class="quiz-progress" value="0" max="3"></progress></div><div class="quiz-q" data-qi="0" data-type="num" data-answer="20" data-tol="0.01" data-traps="[{&quot;v&quot;: 259.2, &quot;msg&quot;: &quot;Tu as multiplié par 3,6 : c&#x27;est l&#x27;inverse pour aller vers les m/s.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Convertis 72 km/h en m/s.</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m/s</span><button class="quiz-validate" type="button">Valider</button></div>
 <div class="quiz-hint" aria-live="polite"></div>
 <div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. 72 ÷ 3,6 = 20 m/s.</span></div>
@@ -1958,6 +2030,12 @@ function doSearch(query) {
   });
 
   countEl.textContent = count ? `${count} résultat${count>1?'s':''}` : 'Aucun résultat';
+
+  // Ouvre les pauses-réflexion repliées qui contiennent un résultat
+  contentEl.querySelectorAll('.reflect-body mark.sh').forEach(m => {
+    const bar = m.closest('.reflect').querySelector('.reflect-bar');
+    if (bar) bar.setAttribute('aria-expanded', 'true');
+  });
 
   document.querySelectorAll('.section-card').forEach(card => {
     if (card.querySelector('mark.sh')) {
