@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 2 — Le mouvement rectiligne uniformément accéléré — Physique Sec. 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette « banc d'optique » — bleu nuit + cyan laser, la même que celle
+       établie dans le module 1 (notions_de_base.html, chapitre1.html), afin
+       que l'ensemble du cours de Physique Sec. 5 garde une identité visuelle
+       cohérente d'un module à l'autre. */
+    --indigo-dark: #0d1b2e;
+    --indigo-mid:  #163a5c;
+    --indigo-light:#4f90b8;
+    --amber:       #2bc4d4;
+    --amber-dim:   #1f8fa0;
+    --flame:       #dd4a3a;
+    --bg:          #eef2f5;
+    --surface:     #ffffff;
+    --text:        #16212c;
+    --muted:       #5c6b78;
+    --border:      #d7e0e6;
+    --sidebar-w:   268px;
+    --mono:        'JetBrains Mono', monospace;
+    /* Motif signature du module 2 : une « traînée de mouvement » qui va du
+       bleu nuit (position initiale) au cyan (position finale) — l'équivalent,
+       pour la mécanique, du motif du spectre visible utilisé en optique. */
+    --trace:        linear-gradient(90deg, #163a5c 0%, #2a5f86 30%, #3f86a8 55%, #2bc4d4 80%, #7fe3ec 100%);
+    --trace-pastel: linear-gradient(100deg, #9db3c9 0%, #a9c7d8 30%, #a9dde3 60%, #bdeef2 100%);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar { width: var(--sidebar-w); background: var(--indigo-dark); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; display: flex; flex-direction: column; z-index: 100; transition: transform .3s ease; }
+  .sidebar-header { background: var(--trace-pastel); padding: 20px 18px 16px; flex-shrink: 0; }
+  .back-to-index { display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--indigo-dark); text-decoration: none; opacity: .65; margin-bottom: 12px; transition: opacity .15s; }
+  .back-to-index:hover { opacity: 1; text-decoration: underline; }
+  .sidebar-header .label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-dark); }
+  .sidebar-header .chap-num { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 800; line-height: 1; color: var(--indigo-dark); }
+  .sidebar-header .chap-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-dark); margin-top: 4px; }
+  .toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--indigo-light); padding: 20px 18px 8px; }
+  #sidebar nav ul { list-style: none; }
+  #sidebar nav ul li a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); text-decoration: none; border-left: 3px solid transparent; transition: background .15s, color .15s, border-color .15s; line-height: 1.35; }
+  #sidebar nav ul li a:hover, #sidebar nav ul li a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--amber); }
+  #sidebar nav ul li a .num { font-family: var(--mono); font-size: 11px; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+  .sidebar-footer { margin-top: auto; padding: 16px 18px; font-size: 11px; color: rgba(255,255,255,.3); border-top: 1px solid rgba(255,255,255,.1); position: relative; }
+  .sidebar-footer button { background: none; border: none; cursor: pointer; font-size: 11px; color: rgba(255,255,255,.3); padding: 0; text-align: left; width: 100%; transition: color .15s; }
+  .sidebar-footer button:hover { color: rgba(255,255,255,.6); }
+  .attrib-popover { display: none; position: absolute; bottom: 60px; left: 14px; width: 230px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.18); padding: 14px 16px; font-size: 12px; color: var(--text); line-height: 1.6; z-index: 200; }
+  .attrib-popover::after { content: ''; position: absolute; bottom: -7px; left: 20px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 2px 2px 4px rgba(0,0,0,.08); }
+  .attrib-popover.visible { display: block; }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+
+  .hero { background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-mid) 60%, var(--indigo-light) 100%); padding: 60px 56px 48px; color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: 'Δ'; position: absolute; right: 40px; top: -30px; font-family: 'Barlow Condensed', sans-serif; font-size: 260px; font-weight: 800; color: rgba(255,255,255,.07); line-height: 1; pointer-events: none; }
+  .hero .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px, 5vw, 56px); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 20px; }
+  .hero p { max-width: 600px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.82); }
+
+  .search-bar-wrap { background: var(--indigo-dark); padding: 14px 56px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid var(--amber); }
+  .search-bar-wrap label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.5); white-space: nowrap; letter-spacing: .06em; text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif; }
+  #search-input { flex: 1; max-width: 440px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 8px 14px; font-size: 14px; color: #fff; font-family: 'Inter', sans-serif; outline: none; transition: background .2s, border-color .2s; }
+  #search-input::placeholder { color: rgba(255,255,255,.4); }
+  #search-input:focus { background: rgba(255,255,255,.16); border-color: var(--amber); }
+  #search-count { font-size: 12px; color: var(--amber); font-family: var(--mono); min-width: 90px; }
+
+  .content { padding: 48px 56px 80px; max-width: 880px; }
+
+  /* Carte d'introduction */
+  .intro-card { background: linear-gradient(120deg, var(--indigo-dark), var(--indigo-mid)); border-radius: 10px; padding: 24px 28px; color: rgba(255,255,255,.88); margin-bottom: 24px; }
+  .intro-card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--amber); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; }
+  .intro-card h2 svg { margin-top: 3px; flex-shrink: 0; }
+  .intro-card p { color: rgba(255,255,255,.82); font-size: 14px; margin-bottom: 10px; line-height: 1.65; }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .intro-card a { color: var(--amber); }
+  .intro-card .wip-note { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.18); font-size: 12.5px; color: rgba(255,255,255,.65); font-style: italic; }
+
+  .section-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .section-toggle { width: 100%; background: none; border: none; cursor: pointer; padding: 0; text-align: left; display: block; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; background: var(--surface); transition: background .15s; border-bottom: 1px solid transparent; }
+  .section-toggle:hover .section-header, .section-toggle[aria-expanded="true"] .section-header { background: #f0f4f6; border-bottom-color: var(--border); }
+  .section-num { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--amber-dim); background: var(--indigo-dark); padding: 4px 9px; border-radius: 5px; letter-spacing: .04em; flex-shrink: 0; margin-top: 2px; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--indigo-dark); flex: 1; }
+  .chevron { width: 20px; height: 20px; color: var(--muted); transition: transform .25s ease; flex-shrink: 0; margin-top: 2px; }
+  .section-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .section-body { display: none; padding: 28px 28px 32px; border-top: 3px solid; border-image: var(--trace) 1; }
+  .section-body.open { display: block; }
+
+  .subsection { margin-bottom: 32px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--indigo-mid); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .subsection-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--amber); border-radius: 2px; flex-shrink: 0; }
+
+  .subhead { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--indigo-mid); margin: 22px 0 10px; display: flex; align-items: center; gap: 7px; scroll-margin-top: 12px; }
+  .subhead::before { content: ''; width: 3px; height: 14px; background: var(--amber-dim); border-radius: 2px; flex-shrink: 0; }
+  .subhead:first-child { margin-top: 0; }
+
+  p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul.content-list { padding-left: 20px; margin-bottom: 14px; }
+  ul.content-list li { font-size: 15px; line-height: 1.7; margin-bottom: 6px; }
+  .content a.xref { color: var(--indigo-mid); font-weight: 600; text-decoration: underline; text-decoration-color: var(--amber-dim); text-underline-offset: 2px; }
+  .content a.xref:hover { color: var(--indigo-dark); }
+
+  /* === TERME CONSULTABLE (étymologie au clic) === */
+  .term-wrap { position: relative; display: inline-block; }
+  .term { cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--amber-dim); text-decoration-thickness: 1.5px; text-underline-offset: 3px; transition: color .15s; }
+  .term:hover, .term[aria-expanded="true"] { color: var(--amber-dim); }
+  .term-pop { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 10px; width: 250px; max-width: min(250px, 80vw); background: var(--indigo-dark); border-radius: 10px; box-shadow: 0 6px 22px rgba(13,27,46,.35); padding: 12px 15px; z-index: 220; text-align: left; font-weight: 400; white-space: normal; }
+  .term-pop::before { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-bottom-color: var(--indigo-dark); }
+  .term[aria-expanded="true"] + .term-pop { display: block; }
+  .term-pop-word { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; display: block; }
+  .term-pop-ety { font-size: 12.5px; font-style: italic; color: rgba(255,255,255,.75); margin-bottom: 6px; display: block; line-height: 1.5; }
+  .term-pop-body { font-size: 13px; color: rgba(255,255,255,.92); line-height: 1.55; display: block; }
+
+  .def-box { background: linear-gradient(135deg, #eef2fa, #f2f6fb); border-left: 4px solid var(--indigo-light); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .def-box .def-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 6px; }
+  .def-box p { font-size: 14px; margin: 0 0 6px; color: var(--indigo-dark); }
+  .def-box p:last-child { margin: 0; }
+  .def-box strong { color: var(--indigo-dark); font-weight: 600; }
+
+  .note-box { margin: 20px 0; border: 1.5px solid var(--amber-dim); border-radius: 10px; overflow: hidden; background: #eaf8fa; }
+  .note-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: rgba(43,196,212,.22); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .note-bar:hover { background: rgba(43,196,212,.32); }
+  .note-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #0d5a66; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .note-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .note-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: #2a7d8a; }
+  .note-bar .chevron-n { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #0d5a66; margin-top: 1px; }
+  .note-bar[aria-expanded="true"] .chevron-n { transform: rotate(180deg); }
+  .note-body { display: none; padding: 14px 18px 18px; font-size: 14px; color: #0d3a42; line-height: 1.65; }
+  .note-bar[aria-expanded="true"] + .note-body { display: block; }
+
+  /* === RAPPEL (encadré non repliable) === */
+  .rappel-box { background: #eef1f4; border-left: 4px solid var(--muted); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 4px 0 20px; }
+  .rappel-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .rappel-box p { font-size: 14px; color: var(--text); margin: 0; }
+
+  /* === ZOOM (encadré historique repliable) === */
+  .zoom-box { margin: 20px 0; border: 1.5px solid var(--indigo-mid); border-radius: 10px; overflow: hidden; background: #eef2f7; }
+  .zoom-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: var(--indigo-dark); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .zoom-bar:hover { background: var(--indigo-mid); }
+  .zoom-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .zoom-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .zoom-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.65); }
+  .zoom-bar .chevron-z { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .zoom-bar[aria-expanded="true"] .chevron-z { transform: rotate(180deg); }
+  .zoom-body { display: none; padding: 16px 18px 18px; font-size: 14px; color: var(--text); line-height: 1.65; }
+  .zoom-bar[aria-expanded="true"] + .zoom-body { display: block; }
+
+  /* === À QUOI ÇA SERT (encadré application repliable) === */
+  .apply-box { margin: 20px 0; border: 1.5px solid var(--flame); border-radius: 10px; overflow: hidden; background: #fdf5f4; }
+  .apply-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: linear-gradient(120deg, var(--flame), #b8362a); border: none; cursor: pointer; padding: 12px 18px; text-align: left; font-family: inherit; color: #fff; transition: filter .15s; }
+  .apply-bar:hover { filter: brightness(1.08); }
+  .apply-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .apply-label .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+  .apply-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.8); }
+  .apply-bar .chevron-ap { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .apply-bar[aria-expanded="true"] .chevron-ap { transform: rotate(180deg); }
+  .apply-body { display: none; padding: 16px 18px 18px; font-size: 14px; color: var(--text); line-height: 1.65; }
+  .apply-bar[aria-expanded="true"] + .apply-body { display: block; }
+
+  /* === EXEMPLE RÉSOLU (encadré non repliable, mise en évidence forte) === */
+  .exemple-box { margin: 24px 0; border: 1.5px solid var(--indigo-light); border-radius: 10px; overflow: hidden; background: var(--surface); box-shadow: 0 2px 8px rgba(13,27,46,.08); }
+  .exemple-header { background: linear-gradient(120deg, var(--indigo-mid), var(--indigo-dark)); padding: 12px 20px; display: flex; align-items: center; gap: 8px; }
+  .exemple-label { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 8px; }
+  .exemple-label .icon-sm { width: 16px; height: 16px; }
+  .exemple-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); }
+  .exemple-body { padding: 22px 24px 24px; }
+  .exemple-donnees { background: var(--bg); border-radius: 8px; padding: 14px 20px; margin: 14px 0 18px; }
+  .exemple-donnees-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo-mid); margin-bottom: 8px; }
+  .exemple-donnees ul { list-style: none; padding: 0; margin: 0; font-family: var(--mono); font-size: 14px; line-height: 1.85; color: var(--text); }
+  .exemple-question { font-weight: 700; color: var(--indigo-dark); margin: 18px 0 8px; font-size: 15px; }
+  .exemple-reponse { background: #eaf8fa; border-left: 4px solid var(--amber-dim); border-radius: 0 8px 8px 0; padding: 10px 16px; margin-top: 12px; font-weight: 600; color: #0d5a66; font-size: 14.5px; }
+
+  .formula { font-family: var(--mono); background: var(--indigo-dark); color: var(--amber); padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 16px 0; letter-spacing: .04em; text-align: center; overflow-x: auto; }
+  .formula-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: -10px; margin-bottom: 14px; }
+
+  .kw { background: rgba(43,196,212,.22); color: var(--indigo-dark); padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+  mark.sh { background: #cdeef1; color: var(--text); border-radius: 2px; padding: 0 2px; }
+  mark.sh.current { background: var(--flame); color: #fff; box-shadow: 0 0 0 2px var(--flame); }
+
+  .fig-block { margin: 18px 0; background: #f8fafb; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-align: center; }
+  .fig-block .fig-inner { padding: 20px; }
+  .fig-block figcaption { font-size: 12.5px; color: var(--muted); padding: 10px 16px 14px; border-top: 1px solid var(--border); line-height: 1.5; font-style: italic; text-align: left; }
+
+  .fig-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 18px 0; }
+  .fig-row .fig-block { flex: 1 1 260px; margin: 0; }
+
+  .table-wrap { overflow-x: auto; margin: 6px 0 20px; border-radius: 8px; border: 1px solid var(--border); }
+  .data-table { width: 100%; border-collapse: collapse; margin: 0; font-size: 14px; }
+  .data-table th { background: var(--indigo-dark); color: var(--amber); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; padding: 10px 14px; text-align: left; }
+  .data-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f2f6f8; }
+  .data-table td strong { color: var(--indigo-dark); }
+
+  #to-top { position: fixed; bottom: 28px; right: 28px; width: 42px; height: 42px; background: var(--indigo-dark); color: var(--amber); border: 2px solid var(--amber); border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 200; }
+  #to-top.visible { opacity: 1; pointer-events: auto; }
+
+  #menu-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 150; background: var(--indigo-dark); border: 2px solid var(--amber); color: var(--amber); width: 40px; height: 40px; border-radius: 8px; font-size: 20px; cursor: pointer; align-items: center; justify-content: center; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: flex; }
+    .hero { padding: 60px 24px 36px; }
+    .search-bar-wrap { padding: 12px 24px; }
+    .content { padding: 28px 20px 60px; }
+    .page-toc-bar { padding: 12px 24px; }
+    .page-toc-body { padding: 4px 24px 20px; }
+    .fig-row { flex-direction: column; }
+  }
+
+  /* === TABLE DES MATIÈRES (index des notions, repliable, en tête de page) === */
+  .page-toc { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .page-toc-bar { width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 56px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+  .page-toc-bar:hover { background: #f4f6f8; }
+  .page-toc-icon { width: 17px; height: 17px; color: var(--amber-dim); flex-shrink: 0; }
+  .page-toc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--indigo-dark); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 2px; }
+  .page-toc-subtitle { font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .page-toc-bar .chevron-toc { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--muted); }
+  .page-toc-bar[aria-expanded="true"] .chevron-toc { transform: rotate(180deg); }
+  .page-toc-body { display: none; padding: 4px 56px 22px; }
+  .page-toc-bar[aria-expanded="true"] + .page-toc-body { display: block; }
+  .page-toc-group { margin-top: 14px; }
+  .page-toc-group-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+  .page-toc-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .page-toc-pills a { font-size: 13px; font-weight: 600; color: var(--indigo-mid); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 5px 13px 5px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: background .15s, color .15s, border-color .15s; }
+  .page-toc-pills a .toc-num { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--indigo-light); border-radius: 8px; padding: 1px 6px; }
+  .page-toc-pills a:hover { background: var(--indigo-dark); color: #fff; border-color: var(--indigo-dark); }
+  .page-toc-pills a:hover .toc-num { background: var(--amber); color: var(--indigo-dark); }
+
+  /* ── QUIZ ── */
+  .quiz-block { margin-top: 36px; margin-bottom: 32px; border-top: 2px solid var(--amber); border-bottom: 2px solid var(--amber); padding-top: 24px; padding-bottom: 24px; }
+  .quiz-block-bar { width: 100%; display: flex; align-items: flex-start; gap: 10px; background: var(--indigo-dark); border: none; border-radius: 10px; cursor: pointer; padding: 14px 18px; margin-bottom: 6px; text-align: left; transition: background .15s; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .quiz-block-bar:hover { background: var(--indigo-mid); }
+  .quiz-block-bar .quiz-block-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--amber); margin-top: 2px; }
+  .quiz-block-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .quiz-block-subtitle { font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.72); margin-left: 2px; }
+  .quiz-block-bar .chevron-q { margin-left: auto; width: 20px; height: 20px; transition: transform .2s; flex-shrink: 0; color: #fff; margin-top: 2px; }
+  .quiz-block-bar[aria-expanded="true"] .chevron-q { transform: rotate(180deg); }
+  .quiz-body { display: none; }
+  .quiz-block-bar[aria-expanded="true"] + .quiz-body { display: block; padding-top: 14px; }
+  .quiz-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .quiz-score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 13px; color: var(--muted); }
+  .quiz-score-bar progress { flex: 1; height: 6px; border-radius: 3px; appearance: none; -webkit-appearance: none; }
+  .quiz-score-bar progress::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  .quiz-score-bar progress::-webkit-progress-value { background: var(--indigo-mid); border-radius: 3px; transition: width .4s; }
+
+  .quiz-q { background: var(--bg); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; border: 1.5px solid var(--border); transition: border-color .2s; }
+  .quiz-q.answered { border-color: transparent; }
+  .quiz-q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 14px; }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background .15s, border-color .15s; text-align: left; width: 100%; line-height: 1.45; }
+  .quiz-option:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-option .opt-letter { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-option.correct { background: #e8f8ef; border-color: #2da262; color: #1a6640; }
+  .quiz-option.correct .opt-letter { color: #2da262; }
+  .quiz-option.wrong { background: #fdecea; border-color: #d94f3d; color: #8b2218; }
+  .quiz-option.wrong .opt-letter { color: #d94f3d; }
+  .quiz-option.reveal { background: #e8f8ef; border-color: #2da262; color: #1a6640; opacity: .7; }
+  .quiz-option.reveal .opt-letter { color: #2da262; }
+
+  .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13.5px; line-height: 1.55; display: none; }
+  .quiz-feedback.show { display: flex; gap: 8px; align-items: flex-start; }
+  .quiz-feedback .icon-sm { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+  .quiz-feedback.ok { background: #e8f8ef; color: #1a6640; }
+  .quiz-feedback.ko { background: #fdecea; color: #8b2218; }
+  .quiz-result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; text-align: center; display: none; align-items: center; justify-content: center; gap: 8px; }
+  .quiz-result-msg.show { display: flex; }
+  .quiz-result-msg .icon-sm { width: 18px; height: 18px; flex-shrink: 0; }
+  .quiz-result-msg.great { background: #e8f8ef; color: #1a6640; }
+  .quiz-result-msg.good { background: #fdf6e3; color: #7a5c00; }
+  .quiz-result-msg.poor { background: #fdecea; color: #8b2218; }
+
+  .quiz-reset { margin-top: 20px; padding: 9px 20px; border-radius: 8px; border: 1.5px solid var(--indigo-mid); background: #fff; color: var(--indigo-dark); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; display: none; }
+  .quiz-reset:hover { background: #eef2fa; }
+
+  .icon-sm { display: inline-block; vertical-align: middle; width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* === SECTION 2 : laboratoires interactifs === */
+  .iv-opts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .iv-btn{flex:1 1 150px;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font:600 14px Inter,sans-serif;color:var(--indigo-dark);cursor:pointer;transition:background .15s,border-color .15s}
+  .iv-btn:hover{border-color:var(--indigo-mid);background:#eef6f7}
+  .iv-btn.ok{background:#e8f8ef;border-color:#2da262;color:#1a6640}
+  .iv-btn.ko{background:#fdecea;border-color:#d94f3d;color:#8b2218}
+  .iv-fb{font-size:13.5px;line-height:1.55;min-height:46px;padding:10px 14px;border-radius:8px;background:var(--bg)}
+  .lab{background:#f8fafb;border:1.5px solid var(--indigo-light);border-radius:10px;padding:16px 18px 18px;margin:18px 0}
+  .lab-title{font:700 13px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--indigo-mid);margin-bottom:12px}
+  .lab-grid{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+  .lab-grid .table-wrap{flex:0 0 190px;margin:0}
+  .lab-grid .lab-gr{flex:1 1 300px;min-width:0}
+  .lab-ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 8px}
+  .lab-ctl input[type=range]{flex:1 1 200px;accent-color:var(--amber-dim);min-width:140px}
+  .lab-btn{padding:8px 16px;border-radius:8px;border:1.5px solid var(--indigo-mid);background:#fff;font:600 13px Inter,sans-serif;color:var(--indigo-dark);cursor:pointer}
+  .lab-btn:hover{background:#eef2fa}
+  .lab-read{font-family:var(--mono);font-size:13px;font-weight:600;background:var(--indigo-dark);color:var(--amber);padding:9px 14px;border-radius:8px;overflow-x:auto;white-space:nowrap}
+  .lab-phase{font-size:14px;font-weight:600;color:var(--indigo-dark);margin:10px 0 0;min-height:22px}
+  .data-table tr.on td{background:#cdeef1;font-weight:700}
+  .chip{display:inline-block;background:#eaf8fa;border:1px solid var(--amber-dim);border-radius:6px;padding:4px 10px;font:600 13px var(--mono);color:#0d5a66;margin:3px 6px 3px 0}
+  .legs{list-style:none;padding:0;margin:0;font-size:14px;line-height:1.9}
+  .legs b{font-family:var(--mono);color:var(--indigo-dark)}
+
+  /* === VECTEUR : flèche dessinée en CSS (le caractère Unicode combinant U+20D7 n'existe pas dans Inter ni JetBrains Mono) === */
+  .vec { position: relative; display: inline-block; line-height: 1; --vy: -.03em; }
+  .vec.lc { --vy: .13em; }
+  .vec::before { content: ""; position: absolute; left: .05em; right: .02em; top: calc(var(--vy) - .0125em); border-top: .075em solid currentColor; }
+  .vec::after { content: ""; position: absolute; right: .02em; top: calc(var(--vy) - .06em); width: .16em; height: .16em; box-sizing: border-box; border-top: .075em solid currentColor; border-right: .075em solid currentColor; transform: rotate(45deg); }
+
+  /* === INTERACTIONS ÉLARGIES : pauses-réflexion + nouveaux types de questions === */
+  .reflect { margin: 26px 0; border: 1.5px solid var(--indigo-light); border-left-width: 5px; border-radius: 0 10px 10px 0; background: #f3f8fb; padding: 0; overflow: hidden; }
+  .reflect-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo-mid); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; row-gap: 3px; }
+  .reflect-label .icon-sm { width: 16px; height: 16px; flex-shrink: 0; }
+  /* Pause-réflexion rabattable : une barre cliquable, le contenu se déplie dessous (même mécanisme que les encadrés Zoom / Pour aller plus loin) */
+  .reflect-bar { width: 100%; display: flex; align-items: flex-start; gap: 8px; background: none; border: none; cursor: pointer; padding: 13px 20px; text-align: left; font-family: inherit; color: inherit; transition: background .15s; }
+  .reflect-bar:hover { background: rgba(79,144,184,.12); }
+  .reflect-subtitle { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .reflect-bar .chevron-r { margin-left: auto; width: 16px; height: 16px; transition: transform .2s; flex-shrink: 0; color: var(--indigo-mid); margin-top: 1px; }
+  .reflect-bar[aria-expanded="true"] .chevron-r { transform: rotate(180deg); }
+  .reflect-body { display: none; padding: 4px 20px 18px; }
+  .reflect-bar[aria-expanded="true"] + .reflect-body { display: block; }
+  .reflect-q { font-size: 15px; font-weight: 500; color: var(--indigo-dark); line-height: 1.55; margin: 0 0 12px; }
+  .reflect-input, .quiz-open-input { display: block; width: 100%; box-sizing: border-box; font: inherit; font-size: 14px; line-height: 1.5; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); resize: vertical; min-height: 78px; }
+  .reflect-input:read-only, .quiz-open-input:read-only { background: #f6f9fb; color: var(--muted); }
+  .reflect-input:focus, .quiz-open-input:focus, .quiz-num-input:focus, .quiz-blank:focus { outline: 2px solid var(--amber); outline-offset: 1px; border-color: var(--indigo-mid); }
+  .reflect-actions, .quiz-open-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+  .reflect-btn, .quiz-validate { padding: 9px 18px; border-radius: 8px; border: none; background: var(--indigo-mid); color: #fff; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s, opacity .15s; }
+  .reflect-btn:hover:not(:disabled), .quiz-validate:hover:not(:disabled) { background: var(--indigo-dark); }
+  .reflect-btn:disabled, .quiz-validate:disabled { opacity: .45; cursor: not-allowed; }
+  .reflect-hint, .quiz-open-hint { font-size: 12.5px; color: var(--muted); }
+  .reflect-answer { margin-top: 14px; padding: 14px 16px; background: #eaf8fa; border-left: 4px solid var(--amber-dim); border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.65; color: var(--text); }
+  .reflect-answer[hidden], .quiz-model[hidden] { display: none; }
+  .reflect-answer-label, .quiz-model-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--amber-dim); margin-bottom: 6px; }
+  .reflect-answer p, .quiz-model p { margin: 0 0 8px; font-size: 14px; }
+  .reflect-answer p:last-child, .quiz-model p:last-child { margin-bottom: 0; }
+
+  .quiz-block.mini { margin-top: 30px; margin-bottom: 8px; padding-top: 20px; padding-bottom: 20px; }
+  .quiz-block.mini .quiz-block-bar { background: var(--indigo-mid); }
+  .quiz-block.mini .quiz-block-bar:hover { background: var(--indigo-dark); }
+
+  .quiz-hint { font-size: 12.5px; color: var(--flame); margin-top: 8px; min-height: 0; }
+  .quiz-hint:empty { display: none; }
+  .quiz-q .quiz-validate { margin-top: 12px; }
+  .quiz-feedback .fb-text sub { font-size: .75em; }
+
+  .quiz-checks { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-check { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; cursor: pointer; font-size: 14px; line-height: 1.5; transition: background .15s, border-color .15s; }
+  .quiz-check:hover { background: #eef6f7; border-color: var(--indigo-mid); }
+  .quiz-check input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--indigo-mid); flex-shrink: 0; }
+  .quiz-check .ck-text { flex: 1; }
+  .quiz-check .ck-tag { margin-left: auto; padding-left: 10px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .quiz-check.good { background: #e8f8ef; border-color: #2da262; color: #1a6640; cursor: default; }
+  .quiz-check.bad { background: #fdecea; border-color: #d94f3d; color: #8b2218; cursor: default; }
+  .quiz-check.missed { background: #fffbea; border: 1.5px dashed #d4a017; color: #7a5c00; cursor: default; }
+
+  .quiz-num { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .quiz-num-input { width: 140px; font-family: var(--mono); font-size: 15px; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); }
+  .quiz-num-input.ok { border-color: #2da262; background: #e8f8ef; color: #1a6640; }
+  .quiz-num-input.ko { border-color: #d94f3d; background: #fdecea; color: #8b2218; }
+  .quiz-unit { font-family: var(--mono); font-size: 14px; color: var(--muted); }
+  .quiz-num .quiz-validate { margin-top: 0; }
+
+  .quiz-fill { font-size: 15px; line-height: 2.3; color: var(--text); margin-bottom: 4px; }
+  .quiz-blank { font: inherit; font-size: 14px; padding: 4px 8px; border: 1.5px solid var(--indigo-light); border-radius: 6px; background: #fff; color: var(--indigo-dark); margin: 0 3px; max-width: 100%; cursor: pointer; }
+  .quiz-blank.ok { border-color: #2da262; background: #e8f8ef; color: #1a6640; }
+  .quiz-blank.ko { border-color: #d94f3d; background: #fdecea; color: #8b2218; }
+  .quiz-blank:disabled { opacity: 1; cursor: default; }
+
+  .quiz-match { display: flex; flex-direction: column; gap: 8px; }
+  .qm-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; }
+  .qm-term { flex: 1 1 240px; font-size: 14px; line-height: 1.5; }
+  .qm-row .quiz-blank { margin: 0; flex: 0 1 210px; }
+
+  .quiz-order { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; counter-reset: ord; }
+  .quiz-order li { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; font-size: 14px; line-height: 1.45; }
+  .quiz-order li::before { counter-increment: ord; content: counter(ord); font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); width: 20px; flex-shrink: 0; text-align: center; }
+  .quiz-order .ord-text { flex: 1; }
+  .ord-btns { display: flex; gap: 4px; }
+  .ord-btn { width: 32px; height: 30px; border: 1.5px solid var(--border); border-radius: 6px; background: #f6f9fb; cursor: pointer; color: var(--indigo-mid); font-size: 14px; line-height: 1; padding: 0; }
+  .ord-btn:hover:not(:disabled) { background: #eef6f7; border-color: var(--indigo-mid); }
+  .ord-btn:disabled { opacity: .3; cursor: default; }
+  .quiz-order li.ok { border-color: #2da262; background: #e8f8ef; }
+  .quiz-order li.ko { border-color: #d94f3d; background: #fdecea; }
+
+  .quiz-model { margin-top: 14px; padding: 14px 16px; background: #eaf8fa; border-left: 4px solid var(--amber-dim); border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.65; color: var(--text); }
+  .quiz-self { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(31,143,160,.3); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .quiz-self > span { flex-basis: 100%; font-size: 13px; font-weight: 600; color: var(--indigo-dark); }
+  .quiz-self-btn { padding: 8px 14px; border: 1.5px solid var(--indigo-mid); background: #fff; border-radius: 8px; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; color: var(--indigo-dark); transition: background .15s; }
+  .quiz-self-btn:hover:not(:disabled) { background: #eef2fa; }
+  .quiz-self-btn:disabled { opacity: .5; cursor: default; }
+  .quiz-self-btn.chosen { opacity: 1; background: var(--indigo-mid); color: #fff; }
+
+  @media (max-width: 768px) {
+    .reflect-bar { padding: 12px 14px; }
+    .reflect-body { padding: 4px 14px 16px; }
+    .qm-row .quiz-blank { flex: 1 1 100%; }
+    .quiz-num-input { width: 120px; }
+  }
+</style>
+<style>.ac-b{font:inherit;font-size:13px;padding:7px 12px;border:1.5px solid var(--indigo-light);background:#fff;color:var(--indigo-mid);border-radius:8px;cursor:pointer;margin:3px 6px 3px 0}.ac-b.on{background:var(--indigo-mid);color:#fff;.sp-row{display:flex;gap:6px;margin:10px 0}.sp-c{flex:1;min-width:52px;text-align:center;border:1px solid var(--border);border-radius:8px;padding:6px 2px;background:#fff}.sp-t{font:600 11px var(--mono);color:var(--muted)}.sp-v{font:700 15px var(--mono);color:var(--indigo-mid)}</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="q-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1" fill="none" stroke="currentColor" stroke-width="2"/></symbol><symbol id="q-ko" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9l6 6M15 9l-6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol></defs></svg>
+
+<button id="menu-toggle" aria-label="Menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<aside id="sidebar" role="navigation" aria-label="Table des matières">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-to-index" title="Retour à la table des matières du cours">
+      <svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Tous les chapitres
+    </a>
+    <div class="label">Physique Sec. 5 · Module 2</div>
+    <div class="chap-num">2</div>
+    <div class="chap-title">Le mouvement rectiligne uniformément accéléré</div>
+  </div>
+  <div class="toc-label">Table des matières</div>
+  <nav>
+    <ul>
+      <li><a href="#intro" class="toc-link"><span class="num">—</span> Avant de commencer</a></li>
+<li><a href="#section-1" class="toc-link"><span class="num">Section 1</span> La notion d'accélération</a></li>
+<li><a href="#section-2" class="toc-link"><span class="num">Section 2</span> Le graphique de la vitesse en fonction du temps</a></li>
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <button onclick="document.getElementById('attrib-pop').classList.toggle('visible')" title="À propos de ce document" style="display:flex;align-items:center;gap:6px;"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg> À propos de ce document</button>
+    <div class="attrib-popover" id="attrib-pop">
+      Matériel préparé par M. Raphaël Sylvestre Bouchard, à l'aide du manuel <em>Delta</em>, Secondaire 5 (TC Média Livres inc.).
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="hero">
+    <div class="eyebrow">Physique · Secondaire 5 · Module 2 — Mécanique</div>
+    <h1>Le mouvement rectiligne uniformément accéléré</h1>
+    <p>Une voiture démarre, un métro freine, une balle tombe : la vitesse change presque tout le temps. Ce chapitre apprend à décrire ces mouvements, à l'aide d'une nouvelle grandeur, l'accélération, et de graphiques qui permettent de la lire.</p>
+  </div>
+
+  <div class="page-toc">
+    <button class="page-toc-bar" aria-expanded="false" onclick="toggleNote(this)">
+      <svg class="page-toc-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="page-toc-label">Table des matières<span class="page-toc-subtitle">Accès direct à chaque notion</span></span>
+      <svg class="chevron-toc" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="page-toc-body">
+<div class="page-toc-group"><div class="page-toc-group-label">Section 1 — La notion d'accélération</div><div class="page-toc-pills"><a href="#notion-acceleration"><span class="toc-num">1.1</span>La notion</a><a href="#signe-acceleration"><span class="toc-num">1.2</span>Le signe</a><a href="#calcul-acceleration"><span class="toc-num">1.3</span>Le calcul</a><a href="#exemple-accel"><span class="toc-num">Ex.</span>Deux départs</a></div></div>
+<div class="page-toc-group"><div class="page-toc-group-label">Section 2 — Le graphique de la vitesse en fonction du temps</div><div class="page-toc-pills"><a href="#graphique-vt-mrua"><span class="toc-num">2.1</span>Le graphique v(t)</a><a href="#exemple-metro-vt"><span class="toc-num">Ex.</span>Le métro</a><a href="#aire-mrua"><span class="toc-num">2.2</span>L'aire sous la courbe</a><a href="#exemple-aire-vt"><span class="toc-num">Ex.</span>Déplacement et distance</a></div></div>
+</div>
+  </div>
+<div class="search-bar-wrap">
+    <label for="search-input">🔍 Recherche rapide</label>
+    <input type="text" id="search-input" placeholder="Ex : déplacement, distance parcourue, position, trajectoire…" oninput="doSearch(this.value)">
+    <span id="search-count"></span>
+  </div>
+
+  <div class="content">
+
+    <!-- INTRO -->
+<div id="intro" class="intro-card"><h2>Quand la vitesse change</h2>
+<p>Au chapitre 1, la vitesse était toujours la même. Ici, on s'intéresse au cas bien plus courant où elle change : on définira l'accélération, on apprendra à lire son signe, à la calculer, puis à la repérer sur un graphique de la vitesse en fonction du temps.</p>
+<div class="wip-note">Ce chapitre est en cours de rédaction. Cette version couvre les sections 1 (la notion d'accélération) et 2 (le graphique de la vitesse en fonction du temps).</div></div>
+
+<div class="section-card" id="section-1"><button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)"><div class="section-header"><span class="section-num">Section 1</span><span class="section-title">La notion d'accélération</span><svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div></button><div class="section-body">
+<div class="rappel-box"><div class="rappel-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Rappel — Quand la vitesse ne change pas</div><p>Au chapitre 1, la vitesse restait la même du début à la fin : c'était le « U » de MRU. Dans la vie courante, c'est plutôt rare : un autobus démarre, freine, redémarre. Cette section s'intéresse à ce qui se passe quand la vitesse change, et à la grandeur qui mesure ce changement.</p></div>
+<div class="subsection" id="notion-acceleration"><div class="subsection-title">1.1 Quand la vitesse change : la notion d'accélération</div>
+<p>Quand un feu passe au vert, une voiture ne passe pas d'un coup de 0 à 50 km/h : sa vitesse grimpe peu à peu. Chaque fois que la vitesse d'un corps change, on dit que ce corps subit une <strong><span class="term-wrap"><span class="term" role="button" tabindex="0" aria-expanded="false" onclick="toggleTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTerm(this);}">accélération</span><span class="term-pop" role="tooltip"><span class="term-pop-word">accélération</span><span class="term-pop-ety">De <em>accélérer</em>, du latin <em>accelerare</em> (« hâter, presser »), lui-même dérivé de <em>celer</em> (« rapide »)</span><span class="term-pop-body">En physique, accélérer ne veut pas dire « aller plus vite » : c'est changer de vitesse, dans un sens comme dans l'autre.</span></span></span></strong>.</p><p>Une vitesse peut changer de deux façons : sa <em>grandeur</em> (le corps va plus ou moins vite) ou son <em>orientation</em> (il tourne). Ici, on reste sur une ligne droite : le corps ne tourne pas, donc seule la grandeur de sa vitesse varie. Elle peut augmenter, diminuer, et même changer de signe si le corps s'arrête puis repart dans l'autre sens. Dans tous ces cas, on parle d'accélération, <em>même quand le corps ralentit</em> : en physique, on ne distingue pas « accélérer » et « décélérer ».</p><div class="def-box"><div class="def-label">Définition</div><p><strong>Accélération</strong> (<em>a</em>) : le taux de variation de la vitesse par rapport au temps, c'est-à-dire la rapidité avec laquelle la vitesse change.</p></div>
+<p>Le raisonnement est le même qu'au chapitre 1, un cran plus loin : la <strong>vitesse</strong> mesure à quel rythme la <em>position</em> change; l'<strong>accélération</strong> mesure à quel rythme la <em>vitesse</em> change.</p><div class="zoom-box"><button class="zoom-bar" aria-expanded="false" onclick="toggleNote(this)"><span class="zoom-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg> Zoom<span class="zoom-subtitle">Galilée et les plans inclinés</span></span><svg class="chevron-z" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="zoom-body"><p>Au début du XVIIe siècle, Galilée (1564-1642) cherche à comprendre comment les objets tombent. Problème : une pierre qui tombe va beaucoup trop vite pour être chronométrée avec les instruments de l'époque.</p><p>Il a alors l'idée de « diluer » la chute en faisant rouler des billes sur un plan incliné : plus la pente est douce, plus le mouvement est lent et mesurable. Il en conclut que la vitesse d'un corps qui tombe augmente de manière régulière, et non d'un seul coup. C'est cette idée de changement régulier de la vitesse que la physique décrit aujourd'hui par une accélération constante.</p></div></div>
+<div class="reflect"><button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)"><span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Pourquoi comparer à la durée?</span></span><svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="reflect-body"><p class="reflect-q">Deux voitures passent toutes les deux de 0 à 100 km/h : la première en 6 s, la seconde en 12 s. Laquelle accélère le plus fort? Qu'est-ce qu'une accélération doit donc mesurer pour que cette différence apparaisse?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p><strong>La première.</strong> Les deux gagnent exactement la même vitesse (100 km/h), mais elle l'obtient en deux fois moins de temps.</p><p>Le gain de vitesse seul ne permet donc pas de les départager : il faut le comparer à la <strong>durée</strong> qu'il a fallu. Une accélération mesure un gain de vitesse <em>par unité de temps</em>, ce que veut dire « taux de variation ».</p></div></div></div>
+<div class="quiz-block mini" data-quiz="c2s1-1" data-done="la sous-section 1.1 est maîtrisée." data-reread="la sous-section 1.1"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 1.1<span class="quiz-block-subtitle">La notion d'accélération · 4 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 4</span><progress class="quiz-progress" value="0" max="4"></progress></div><div class="quiz-q" data-qi="0" data-type="mcq"><div class="quiz-q-label">Choix multiple</div><div class="quiz-q-text">Un cycliste roule en ligne droite et freine jusqu'à l'arrêt. En physique, subit-il une accélération?</div><div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Oui, car sa vitesse change, même s'il ralentit.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Non : accélérer, c'est seulement aller plus vite.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Non, car sa trajectoire reste une ligne droite.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Oui, mais seulement à l'instant précis où il s'arrête.</button></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Dès que la vitesse change (en plus ou en moins), il y a accélération.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">En physique, il n'y a qu'un seul mot pour tout changement de vitesse : freiner est une accélération au même titre que démarrer.</span></div></div>
+<div class="quiz-q" data-qi="1" data-type="mcq"><div class="quiz-q-label">Choix multiple</div><div class="quiz-q-text">Laquelle de ces situations ne comporte <strong>aucune</strong> accélération?</div><div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Une voiture qui garde exactement 80 km/h sur une autoroute rectiligne.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Un train qui quitte la gare.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Une balle qui roule de plus en plus lentement sur un tapis.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Une balle lancée vers le haut, au moment où elle monte.</button></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Vitesse constante en ligne droite : c'est un MRU, donc aucun changement de vitesse.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Dans les trois autres cas, la vitesse change. Seule la voiture à vitesse constante n'accélère pas.</span></div></div>
+<div class="quiz-q" data-qi="2" data-type="open"><div class="quiz-q-label">Question de réflexion</div><div class="quiz-q-text">Un ami dit : « Sa vitesse a changé de 20 m/s, donc son accélération est de 20. » Qu'est-ce qui manque à son raisonnement?</div><textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea><div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div><div class="quiz-model" hidden><div class="quiz-model-label">Piste de réponse</div><p>Il manque la <strong>durée</strong>. Gagner 20 m/s en 2 s ou en 20 s, ce n'est pas du tout la même accélération.</p><p>L'accélération compare le changement de vitesse au temps écoulé : c'est un « gain de vitesse par seconde ».</p><div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as repéré l'essentiel.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste, puis reprends la sous-section.</span></div></div>
+<div class="quiz-q" data-qi="3" data-type="fill"><div class="quiz-q-label">Compléter la phrase</div><div class="quiz-q-text">Choisis le bon mot dans chaque liste.</div><div class="quiz-fill">L'accélération est le taux de variation de la <select class="quiz-blank" data-answer="vitesse" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="position">position</option><option value="vitesse">vitesse</option><option value="masse">masse</option></select> par rapport au <select class="quiz-blank" data-answer="temps" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="déplacement">déplacement</option><option value="temps">temps</option><option value="référentiel">référentiel</option></select>. Un corps qui freine <select class="quiz-blank" data-answer="subit une accélération" aria-label="Choisis la bonne réponse"><option value="">…</option><option value="n&#x27;a aucune accélération">n'a aucune accélération</option><option value="subit une accélération">subit une accélération</option><option value="a une vitesse nulle">a une vitesse nulle</option></select>.</div><button class="quiz-validate" type="button">Valider</button><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. L'accélération compare un changement de vitesse au temps écoulé, et freiner est une accélération comme une autre.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Relis la définition : l'accélération est le taux de variation de la <em>vitesse</em> par rapport au <em>temps</em>. Un corps qui freine change de vitesse : il subit donc une accélération.</span></div></div>
+<div class="quiz-result-msg"></div><button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button></div></div>
+</div>
+<div class="subsection" id="signe-acceleration"><div class="subsection-title">1.2 Accélérer ou ralentir : le signe de l'accélération</div>
+<p>Comme le déplacement et la vitesse, l'accélération a un sens : sur une droite, elle pointe vers les <em>x</em> positifs ou vers les <em>x</em> négatifs. Sa composante selon l'axe, notée <em>a</em>, est donc positive ou négative.</p><p>Mais attention : le signe de <em>a</em> ne dit pas, à lui seul, si le corps accélère ou ralentit. Il faut le <strong>comparer au signe de la vitesse</strong>. Pense à une poussée : si elle va dans le sens du mouvement, elle l'accélère; si elle va à contre-sens, elle le freine.</p><div class="def-box"><div class="def-label">À retenir</div><p><strong>Même signe</strong> pour <em>v</em> et <em>a</em> → la grandeur de la vitesse augmente : le corps accélère. <strong>Signes opposés</strong> → la grandeur de la vitesse diminue : le corps ralentit.</p></div>
+<p>Piège classique : « <em>a</em> négative = ralentir ». C'est faux! Sur un axe orienté vers la droite, une planche à roulettes qui file vers la gauche a <em>v</em> = −3 m/s. Si son accélération est <em>a</em> = −1 m/s², une seconde plus tard <em>v</em> = −4 m/s : elle va plus vite, vers la gauche. Les deux signes sont négatifs, et elle accélère.</p><div class="lab"><div class="lab-title">Laboratoire — Accélère ou ralentit?</div><p class="lab-intro" style="margin:0 0 8px">Choisis le sens de la vitesse et celui de l'accélération (axe orienté vers la droite).</p><div class="lab-ctl"><label>Vitesse <em>v</em></label><button type="button" class="ac-b on" data-k="v" data-s="1">→ vers les x positifs (v &gt; 0)</button><button type="button" class="ac-b" data-k="v" data-s="-1">← vers les x négatifs (v &lt; 0)</button></div><div class="lab-ctl"><label>Accélération <em>a</em></label><button type="button" class="ac-b on" data-k="a" data-s="1">→ vers les x positifs (a &gt; 0)</button><button type="button" class="ac-b" data-k="a" data-s="-1">← vers les x négatifs (a &lt; 0)</button></div><svg viewBox="0 0 360 130" style="width:100%;max-width:420px;display:block;margin:6px auto 0" role="img" aria-label="Chariot sur un rail avec une flèche de vitesse et une flèche d’accélération"><defs><marker id="ac-mv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#163a5c"/></marker><marker id="ac-ma" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dd4a3a"/></marker></defs><line x1="14" y1="108" x2="346" y2="108" stroke="#5c6b78" stroke-width="2"/><rect x="145" y="68" width="70" height="30" rx="5" fill="#163a5c"/><circle cx="162" cy="102" r="6" fill="#0d1b2e"/><circle cx="198" cy="102" r="6" fill="#0d1b2e"/><line id="ac-va" x1="180" y1="52" x2="250" y2="52" stroke="#163a5c" stroke-width="4" marker-end="url(#ac-mv)"/><line id="ac-aa" x1="180" y1="22" x2="250" y2="22" stroke="#dd4a3a" stroke-width="4" marker-end="url(#ac-ma)"/><text x="12" y="56" font-size="12" fill="#163a5c">v</text><text x="12" y="26" font-size="12" fill="#dd4a3a">a</text></svg><div class="lab-read" id="ac-read" style="margin-top:10px"></div><p class="lab-phase" id="ac-ph" aria-live="polite"></p></div><div class="reflect"><button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)"><span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Un chariot qui file vers la gauche</span></span><svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="reflect-body"><p class="reflect-q">L'axe est orienté vers la droite. Un chariot roule vers la gauche et va de plus en plus vite. Quel est le signe de sa vitesse? Et celui de son accélération? Un ami affirme : « accélérer, c'est forcément avoir a &gt; 0 ». Que lui réponds-tu?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p>La vitesse est <strong>négative</strong> (le chariot va vers les <em>x</em> négatifs). Comme il va de plus en plus vite, l'accélération a le même signe : elle est aussi <strong>négative</strong>.</p><p>Ton ami se trompe : on accélère quand <em>v</em> et <em>a</em> ont le <strong>même</strong> signe, qu'il soit positif ou négatif.</p></div></div></div>
+<div class="quiz-block mini" data-quiz="c2s1-2" data-done="la sous-section 1.2 est maîtrisée." data-reread="la sous-section 1.2"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 1.2<span class="quiz-block-subtitle">Le signe de l'accélération · 4 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 4</span><progress class="quiz-progress" value="0" max="4"></progress></div><div class="quiz-q" data-qi="0" data-type="mcq"><div class="quiz-q-label">Choix multiple</div><div class="quiz-q-text">L'axe est orienté vers la droite. Une bille roule vers la droite (<em>v</em> &gt; 0) et son accélération est négative (<em>a</em> &lt; 0). Que fait la bille?</div><div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Elle ralentit.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Elle accélère vers la droite.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Elle accélère vers la gauche.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Elle garde la même vitesse.</button></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Signes opposés : l'accélération s'oppose au mouvement, la bille ralentit.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Compare les signes : <em>v</em> est positive, <em>a</em> est négative. Signes opposés, donc la grandeur de la vitesse diminue.</span></div></div>
+<div class="quiz-q" data-qi="1" data-type="mcq"><div class="quiz-q-label">Choix multiple</div><div class="quiz-q-text">Une balle roule à <em>v</em> = −6 m/s et son accélération est <em>a</em> = −2 m/s². Une seconde plus tard, sa vitesse sera −8 m/s. Que fait-elle?</div><div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Elle accélère : la grandeur de sa vitesse passe de 6 à 8 m/s.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Elle ralentit, parce que −8 est plus petit que −6.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Elle ralentit, parce que <em>a</em> est négative.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Elle garde la même vitesse.</button></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Ce qui compte, c'est la grandeur de la vitesse (6, puis 8 m/s), et elle augmente.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">−8 est « plus petit » que −6 sur la droite des nombres, mais la balle va plus vite : 8 m/s en grandeur, contre 6 avant. Les deux signes étant négatifs, elle accélère.</span></div></div>
+<div class="quiz-q" data-qi="2" data-type="open"><div class="quiz-q-label">Question de réflexion</div><div class="quiz-q-text">Un corps est immobile à l'instant 0 (<em>v</em> = 0) et son accélération est <em>a</em> = −4 m/s². Dans quel sens va-t-il partir? Que va-t-il faire de sa vitesse ensuite?</div><textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea><div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div><div class="quiz-model" hidden><div class="quiz-model-label">Piste de réponse</div><p>Il part vers les <em>x</em> <strong>négatifs</strong> : l'accélération « pousse » dans ce sens.</p><p>Sa vitesse devient négative, donc de même signe que <em>a</em> : il accélère de plus en plus vers les <em>x</em> négatifs.</p><div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as repéré l'essentiel.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste, puis reprends la sous-section.</span></div></div>
+<div class="quiz-q" data-qi="3" data-type="multi"><div class="quiz-q-label">Plusieurs bonnes réponses</div><div class="quiz-q-text">L'axe est orienté vers la droite. Quels corps sont en train de <strong>ralentir</strong>? (Coche toutes les bonnes réponses.)</div><div class="quiz-checks"><label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Sa vitesse est +5 m/s et son accélération est −2 m/s².</span><span class="ck-tag" aria-live="polite"></span></label><label class="quiz-check" data-correct="true"><input type="checkbox"><span class="ck-text">Sa vitesse est −5 m/s et son accélération est +2 m/s².</span><span class="ck-tag" aria-live="polite"></span></label><label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Sa vitesse est −5 m/s et son accélération est −2 m/s².</span><span class="ck-tag" aria-live="polite"></span></label><label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Sa vitesse est +5 m/s et son accélération est +2 m/s².</span><span class="ck-tag" aria-live="polite"></span></label><label class="quiz-check" data-correct="false"><input type="checkbox"><span class="ck-text">Sa vitesse est +5 m/s et son accélération est nulle.</span><span class="ck-tag" aria-live="polite"></span></label></div><button class="quiz-validate" type="button">Valider</button><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. On ralentit quand <em>v</em> et <em>a</em> ont des signes opposés (les deux premiers cas). Dans les cas 3 et 4, les signes sont identiques : le corps accélère; dans le dernier, <em>a</em> = 0 et la vitesse ne change pas.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Compare les signes de <em>v</em> et de <em>a</em> : signes opposés → ralentit; même signe → accélère; <em>a</em> = 0 → la vitesse ne change pas.</span></div></div>
+<div class="quiz-result-msg"></div><button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button></div></div>
+</div>
+<div class="subsection" id="calcul-acceleration"><div class="subsection-title">1.3 Calculer l'accélération</div>
+<p>Pour comparer deux accélérations, il faut un nombre. On vient de voir ce qu'il doit mesurer : un gain de vitesse <em>par unité de temps</em>. On divise donc la variation de vitesse par la durée, exactement comme on divisait Δ<em>x</em> par Δ<em>t</em> pour la vitesse.</p><div class="formula"><em>a</em> = Δ<em>v</em> / Δ<em>t</em> = (<em>v</em><sub>f</sub> − <em>v</em><sub>i</sub>) / (<em>t</em><sub>f</sub> − <em>t</em><sub>i</sub>)</div><p class="formula-caption"><em>a</em> = accélération, en m/s² · <em>v</em><sub>f</sub>, <em>v</em><sub>i</sub> = vitesses finale et initiale, en m/s · <em>t</em><sub>f</sub>, <em>t</em><sub>i</sub> = instants final et initial, en s</p>
+<div class="exemple-box" id="exemple-accel"><div class="exemple-header"><span class="exemple-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Exemple résolu<span class="exemple-subtitle">Calculer une accélération, positive puis négative</span></span></div><div class="exemple-body"><p>Deux situations, avec la même méthode : vitesses en m/s, durée en s.</p><p class="exemple-question">a) Un train de banlieue quitte une gare : sa vitesse passe de 2,0 m/s à 14 m/s en 8,0 s. Quelle est son accélération?</p><div class="exemple-donnees"><div class="exemple-donnees-label">Données</div><ul><li><em>v</em><sub>i</sub> = 2,0 m/s · <em>v</em><sub>f</sub> = 14 m/s</li><li>Δ<em>t</em> = 8,0 s</li></ul></div><div class="formula"><em>a</em> = (14 − 2,0) / 8,0 = 12 / 8,0 = 1,5 m/s²</div><div class="exemple-reponse">L'accélération du train est de +1,5 m/s². Elle est positive, comme sa vitesse : le train accélère.</div><p class="exemple-question">b) Un cycliste passe de 9,0 m/s à 3,0 m/s en 4,0 s. Quelle est son accélération?</p><div class="formula"><em>a</em> = (3,0 − 9,0) / 4,0 = −6,0 / 4,0 = −1,5 m/s²</div><div class="exemple-reponse">L'accélération du cycliste est de −1,5 m/s². Sa vitesse est positive et <em>a</em> est négative : il ralentit. Même valeur que le train, signe opposé.</div></div></div>
+<p><strong>D'où vient l'unité?</strong> On divise des m/s par des s : (m/s) ÷ s = m / (s × s) = <strong>m/s²</strong>. Concrètement, <em>a</em> = 1,5 m/s² veut dire « à chaque seconde, la vitesse gagne 1,5 m/s ». Le train du premier exemple ira donc à 2,0 m/s au départ, puis 3,5 m/s après 1 s, 5,0 m/s après 2 s, 6,5 m/s après 3 s…</p><div class="lab"><div class="lab-title">Laboratoire — Seconde par seconde</div><p style="margin:0 0 8px">Choisis une vitesse de départ et une accélération, puis regarde la vitesse évoluer, seconde après seconde.</p><div class="lab-ctl"><label for="sp-vi">Vitesse initiale</label><input type="range" id="sp-vi" min="-10" max="10" step="1" value="2"><strong id="sp-vio"></strong></div><div class="lab-ctl"><label for="sp-a">Accélération</label><input type="range" id="sp-a" min="-3" max="3" step="0.5" value="1.5"><strong id="sp-ao"></strong></div><div class="sp-row" id="sp-row"></div><div class="lab-read" id="sp-read"></div></div><div class="note-box"><button class="note-bar" aria-expanded="false" onclick="toggleNote(this)"><span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Attention aux unités concordantes</span></span><svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="note-body"><p>Si la vitesse est en km/h et le temps en s, la formule donnerait des « km/h par seconde » : difficile à interpréter. On convertit d'abord. Exemple : 36 km/h = 36 000 m ÷ 3 600 s = 10 m/s. Pour passer de km/h à m/s, on divise donc par 3,6.</p></div></div>
+<div class="reflect"><button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)"><span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Accélération nulle, corps immobile?</span></span><svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="reflect-body"><p class="reflect-q">Une accélération de 0 m/s² veut-elle dire que le corps est immobile? Donne un exemple. Et que signifie une accélération de 10 m/s², dite « seconde par seconde »?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p><strong>Non.</strong> <em>a</em> = 0 veut dire que la vitesse ne change pas, pas qu'elle est nulle. Un train qui roule à 20 m/s constants a une accélération nulle : c'est un MRU.</p><p><em>a</em> = 10 m/s² : à chaque seconde, la vitesse augmente de 10 m/s (0, 10, 20, 30 m/s… si le corps part de l'arrêt).</p></div></div></div>
+<div class="quiz-block mini" data-quiz="c2s1-3" data-done="la sous-section 1.3 est maîtrisée." data-reread="la sous-section 1.3"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 1.3<span class="quiz-block-subtitle">Calculer l'accélération · 5 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 5</span><progress class="quiz-progress" value="0" max="5"></progress></div><div class="quiz-q" data-qi="0" data-type="num" data-answer="4.0" data-tol="0.01" data-traps="[{&quot;v&quot;: 100, &quot;msg&quot;: &quot;Tu as multiplié 20 × 5 au lieu de diviser.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Une voiture passe de 0 m/s à 20 m/s en 5,0 s. Quelle est son accélération?</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m/s²</span><button class="quiz-validate" type="button">Valider</button></div><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. <em>a</em> = (20 − 0) / 5,0 = 4,0 m/s².</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text"><em>a</em> = Δ<em>v</em> / Δ<em>t</em> = (20 − 0) / 5,0 = 4,0 m/s². On divise le gain de vitesse par la durée.</span></div></div>
+<div class="quiz-q" data-qi="1" data-type="num" data-answer="-2.5" data-tol="0.01" data-traps="[{&quot;v&quot;: 2.5, &quot;msg&quot;: &quot;La valeur est bonne, mais pas le signe : la vitesse diminue, donc &lt;em&gt;a&lt;/em&gt; est négative.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Un camion roule à 25 m/s, freine et s'arrête en 10 s. Quelle est son accélération? (Attention au signe.)</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m/s²</span><button class="quiz-validate" type="button">Valider</button></div><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. <em>a</em> = (0 − 25) / 10 = −2,5 m/s². Négative, car il ralentit en allant vers les <em>x</em> positifs.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text"><em>a</em> = (<em>v</em>f − <em>v</em>i) / Δ<em>t</em> = (0 − 25) / 10 = −2,5 m/s². La vitesse diminue : Δ<em>v</em> est négatif, donc <em>a</em> aussi.</span></div></div>
+<div class="quiz-q" data-qi="2" data-type="num" data-answer="1.0" data-tol="0.01" data-traps="[{&quot;v&quot;: 3.6, &quot;msg&quot;: &quot;Tu as calculé (54 − 36) / 5,0 en km/h : le résultat n&#x27;est pas en m/s². Convertis d&#x27;abord les vitesses.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Un scooter roule à 36 km/h et accélère jusqu'à 54 km/h en 5,0 s. Quelle est son accélération en m/s²?</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m/s²</span><button class="quiz-validate" type="button">Valider</button></div><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. 36 km/h = 10 m/s et 54 km/h = 15 m/s : <em>a</em> = (15 − 10) / 5,0 = 1,0 m/s².</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Convertis d'abord : divise par 3,6. 36 km/h = 10 m/s, 54 km/h = 15 m/s. Puis <em>a</em> = (15 − 10) / 5,0 = 1,0 m/s².</span></div></div>
+<div class="quiz-q" data-qi="3" data-type="open"><div class="quiz-q-label">Question de réflexion</div><div class="quiz-q-text">Un élève dit : « Une accélération de −3 m/s² est plus petite qu'une accélération de +2 m/s², parce qu'elle est négative. » Qu'en penses-tu?</div><textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea><div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div><div class="quiz-model" hidden><div class="quiz-model-label">Piste de réponse</div><p>Il confond le <strong>signe</strong> et la <strong>grandeur</strong>. Le signe indique le sens de l'accélération; sa valeur absolue dit son intensité.</p><p>Une accélération de −3 m/s² change la vitesse <em>plus fortement</em> (3 m/s par seconde) qu'une de +2 m/s² (2 m/s par seconde); elle agit simplement dans l'autre sens.</p><div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as repéré l'essentiel.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste, puis reprends la sous-section.</span></div></div>
+<div class="quiz-q" data-qi="4" data-type="order"><div class="quiz-q-label">Remettre dans l'ordre</div><div class="quiz-q-text">Remets dans l'ordre les étapes pour calculer une accélération. <span style="font-weight:400;color:var(--muted)">(Utilise les flèches ↑ ↓.)</span></div><ol class="quiz-order"><li data-pos="1"><span class="ord-text">Convertir les vitesses en m/s au besoin, puis noter <em>v</em>i, <em>v</em>f et Δ<em>t</em></span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li><li data-pos="2"><span class="ord-text">Calculer la variation de vitesse : Δ<em>v</em> = <em>v</em>f − <em>v</em>i</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li><li data-pos="3"><span class="ord-text">Diviser Δ<em>v</em> par Δ<em>t</em> pour obtenir <em>a</em> en m/s²</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li><li data-pos="4"><span class="ord-text">Comparer le signe de <em>a</em> à celui de <em>v</em> pour savoir si le corps accélère ou ralentit</span><span class="ord-btns"><button class="ord-btn ord-up" type="button" aria-label="Monter cette étape">↑</button><button class="ord-btn ord-down" type="button" aria-label="Descendre cette étape">↓</button></span></li></ol><button class="quiz-validate" type="button">Valider l'ordre</button><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. On prépare les données, on calcule Δ<em>v</em>, on divise par Δ<em>t</em>, puis on interprète le signe.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">On ne peut pas diviser Δ<em>v</em> avant de l'avoir calculé, ni interpréter le signe avant d'avoir <em>a</em>. Reprends l'ordre logique.</span></div></div>
+<div class="quiz-result-msg"></div><button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button></div></div>
+</div>
+</div></div>
+
+<div class="section-card" id="section-2"><button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)"><div class="section-header"><span class="section-num">Section 2</span><span class="section-title">Le graphique de la vitesse en fonction du temps</span><svg class="chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div></button><div class="section-body">
+<div class="rappel-box"><div class="rappel-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Rappel — Les graphiques du chapitre 1</div><p>Au chapitre 1, un MRU donnait une droite horizontale sur le graphique <em>v</em>(<em>t</em>), et l'aire sous cette droite donnait le déplacement. On garde ces deux idées : on les étend maintenant au cas où la vitesse change.</p></div>
+<div class="def-box"><div class="def-label">Définition</div><p><strong>Mouvement rectiligne uniformément accéléré (MRUA)</strong> : mouvement en ligne droite dont l'accélération est constante. La vitesse varie alors de la même quantité durant chaque intervalle de temps égal.</p></div>
+<div class="subsection" id="graphique-vt-mrua"><div class="subsection-title">2.1 Le graphique de la vitesse en fonction du temps</div>
+<p>Pourquoi tracer la vitesse en fonction du temps? Parce qu'un tel graphique montre d'un coup d'œil comment la vitesse évolue. Au chapitre 1, un MRU donnait une droite horizontale : la vitesse ne bouge pas. Que donne un MRUA? Si l'accélération est constante, la vitesse gagne <em>la même quantité à chaque seconde</em> : les points sont alignés sur une <strong>droite oblique</strong>. Fais varier les curseurs pour le constater.</p><div class="lab"><div class="lab-title">Laboratoire — Construis un graphique v(t)</div><div class="lab-ctl"><label for="vt-vi">Vitesse initiale</label><input type="range" id="vt-vi" min="-10" max="10" step="1" value="2"><strong id="vt-vio"></strong></div><div class="lab-ctl"><label for="vt-a">Accélération</label><input type="range" id="vt-a" min="-3" max="3" step="0.5" value="1"><strong id="vt-ao"></strong></div><svg viewBox="0 0 360 224" style="width:100%;max-width:440px;display:block;margin:10px auto 0" role="img" aria-label="Droite de la vitesse en fonction du temps"><g stroke="#d7e0e6"><line x1="48" y1="20" x2="48" y2="204"/><line x1="198" y1="20" x2="198" y2="204"/><line x1="348" y1="20" x2="348" y2="204"/><line x1="48" y1="64" x2="348" y2="64"/><line x1="48" y1="158" x2="348" y2="158"/></g><line x1="48" y1="112" x2="348" y2="112" stroke="#5c6b78" stroke-width="1.5"/><line x1="48" y1="10" x2="48" y2="204" stroke="#5c6b78" stroke-width="1.5"/><line id="vt-line" x1="48" y1="90" x2="348" y2="60" stroke="#dd4a3a" stroke-width="3" stroke-linecap="round"/><g font-size="11" fill="#5c6b78" font-family="JetBrains Mono,monospace"><text x="42" y="68" text-anchor="end">20</text><text x="42" y="116" text-anchor="end">0</text><text x="42" y="162" text-anchor="end">−20</text><text x="48" y="218" text-anchor="middle">0</text><text x="198" y="218" text-anchor="middle">5</text><text x="348" y="218" text-anchor="middle">10</text><text x="270" y="218">t (s)</text><text x="54" y="14">v (m/s)</text></g></svg><div class="lab-read" id="vt-read" style="margin-top:10px"></div></div><p>Regarde ce que fait la <strong>pente</strong> de la droite. Pour un segment, la pente est « variation verticale ÷ variation horizontale ». Ici, la verticale est la vitesse et l'horizontale est le temps : on retrouve exactement la formule de l'accélération.</p><div class="formula">pente = Δ<em>v</em> / Δ<em>t</em> = <em>a</em></div><p class="formula-caption">Sur un graphique <em>v</em>(<em>t</em>), la pente est l'accélération (comme, sur <em>x</em>(<em>t</em>), la pente était la vitesse).</p>
+<p>Quelques repères pour lire un tel graphique : une <strong>seule droite oblique</strong> veut dire une même accélération du début à la fin; <strong>plusieurs segments</strong> veulent dire plusieurs MRUA différents à la suite; un <strong>segment horizontal</strong> veut dire <em>a</em> = 0 (le corps est alors en MRU); une pente positive signifie que <em>v</em> augmente, une pente négative que <em>v</em> diminue.</p><div class="note-box"><button class="note-bar" aria-expanded="false" onclick="toggleNote(this)"><span class="note-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 1.8-2 3.3"/><circle cx="12" cy="16.3" r="0.6" fill="currentColor" stroke="none"/></svg> Pour aller plus loin<span class="note-subtitle">Et si la ligne n'est pas droite?</span></span><svg class="chevron-n" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="note-body"><p>Dans ce chapitre, l'accélération est constante : la ligne est donc droite. Si elle se courbait, sa pente changerait d'un instant à l'autre, c'est-à-dire que l'accélération ne serait plus constante, et on ne parlerait plus de MRUA. Ce cas plus général dépasse le cadre de ce chapitre.</p></div></div>
+<div class="exemple-box" id="exemple-metro-vt"><div class="exemple-header"><span class="exemple-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Exemple résolu<span class="exemple-subtitle">Lire l'accélération de chaque phase</span></span></div><div class="exemple-body"><p>Un métro suit le graphique ci-dessous : il démarre, roule, puis freine. Quelle est son accélération pendant chaque phase?</p><div class="fig-block"><div class="fig-inner"><svg viewBox="0 0 360 220" style="width:100%;max-width:440px;display:block;margin:0 auto" role="img" aria-label="Graphique de la vitesse en fonction du temps"><line x1="48.0" y1="14" x2="48.0" y2="188" stroke="#d7e0e6"/><text x="48.0" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">0</text><line x1="122.5" y1="14" x2="122.5" y2="188" stroke="#d7e0e6"/><text x="122.5" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">5</text><line x1="197.0" y1="14" x2="197.0" y2="188" stroke="#d7e0e6"/><text x="197.0" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">10</text><line x1="271.5" y1="14" x2="271.5" y2="188" stroke="#d7e0e6"/><text x="271.5" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">15</text><line x1="346.0" y1="14" x2="346.0" y2="188" stroke="#d7e0e6"/><text x="346.0" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">20</text><line x1="48" y1="149.3" x2="346" y2="149.3" stroke="#d7e0e6"/><text x="42" y="153.3" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">0</text><line x1="48" y1="110.7" x2="346" y2="110.7" stroke="#d7e0e6"/><text x="42" y="114.7" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">4</text><line x1="48" y1="72.0" x2="346" y2="72.0" stroke="#d7e0e6"/><text x="42" y="76.0" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">8</text><line x1="48" y1="33.3" x2="346" y2="33.3" stroke="#d7e0e6"/><text x="42" y="37.3" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">12</text><line x1="48" y1="149.3" x2="346" y2="149.3" stroke="#5c6b78" stroke-width="1.5"/><line x1="48" y1="10" x2="48" y2="188" stroke="#5c6b78" stroke-width="1.5"/><polyline fill="none" stroke="#dd4a3a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="48.0,149.3 137.4,33.3 286.4,33.3 346.0,149.3"/><circle cx="48.0" cy="149.3" r="3.4" fill="#dd4a3a"/><circle cx="137.4" cy="33.3" r="3.4" fill="#dd4a3a"/><circle cx="286.4" cy="33.3" r="3.4" fill="#dd4a3a"/><circle cx="346.0" cy="149.3" r="3.4" fill="#dd4a3a"/><text x="346" y="216" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">t (s)</text><text x="54" y="20" font-size="11" fill="#5c6b78" font-family="JetBrains Mono,monospace">v (m/s)</text></svg></div><figcaption>Vitesse d'un métro : démarrage de 0 à 6 s, vitesse constante de 6 à 16 s, freinage de 16 à 20 s.</figcaption></div>
+<div class="exemple-donnees"><div class="exemple-donnees-label">Données</div><ul><li>Phase 1 : de <em>v</em> = 0 m/s à 12 m/s, entre 0 s et 6 s</li><li>Phase 2 : <em>v</em> = 12 m/s, entre 6 s et 16 s</li><li>Phase 3 : de 12 m/s à 0 m/s, entre 16 s et 20 s</li></ul></div><div class="formula">Phase 1 : <em>a</em> = (12 − 0) / (6 − 0) = +2,0 m/s²<br>Phase 2 : <em>a</em> = (12 − 12) / (16 − 6) = 0 m/s²<br>Phase 3 : <em>a</em> = (0 − 12) / (20 − 16) = −3,0 m/s²</div><div class="exemple-reponse">Le métro accélère à +2,0 m/s², puis roule sans accélérer (segment horizontal), puis freine à −3,0 m/s². Le freinage est plus brusque : sa pente est plus raide.</div></div></div>
+<div class="reflect"><button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)"><span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Une droite qui descend</span></span><svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="reflect-body"><p class="reflect-q">Sur un graphique <em>v</em>(<em>t</em>), une droite descend mais reste entièrement <em>au-dessus</em> de l'axe du temps. Le corps recule-t-il? Que fait-il?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p><strong>Non, il ne recule pas.</strong> La droite est au-dessus de l'axe, donc <em>v</em> reste positive : le corps continue d'avancer.</p><p>La pente est négative parce que <em>v</em> diminue : il <strong>ralentit</strong>. Il ne ferait demi-tour que si la droite traversait l'axe du temps.</p></div></div></div>
+<div class="quiz-block mini" data-quiz="c2s2-1" data-done="la sous-section 2.1 est maîtrisée." data-reread="la sous-section 2.1"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 2.1<span class="quiz-block-subtitle">Le graphique v(t) d'un MRUA · 4 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 4</span><progress class="quiz-progress" value="0" max="4"></progress></div><div class="quiz-q" data-qi="0" data-type="num" data-answer="4.0" data-tol="0.01" data-traps="[{&quot;v&quot;: 12, &quot;msg&quot;: &quot;12 m/s est le gain de vitesse; il faut encore le diviser par la durée de 3 s.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Sur un graphique <em>v</em>(<em>t</em>) formé d'une seule droite, la vitesse est de 4 m/s à <em>t</em> = 2 s et de 16 m/s à <em>t</em> = 5 s. Quelle est l'accélération?</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m/s²</span><button class="quiz-validate" type="button">Valider</button></div><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Pente = (16 − 4) / (5 − 2) = 12 / 3 = 4,0 m/s².</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">La pente se calcule avec deux points : <em>a</em> = Δ<em>v</em> / Δ<em>t</em> = (16 − 4) / (5 − 2) = 4,0 m/s².</span></div></div>
+<div class="quiz-q" data-qi="1" data-type="mcq"><div class="quiz-q-label">Choix multiple</div><div class="quiz-q-text">Sur un graphique <em>v</em>(<em>t</em>), un segment horizontal est tracé à <em>v</em> = 7 m/s. Que signifie-t-il?</div><div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> Le corps avance à 7 m/s constants : son accélération est nulle.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> Le corps est immobile.</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> Le corps accélère de 7 m/s².</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> Le corps ralentit à 7 m/s².</button></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Horizontal = la vitesse ne change pas, donc <em>a</em> = 0.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Un segment horizontal est à hauteur constante : la vitesse reste 7 m/s. Le corps n'est donc pas immobile, mais il n'accélère pas.</span></div></div>
+<div class="quiz-q" data-qi="2" data-type="open"><div class="quiz-q-label">Question de réflexion</div><div class="quiz-q-text">Un graphique <em>v</em>(<em>t</em>) comporte trois segments : un oblique qui monte, un horizontal, puis un oblique qui descend (sans toucher l'axe). Décris le mouvement en une phrase par segment.</div><textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea><div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div><div class="quiz-model" hidden><div class="quiz-model-label">Piste de réponse</div><p>Segment 1 : <em>a</em> &gt; 0, la vitesse augmente (le corps accélère).</p><p>Segment 2 : <em>a</em> = 0, vitesse constante (un MRU).</p><p>Segment 3 : <em>a</em> &lt; 0, mais <em>v</em> reste positive : le corps avance en ralentissant.</p><div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as repéré l'essentiel.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste, puis reprends la sous-section.</span></div></div>
+<div class="quiz-q" data-qi="3" data-type="match"><div class="quiz-q-label">Associer</div><div class="quiz-q-text">Associe chaque segment d'un graphique <em>v</em>(<em>t</em>) à ce qu'il signifie.</div><div class="quiz-match"><div class="qm-row"><span class="qm-term">Droite oblique qui monte</span><select class="quiz-blank" data-answer="Accélération positive" aria-label="Associe : Droite oblique qui monte"><option value="">Choisis…</option><option value="Accélération positive">Accélération positive</option><option value="Accélération négative">Accélération négative</option><option value="Vitesse constante, non nulle">Vitesse constante, non nulle</option><option value="Corps immobile">Corps immobile</option></select></div><div class="qm-row"><span class="qm-term">Droite oblique qui descend</span><select class="quiz-blank" data-answer="Accélération négative" aria-label="Associe : Droite oblique qui descend"><option value="">Choisis…</option><option value="Accélération positive">Accélération positive</option><option value="Accélération négative">Accélération négative</option><option value="Vitesse constante, non nulle">Vitesse constante, non nulle</option><option value="Corps immobile">Corps immobile</option></select></div><div class="qm-row"><span class="qm-term">Segment horizontal au-dessus de l'axe, à 7 m/s</span><select class="quiz-blank" data-answer="Vitesse constante, non nulle" aria-label="Associe : Segment horizontal au-dessus de l&#x27;axe, à 7 m/s"><option value="">Choisis…</option><option value="Accélération positive">Accélération positive</option><option value="Accélération négative">Accélération négative</option><option value="Vitesse constante, non nulle">Vitesse constante, non nulle</option><option value="Corps immobile">Corps immobile</option></select></div><div class="qm-row"><span class="qm-term">Segment horizontal confondu avec l'axe du temps</span><select class="quiz-blank" data-answer="Corps immobile" aria-label="Associe : Segment horizontal confondu avec l&#x27;axe du temps"><option value="">Choisis…</option><option value="Accélération positive">Accélération positive</option><option value="Accélération négative">Accélération négative</option><option value="Vitesse constante, non nulle">Vitesse constante, non nulle</option><option value="Corps immobile">Corps immobile</option></select></div></div><button class="quiz-validate" type="button">Valider</button><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. La pente donne l'accélération : positive si la droite monte, négative si elle descend. Un segment horizontal veut dire que la vitesse ne change pas; sur l'axe du temps, cette vitesse est nulle.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Rappelle-toi : pente = accélération. Une droite qui monte a une pente positive, une droite qui descend une pente négative. Horizontal = la vitesse ne change pas (et si le segment est sur l'axe, <em>v</em> = 0).</span></div></div>
+<div class="quiz-result-msg"></div><button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button></div></div>
+</div>
+<div class="subsection" id="aire-mrua"><div class="subsection-title">2.2 L'aire sous la courbe : le déplacement</div>
+<p>Voici le problème. Une voiture accélère de 4 m/s à 10 m/s en 6 s : quelle distance a-t-elle franchie dans ce temps? La formule Δ<em>x</em> = <em>v</em> × Δ<em>t</em> ne répond pas : quelle vitesse y mettre, 4 ou 10? Elle n'est valable que si la vitesse est constante.</p><p>Heureusement, l'idée du chapitre 1 tient toujours : <strong>l'aire sous la courbe de <em>v</em>(<em>t</em>) donne le déplacement</strong>, même quand la vitesse change (on l'avait vu en découpant le temps en tranches de plus en plus minces). Pour une droite oblique, cette aire est un <strong>trapèze</strong>, qu'on coupe en un rectangle et un triangle.</p><div class="fig-block"><div class="fig-inner"><svg viewBox="0 0 360 220" style="width:100%;max-width:440px;display:block;margin:0 auto" role="img" aria-label="Graphique de la vitesse en fonction du temps"><line x1="48.0" y1="14" x2="48.0" y2="188" stroke="#d7e0e6"/><text x="48.0" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">0</text><line x1="147.3" y1="14" x2="147.3" y2="188" stroke="#d7e0e6"/><text x="147.3" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">2</text><line x1="246.7" y1="14" x2="246.7" y2="188" stroke="#d7e0e6"/><text x="246.7" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">4</text><line x1="346.0" y1="14" x2="346.0" y2="188" stroke="#d7e0e6"/><text x="346.0" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">6</text><line x1="48" y1="174.6" x2="346" y2="174.6" stroke="#d7e0e6"/><text x="42" y="178.6" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">0</text><line x1="48" y1="121.1" x2="346" y2="121.1" stroke="#d7e0e6"/><text x="42" y="125.1" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">4</text><line x1="48" y1="67.5" x2="346" y2="67.5" stroke="#d7e0e6"/><text x="42" y="71.5" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">8</text><line x1="48" y1="14.0" x2="346" y2="14.0" stroke="#d7e0e6"/><text x="42" y="18.0" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">12</text><polygon points="48.0,174.6 346.0,174.6 346.0,121.1 48.0,121.1" fill="#2bc4d4" opacity="0.28"/><polygon points="48.0,121.1 346.0,121.1 346.0,40.8" fill="#dd4a3a" opacity="0.28"/><line x1="48" y1="174.6" x2="346" y2="174.6" stroke="#5c6b78" stroke-width="1.5"/><line x1="48" y1="10" x2="48" y2="188" stroke="#5c6b78" stroke-width="1.5"/><polyline fill="none" stroke="#dd4a3a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="48.0,121.1 346.0,40.8"/><circle cx="48.0" cy="121.1" r="3.4" fill="#dd4a3a"/><circle cx="346.0" cy="40.8" r="3.4" fill="#dd4a3a"/><text x="346" y="216" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">t (s)</text><text x="54" y="20" font-size="11" fill="#5c6b78" font-family="JetBrains Mono,monospace">v (m/s)</text></svg></div><figcaption>La région sous la droite se décompose en un rectangle (hauteur <em>v</em>i = 4 m/s) et un triangle (hauteur <em>v</em>f − <em>v</em>i = 6 m/s), sur une durée de 6 s.</figcaption></div>
+<p>Rectangle : 4 × 6 = 24 m. Triangle : ½ × 6 × 6 = 18 m. Total : 42 m. En général, on écrit la même addition une fois pour toutes :</p><div class="formula">Δ<em>x</em> = <em>v</em><sub>i</sub> × Δ<em>t</em> + ½ (<em>v</em><sub>f</sub> − <em>v</em><sub>i</sub>) × Δ<em>t</em> = ½ (<em>v</em><sub>i</sub> + <em>v</em><sub>f</sub>) × Δ<em>t</em></div><p class="formula-caption">Δ<em>x</em> = déplacement, en m · <em>v</em><sub>i</sub>, <em>v</em><sub>f</sub> = vitesses initiale et finale, en m/s · Δ<em>t</em> = durée, en s. Vérification : ½ (4 + 10) × 6 = 42 m.</p>
+<div class="lab"><div class="lab-title">Laboratoire — Rectangle + triangle = déplacement</div><p style="margin:0 0 8px">Modifie les deux vitesses et la durée : le trapèze se coupe toujours en un rectangle (cyan) et un triangle (rouge).</p><div class="lab-ctl"><label for="tz-vi">Vitesse initiale</label><input type="range" id="tz-vi" min="0" max="12" step="1" value="4"><strong id="tz-vio"></strong></div><div class="lab-ctl"><label for="tz-vf">Vitesse finale</label><input type="range" id="tz-vf" min="0" max="12" step="1" value="10"><strong id="tz-vfo"></strong></div><div class="lab-ctl"><label for="tz-dt">Durée</label><input type="range" id="tz-dt" min="1" max="6" step="1" value="6"><strong id="tz-dto"></strong></div><svg viewBox="0 0 360 224" style="width:100%;max-width:440px;display:block;margin:10px auto 0" role="img" aria-label="Aire sous la droite de la vitesse, coupée en rectangle et triangle"><g stroke="#d7e0e6"><line x1="48" y1="144" x2="348" y2="144"/><line x1="48" y1="88" x2="348" y2="88"/><line x1="48" y1="32" x2="348" y2="32"/></g><polygon id="tz-rect" fill="#2bc4d4" opacity="0.3"/><polygon id="tz-tri" fill="#dd4a3a" opacity="0.3"/><line id="tz-line" stroke="#dd4a3a" stroke-width="3" stroke-linecap="round"/><line x1="48" y1="200" x2="348" y2="200" stroke="#5c6b78" stroke-width="1.5"/><line x1="48" y1="24" x2="48" y2="200" stroke="#5c6b78" stroke-width="1.5"/><g font-size="11" fill="#5c6b78" font-family="JetBrains Mono,monospace"><text x="42" y="204" text-anchor="end">0</text><text x="42" y="148" text-anchor="end">4</text><text x="42" y="92" text-anchor="end">8</text><text x="42" y="36" text-anchor="end">12</text><text x="48" y="215" text-anchor="middle">0</text><text x="148" y="215" text-anchor="middle">2</text><text x="248" y="215" text-anchor="middle">4</text><text x="348" y="215" text-anchor="middle">6</text><text x="300" y="222">t (s)</text><text x="54" y="20">v (m/s)</text></g></svg><div class="lab-read" id="tz-read" style="margin-top:10px"></div></div><p>Le signe compte aussi. Une aire <em>au-dessus</em> de l'axe du temps est un déplacement positif; une aire <em>en dessous</em> est un déplacement négatif (le corps va dans l'autre sens). Quand la droite traverse l'axe, le corps s'arrête puis repart en sens inverse : pour la <strong>distance parcourue</strong>, on calcule chaque aire à part et on additionne leurs valeurs absolues.</p><div class="exemple-box" id="exemple-aire-vt"><div class="exemple-header"><span class="exemple-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Exemple résolu<span class="exemple-subtitle">Déplacement et distance à partir du graphique</span></span></div><div class="exemple-body"><p>Un corps suit le graphique ci-dessous.</p><div class="fig-block"><div class="fig-inner"><svg viewBox="0 0 360 220" style="width:100%;max-width:440px;display:block;margin:0 auto" role="img" aria-label="Graphique de la vitesse en fonction du temps"><line x1="48.0" y1="14" x2="48.0" y2="188" stroke="#d7e0e6"/><text x="48.0" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">0</text><line x1="107.6" y1="14" x2="107.6" y2="188" stroke="#d7e0e6"/><text x="107.6" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">2</text><line x1="167.2" y1="14" x2="167.2" y2="188" stroke="#d7e0e6"/><text x="167.2" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">4</text><line x1="226.8" y1="14" x2="226.8" y2="188" stroke="#d7e0e6"/><text x="226.8" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">6</text><line x1="286.4" y1="14" x2="286.4" y2="188" stroke="#d7e0e6"/><text x="286.4" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">8</text><line x1="346.0" y1="14" x2="346.0" y2="188" stroke="#d7e0e6"/><text x="346.0" y="202" font-size="11" text-anchor="middle" fill="#5c6b78" font-family="JetBrains Mono,monospace">10</text><line x1="48" y1="166.2" x2="346" y2="166.2" stroke="#d7e0e6"/><text x="42" y="170.2" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">−6</text><line x1="48" y1="101.0" x2="346" y2="101.0" stroke="#d7e0e6"/><text x="42" y="105.0" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">0</text><line x1="48" y1="35.8" x2="346" y2="35.8" stroke="#d7e0e6"/><text x="42" y="39.8" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">6</text><polygon points="48.0,101.0 107.6,35.8 226.8,35.8 286.4,101.0" fill="#2bc4d4" opacity="0.28"/><polygon points="286.4,101.0 346.0,166.2 346.0,101.0" fill="#dd4a3a" opacity="0.28"/><line x1="48" y1="101.0" x2="346" y2="101.0" stroke="#5c6b78" stroke-width="1.5"/><line x1="48" y1="10" x2="48" y2="188" stroke="#5c6b78" stroke-width="1.5"/><polyline fill="none" stroke="#dd4a3a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="48.0,101.0 107.6,35.8 226.8,35.8 286.4,101.0 346.0,166.2"/><circle cx="48.0" cy="101.0" r="3.4" fill="#dd4a3a"/><circle cx="107.6" cy="35.8" r="3.4" fill="#dd4a3a"/><circle cx="226.8" cy="35.8" r="3.4" fill="#dd4a3a"/><circle cx="286.4" cy="101.0" r="3.4" fill="#dd4a3a"/><circle cx="346.0" cy="166.2" r="3.4" fill="#dd4a3a"/><text x="346" y="216" font-size="11" text-anchor="end" fill="#5c6b78" font-family="JetBrains Mono,monospace">t (s)</text><text x="54" y="20" font-size="11" fill="#5c6b78" font-family="JetBrains Mono,monospace">v (m/s)</text></svg></div><figcaption>Vitesse d'un corps entre 0 s et 10 s. Aire teintée en cyan : déplacement positif; en rouge : déplacement négatif.</figcaption></div>
+<p class="exemple-question">a) Que se passe-t-il à <em>t</em> = 8 s? b) Quel est le déplacement de 0 s à 10 s? c) Quelle est la distance parcourue?</p><div class="exemple-donnees"><div class="exemple-donnees-label">Données</div><ul><li>De 0 s à 2 s : <em>v</em> passe de 0 à 6 m/s</li><li>De 2 s à 6 s : <em>v</em> = 6 m/s</li><li>De 6 s à 8 s : <em>v</em> passe de 6 à 0 m/s</li><li>De 8 s à 10 s : <em>v</em> passe de 0 à −6 m/s</li></ul></div><p>a) À 8 s, <em>v</em> = 0 : le corps s'arrête, puis repart dans le sens négatif.</p><div class="formula">0 → 2 s : ½ (0 + 6) × 2 = +6 m<br>2 → 6 s : 6 × 4 = +24 m<br>6 → 8 s : ½ (6 + 0) × 2 = +6 m<br>8 → 10 s : ½ (0 + (−6)) × 2 = −6 m</div><div class="formula">Δ<em>x</em> = 6 + 24 + 6 − 6 = 30 m<br><em>L</em> = |6| + |24| + |6| + |−6| = 42 m</div><div class="exemple-reponse">Le déplacement est de +30 m, mais la distance parcourue est de 42 m : le corps a reculé de 6 m à la fin.</div></div></div>
+<div class="zoom-box"><button class="zoom-bar" aria-expanded="false" onclick="toggleNote(this)"><span class="zoom-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg> Zoom<span class="zoom-subtitle">Oresme et les aires</span></span><svg class="chevron-z" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="zoom-body"><p>Au XIVe siècle, des savants du Merton College, à Oxford, puis le Français Nicole Oresme (vers 1320-1382) étudient les mouvements dont la vitesse change régulièrement. Ils établissent que la distance franchie est la même que si le corps roulait tout le temps à sa vitesse moyenne, c'est-à-dire à la moyenne de sa vitesse initiale et de sa vitesse finale.</p><p>Oresme en propose une preuve en dessinant la vitesse sous forme de graphique : la distance correspond alors à l'aire sous la ligne. C'est exactement l'idée de cette sous-section, plusieurs siècles avant Galilée.</p></div></div>
+<div class="reflect"><button class="reflect-bar" type="button" aria-expanded="false" onclick="toggleNote(this)"><span class="reflect-label"><svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg> Pause-réflexion<span class="reflect-subtitle">Pourquoi pas vitesse × temps?</span></span><svg class="chevron-r" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="reflect-body"><p class="reflect-q">Un corps freine de 12 m/s jusqu'à l'arrêt en 5 s, avec une accélération constante. Un élève calcule Δ<em>x</em> = 12 × 5 = 60 m. Pourquoi ce résultat est-il trop grand? Quelle est la bonne réponse?</p><textarea class="reflect-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots (au moins une phrase)…"></textarea><div class="reflect-actions"><button class="reflect-btn" type="button" disabled>Voir une piste de réponse</button><span class="reflect-hint">Cherche d'abord par toi-même : c'est en essayant qu'on comprend.</span></div><div class="reflect-answer" hidden><div class="reflect-answer-label">Piste de réponse</div><p>Le corps n'est à 12 m/s qu'au tout début : sa vitesse diminue ensuite jusqu'à 0. Multiplier par 12 suppose qu'il garde cette vitesse pendant 5 s.</p><p>L'aire sous la droite est un triangle : ½ × 5 × 12 = <strong>30 m</strong>, la moitié de 60 m (la vitesse « moyenne » est de 6 m/s).</p></div></div></div>
+<div class="quiz-block mini" data-quiz="c2s2-1" data-done="la sous-section 2.2 est maîtrisée." data-reread="la sous-section 2.2"><button class="quiz-block-bar" aria-expanded="false" onclick="toggleQuiz(this)"><svg class="quiz-block-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8.5 13.5l2 2 4-4.5"/></svg><span class="quiz-block-title">Vérifie ta compréhension — 2.2<span class="quiz-block-subtitle">L'aire sous la courbe · 4 questions</span></span><svg class="chevron-q" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="quiz-body"><p class="quiz-intro">Quelques questions pour vérifier que tu as bien compris cette sous-section. Les questions avec une zone de texte n'ont pas de réponse « automatique » : écris la tienne d'abord, puis compare-la avec la piste proposée.</p><div class="quiz-score-bar"><span class="quiz-score-label">0 / 4</span><progress class="quiz-progress" value="0" max="4"></progress></div><div class="quiz-q" data-qi="0" data-type="num" data-answer="35" data-tol="0.01" data-traps="[{&quot;v&quot;: 55, &quot;msg&quot;: &quot;Tu as utilisé seulement la vitesse finale (11 × 5,0). La vitesse n&#x27;est pas restée constante.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">Sur une droite oblique, la vitesse d'un corps passe de 3 m/s à 11 m/s en 5,0 s. Quel est son déplacement?</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m</span><button class="quiz-validate" type="button">Valider</button></div><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Δ<em>x</em> = ½ (3 + 11) × 5,0 = 35 m.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Δ<em>x</em> = ½ (<em>v</em>i + <em>v</em>f) × Δ<em>t</em> = ½ (3 + 11) × 5,0 = 35 m. L'aire est un trapèze.</span></div></div>
+<div class="quiz-q" data-qi="1" data-type="num" data-answer="3.0" data-tol="0.01" data-traps="[{&quot;v&quot;: 9, &quot;msg&quot;: &quot;Tu as additionné les grandeurs (4 + 2). Les signes comptent : −2 m/s retire de l&#x27;aire.&quot;}]"><div class="quiz-q-label">Calcul</div><div class="quiz-q-text">La vitesse d'une bille passe régulièrement de +4 m/s à −2 m/s en 3,0 s. Quel est son déplacement pendant ces 3,0 s?</div><div class="quiz-num"><input class="quiz-num-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ta réponse" placeholder="?"><span class="quiz-unit">m</span><button class="quiz-validate" type="button">Valider</button></div><div class="quiz-hint" aria-live="polite"></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Δ<em>x</em> = ½ (4 + (−2)) × 3,0 = +3,0 m.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Δ<em>x</em> = ½ (<em>v</em>i + <em>v</em>f) × Δ<em>t</em> = ½ (4 − 2) × 3,0 = 3,0 m. La partie « négative » vient soustraire de l'aire positive.</span></div></div>
+<div class="quiz-q" data-qi="2" data-type="mcq"><div class="quiz-q-label">Choix multiple</div><div class="quiz-q-text">Même bille : sa vitesse passe régulièrement de +4 m/s à −2 m/s en 3,0 s (elle s'arrête à <em>t</em> = 2,0 s). Quelle distance a-t-elle parcourue?</div><div class="quiz-options"><button class="quiz-option" data-correct="true"><span class="opt-letter">A</span> 5 m</button><button class="quiz-option" data-correct="false"><span class="opt-letter">B</span> 3 m</button><button class="quiz-option" data-correct="false"><span class="opt-letter">C</span> 6 m</button><button class="quiz-option" data-correct="false"><span class="opt-letter">D</span> 9 m</button></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Exact. Avant l'arrêt : ½ × 2,0 × 4 = 4 m. Après : ½ × 1,0 × 2 = 1 m. Distance : 4 + 1 = 5 m.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Le déplacement (3 m) ne suffit pas : la bille s'arrête à 2,0 s puis repart en sens inverse. Calcule les deux triangles (4 m et 1 m) et additionne leurs valeurs absolues.</span></div></div>
+<div class="quiz-q" data-qi="3" data-type="open"><div class="quiz-q-label">Question de réflexion</div><div class="quiz-q-text">Quand la droite d'un graphique <em>v</em>(<em>t</em>) traverse l'axe du temps, pourquoi doit-on calculer deux aires séparées pour trouver la distance parcourue?</div><textarea class="quiz-open-input" rows="3" aria-label="Ta réponse" placeholder="Écris ta réponse avec tes mots…"></textarea><div class="quiz-open-actions"><button class="quiz-validate quiz-reveal" type="button" disabled>Voir la piste de réponse</button><span class="quiz-open-hint">Écris au moins une phrase pour débloquer la piste.</span></div><div class="quiz-model" hidden><div class="quiz-model-label">Piste de réponse</div><p>Parce qu'à l'endroit où la droite traverse l'axe, le corps s'arrête et <strong>change de sens</strong>.</p><p>Les deux aires ont des signes opposés. Pour le déplacement, elles se compensent; pour la distance, on additionne leurs <strong>valeurs absolues</strong>, car chaque mètre franchi compte, quel que soit le sens.</p><div class="quiz-self"><span>Ta réponse contenait-elle l'essentiel de cette piste?</span><button class="quiz-self-btn" type="button" data-self="1">Oui, l'essentiel y était</button><button class="quiz-self-btn" type="button" data-self="0">Pas tout à fait</button></div></div><div class="quiz-feedback ok" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ok"/></svg><span class="fb-text">Bien joué : tu as repéré l'essentiel.</span></div><div class="quiz-feedback ko" aria-live="polite"><svg class="icon-sm" aria-hidden="true"><use href="#q-ko"/></svg><span class="fb-text">Pas de souci. Relis la piste, puis reprends la sous-section.</span></div></div>
+<div class="quiz-result-msg"></div><button class="quiz-reset" onclick="this.closest('.quiz-block').dispatchEvent(new Event('reset-quiz'))">↺ Recommencer</button></div></div>
+</div>
+</div></div>
+
+  </div>
+</main>
+
+<button id="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+
+<script>
+// ── Toggle sections ────────────────────────────────────────
+function toggleSection(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  btn.parentElement.querySelector('.section-body').classList.toggle('open', !expanded);
+}
+
+// ── Toggle bulles de note ────────────────────────────────────
+function toggleNote(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Termes consultables (étymologie au clic) ────────────────
+function toggleTerm(el) {
+  const expanded = el.getAttribute('aria-expanded') === 'true';
+  document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => {
+    if (t !== el) t.setAttribute('aria-expanded', 'false');
+  });
+  el.setAttribute('aria-expanded', String(!expanded));
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.term-wrap')) {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.term[aria-expanded="true"]').forEach(t => t.setAttribute('aria-expanded', 'false'));
+  }
+});
+
+// ── Toggle blocs d'exercices ────────────────────────────────
+function toggleQuiz(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+}
+
+// ── Sidebar active link ────────────────────────────────────
+const tocLinks = document.querySelectorAll('.toc-link');
+const sectionIds = ['intro','section-1','section-2','section-3','section-4'];
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 130) current = id;
+  });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+  document.getElementById('to-top').classList.toggle('visible', window.scrollY > 300);
+}, {passive: true});
+
+// ── Smooth scroll from TOC ─────────────────────────────────
+tocLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const toggle = target.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ── Table des matières (page-toc) : ouvre la bonne section, puis défile ────
+document.querySelectorAll('.page-toc-pills a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const card = target.closest('.section-card');
+    const toggle = card ? card.querySelector('.section-toggle') : null;
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// Ouvre automatiquement la bonne section si on arrive via une ancre (#section-1, etc.)
+if (location.hash) {
+  const target = document.getElementById(location.hash.slice(1));
+  if (target) {
+    const card = target.closest('.section-card') || target;
+    const toggle = card.querySelector('.section-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggleSection(toggle);
+    setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
+}
+
+// ── Search ─────────────────────────────────────────────────
+const contentEl = document.querySelector('.content');
+const originalHTML = contentEl.innerHTML;
+
+let lastQuery = '';
+let matchIndex = -1;
+
+function doSearch(query) {
+  contentEl.innerHTML = originalHTML;
+  contentEl.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+  initReflect(contentEl);
+  mruInit();if(window.vitInit)vitInit();if(window.s4Init)s4Init();
+  const countEl = document.getElementById('search-count');
+  matchIndex = -1;
+  lastQuery = query;
+
+  if (!query.trim()) { countEl.textContent = ''; return 0; }
+
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest('option,select,textarea,script,style')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  let count = 0;
+  nodes.forEach(node => {
+    if (!re.test(node.textContent)) return;
+    re.lastIndex = 0;
+    const span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(re, m => { count++; return `<mark class="sh">${m}</mark>`; });
+    node.parentNode.replaceChild(span, node);
+  });
+
+  countEl.textContent = count ? `${count} résultat${count>1?'s':''}` : 'Aucun résultat';
+
+  // Ouvre les pauses-réflexion repliées qui contiennent un résultat
+  contentEl.querySelectorAll('.reflect-body mark.sh').forEach(m => {
+    const bar = m.closest('.reflect').querySelector('.reflect-bar');
+    if (bar) bar.setAttribute('aria-expanded', 'true');
+  });
+
+  document.querySelectorAll('.section-card').forEach(card => {
+    if (card.querySelector('mark.sh')) {
+      const t = card.querySelector('.section-toggle');
+      if (t && t.getAttribute('aria-expanded') === 'false') toggleSection(t);
+    }
+  });
+
+  return count;
+}
+
+function goToMatch(step) {
+  const marks = contentEl.querySelectorAll('mark.sh');
+  if (!marks.length) return;
+  if (matchIndex >= 0 && marks[matchIndex]) marks[matchIndex].classList.remove('current');
+  matchIndex = (matchIndex + step + marks.length) % marks.length;
+  const m = marks[matchIndex];
+  m.classList.add('current');
+  m.scrollIntoView({behavior:'smooth', block:'center'});
+  const countEl = document.getElementById('search-count');
+  countEl.textContent = `${matchIndex+1} / ${marks.length} résultats`;
+}
+
+function runSearchAndJump(query, step) {
+  if (query !== lastQuery || !contentEl.querySelector('mark.sh')) {
+    const count = doSearch(query);
+    if (count > 0) goToMatch(0);
+  } else {
+    goToMatch(step);
+  }
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAndJump(e.target.value, e.shiftKey ? -1 : 1);
+  }
+});
+
+// Ctrl+F → recherche interne
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    const inp = document.getElementById('search-input');
+    inp.focus(); inp.select();
+  }
+});
+
+// Fermer la bulle d'attribution au clic à l'extérieur
+document.addEventListener('click', e => {
+  const pop = document.getElementById('attrib-pop');
+  if (pop && !pop.contains(e.target) && !e.target.closest('.sidebar-footer button')) {
+    pop.classList.remove('visible');
+  }
+});
+
+// === MOTEUR DE QUIZ INTERACTIFS ===
+// Types de questions (attribut data-type sur .quiz-q) :
+//   mcq    : choix multiple, un clic valide            multi : plusieurs bonnes réponses à cocher
+//   num    : réponse numérique à écrire                fill  : compléter avec des listes déroulantes
+//   match  : associer (listes déroulantes)             order : remettre des étapes dans l'ordre
+//   open   : question de réflexion (piste de réponse + auto-évaluation)
+function qzParseNum(s) {
+  s = String(s).replace(/[\u2212\u2013\u2014]/g, '-').replace(/\s+/g, '').replace(',', '.');
+  const m = s.match(/^[-+]?(\d+\.?\d*|\.\d+)/);
+  return m ? parseFloat(m[0]) : NaN;
+}
+function qzSetKo(q, html) {
+  const t = q.querySelector('.quiz-feedback.ko .fb-text');
+  if (!t) return;
+  if (!('orig' in t.dataset)) t.dataset.orig = t.innerHTML;
+  t.innerHTML = html;
+}
+function qzRestoreFb(q) {
+  q.querySelectorAll('.quiz-feedback .fb-text').forEach(t => { if ('orig' in t.dataset) t.innerHTML = t.dataset.orig; });
+}
+function qzShuffle(arr, seed) {
+  let s = seed * 9301 + 49297;
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor(s / 233280 * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const QUIZ_TYPES = {
+  mcq(q, done) {
+    const options = Array.from(q.querySelectorAll('.quiz-option'));
+    options.forEach(opt => opt.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      const ok = opt.dataset.correct === 'true';
+      options.forEach(o => {
+        o.disabled = true;
+        if (o.dataset.correct === 'true') o.classList.add(o === opt ? 'correct' : 'reveal');
+        else if (o === opt) o.classList.add('wrong');
+      });
+      done(q, ok);
+    }));
+    return () => options.forEach(o => { o.disabled = false; o.classList.remove('correct', 'wrong', 'reveal'); });
+  },
+
+  multi(q, done) {
+    const checks = Array.from(q.querySelectorAll('.quiz-check'));
+    const btn = q.querySelector('.quiz-validate');
+    const hint = q.querySelector('.quiz-hint');
+    btn.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      if (!checks.some(c => c.querySelector('input').checked)) { hint.textContent = 'Coche au moins une réponse avant de valider.'; return; }
+      hint.textContent = '';
+      let all = true;
+      checks.forEach(c => {
+        const inp = c.querySelector('input');
+        const should = c.dataset.correct === 'true';
+        const tag = c.querySelector('.ck-tag');
+        inp.disabled = true;
+        if (inp.checked && should) { c.classList.add('good'); tag.textContent = '✓ Bien vu'; }
+        else if (inp.checked && !should) { c.classList.add('bad'); tag.textContent = '✗ À décocher'; all = false; }
+        else if (!inp.checked && should) { c.classList.add('missed'); tag.textContent = '! À cocher'; all = false; }
+      });
+      btn.disabled = true;
+      done(q, all);
+    });
+    return () => {
+      checks.forEach(c => {
+        c.classList.remove('good', 'bad', 'missed');
+        const i = c.querySelector('input'); i.checked = false; i.disabled = false;
+        c.querySelector('.ck-tag').textContent = '';
+      });
+      btn.disabled = false; hint.textContent = '';
+    };
+  },
+
+  num(q, done) {
+    const input = q.querySelector('.quiz-num-input');
+    const btn = q.querySelector('.quiz-validate');
+    const hint = q.querySelector('.quiz-hint');
+    const ans = parseFloat(q.dataset.answer);
+    const tol = q.dataset.tol !== undefined ? parseFloat(q.dataset.tol) : 0.01;
+    let traps = [];
+    try { traps = JSON.parse(q.dataset.traps || '[]'); } catch (e) { traps = []; }
+    function submit() {
+      if (q.classList.contains('answered')) return;
+      const v = qzParseNum(input.value);
+      if (isNaN(v)) { hint.textContent = 'Écris un nombre (par exemple 12 ou −3,5).'; input.focus(); return; }
+      hint.textContent = '';
+      const ok = Math.abs(v - ans) <= tol + 1e-9;
+      input.disabled = true; btn.disabled = true;
+      input.classList.add(ok ? 'ok' : 'ko');
+      if (!ok) {
+        const t = traps.find(t => Math.abs(v - t.v) <= tol + 1e-9);
+        const base = q.querySelector('.quiz-feedback.ko .fb-text');
+        if (t && base) qzSetKo(q, '<strong>' + t.msg + '</strong> ' + (base.dataset.orig || base.innerHTML));
+      }
+      done(q, ok);
+    }
+    btn.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
+    return () => { input.value = ''; input.disabled = false; input.classList.remove('ok', 'ko'); btn.disabled = false; hint.textContent = ''; };
+  },
+
+  fill(q, done) {
+    const sels = Array.from(q.querySelectorAll('select.quiz-blank'));
+    const btn = q.querySelector('.quiz-validate');
+    const hint = q.querySelector('.quiz-hint');
+    btn.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      if (sels.some(s => !s.value)) { hint.textContent = 'Choisis une réponse dans chaque liste avant de valider.'; return; }
+      hint.textContent = '';
+      let all = true;
+      sels.forEach(s => {
+        const ok = s.value === s.dataset.answer;
+        s.classList.add(ok ? 'ok' : 'ko'); s.disabled = true;
+        if (!ok) all = false;
+      });
+      btn.disabled = true;
+      done(q, all);
+    });
+    return () => { sels.forEach(s => { s.value = ''; s.disabled = false; s.classList.remove('ok', 'ko'); }); btn.disabled = false; hint.textContent = ''; };
+  },
+
+  order(q, done) {
+    const list = q.querySelector('.quiz-order');
+    const btn = q.querySelector('.quiz-validate');
+    const originals = Array.from(list.children);
+    let seed = (parseInt(q.dataset.qi || '1', 10) || 1) * 7 + 3;
+    function layout() {
+      let arr = qzShuffle(originals, seed);
+      const n = originals.length;
+      const same = arr.every((li, i) => li === originals[i]);
+      const rev = arr.every((li, i) => li === originals[n - 1 - i]);
+      if (same || rev) arr = originals.slice(2).concat(originals.slice(0, 2));
+      arr.forEach(li => list.appendChild(li));
+    }
+    layout();
+    list.addEventListener('click', e => {
+      const b = e.target.closest('.ord-btn');
+      if (!b || q.classList.contains('answered')) return;
+      const li = b.closest('li');
+      if (b.classList.contains('ord-up')) { const p = li.previousElementSibling; if (p) list.insertBefore(li, p); }
+      else { const n = li.nextElementSibling; if (n) list.insertBefore(n, li); }
+      b.focus();
+    });
+    btn.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      let all = true;
+      Array.from(list.children).forEach((li, i) => {
+        const ok = parseInt(li.dataset.pos, 10) === i + 1;
+        li.classList.add(ok ? 'ok' : 'ko');
+        if (!ok) all = false;
+      });
+      list.querySelectorAll('.ord-btn').forEach(b => b.disabled = true);
+      btn.disabled = true;
+      done(q, all);
+    });
+    return () => {
+      Array.from(list.children).forEach(li => li.classList.remove('ok', 'ko'));
+      list.querySelectorAll('.ord-btn').forEach(b => b.disabled = false);
+      btn.disabled = false; seed += 5; layout();
+    };
+  },
+
+  open(q, done) {
+    const ta = q.querySelector('.quiz-open-input');
+    const reveal = q.querySelector('.quiz-reveal');
+    const model = q.querySelector('.quiz-model');
+    const selfBtns = Array.from(q.querySelectorAll('.quiz-self-btn'));
+    const need = parseInt(q.dataset.min || '12', 10);
+    ta.addEventListener('input', () => { reveal.disabled = ta.value.trim().length < need; });
+    reveal.addEventListener('click', () => {
+      model.hidden = false; reveal.disabled = true; ta.readOnly = true;
+    });
+    selfBtns.forEach(b => b.addEventListener('click', () => {
+      if (q.classList.contains('answered')) return;
+      selfBtns.forEach(x => x.disabled = true);
+      b.classList.add('chosen');
+      done(q, b.dataset.self === '1');
+    }));
+    return () => {
+      ta.value = ''; ta.readOnly = false; reveal.disabled = true; model.hidden = true;
+      selfBtns.forEach(x => { x.disabled = false; x.classList.remove('chosen'); });
+    };
+  }
+};
+QUIZ_TYPES.match = QUIZ_TYPES.fill;
+
+function initQuizBlock(block) {
+  const questions = Array.from(block.querySelectorAll('.quiz-q'));
+  const total = questions.length;
+  const scoreLabel = block.querySelector('.quiz-score-label');
+  const progressBar = block.querySelector('.quiz-progress');
+  const resultMsg = block.querySelector('.quiz-result-msg');
+  const resetBtn = block.querySelector('.quiz-reset');
+  const doneMsg = block.dataset.done || 'la section est maîtrisée.';
+  const rereadMsg = block.dataset.reread || 'cette section';
+  progressBar.max = total;
+
+  function updateScore() {
+    const answered = questions.filter(q => q.classList.contains('answered'));
+    const correct = answered.filter(q => q.dataset.gotCorrect === 'true').length;
+    scoreLabel.textContent = `${correct} / ${total}`;
+    progressBar.value = answered.length;
+
+    if (answered.length === total) {
+      resultMsg.classList.add('show');
+      const pct = Math.round((correct / total) * 100);
+      resultMsg.classList.remove('great', 'good', 'poor');
+      const starIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 16.9 6.5 19.7l1.4-6.1-4.7-4.2 6.2-.6Z"/></svg>';
+      const upIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13l3-3 2 2 3-3.5"/></svg>';
+      const bookIcon = '<svg class="icon-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2 2 0 0 1 6 4h6v16H6a2 2 0 0 1-2-2Z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v16h6a2 2 0 0 0 2-2Z"/></svg>';
+      let icon, msg, variant;
+      if (pct === 100) { icon = starIcon; msg = `Parfait ! ${correct} / ${total} — ${doneMsg}`; variant = 'great'; }
+      else if (pct >= 70) { icon = upIcon; msg = `Bon travail : ${correct} / ${total}. Relis les explications des questions manquées.`; variant = 'good'; }
+      else { icon = bookIcon; msg = `${correct} / ${total} — il serait utile de relire ${rereadMsg} avant de continuer.`; variant = 'poor'; }
+      resultMsg.classList.add(variant);
+      resultMsg.innerHTML = `${icon}<span>${msg}</span>`;
+      resetBtn.style.display = 'inline-block';
+    } else {
+      resultMsg.classList.remove('show', 'great', 'good', 'poor');
+      resetBtn.style.display = 'none';
+    }
+  }
+
+  function conclude(q, isCorrect) {
+    if (q.classList.contains('answered')) return;
+    q.classList.add('answered');
+    q.dataset.gotCorrect = isCorrect ? 'true' : 'false';
+    const fb = q.querySelector(isCorrect ? '.quiz-feedback.ok' : '.quiz-feedback.ko');
+    if (fb) fb.classList.add('show');
+    updateScore();
+  }
+
+  const resets = [];
+  questions.forEach(q => {
+    const init = QUIZ_TYPES[q.dataset.type || 'mcq'];
+    if (init) resets.push(init(q, conclude));
+  });
+
+  block.addEventListener('reset-quiz', () => {
+    questions.forEach(q => {
+      q.classList.remove('answered');
+      delete q.dataset.gotCorrect;
+      q.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+      qzRestoreFb(q);
+    });
+    resets.forEach(r => r && r());
+    updateScore();
+  });
+
+  updateScore();
+}
+
+document.querySelectorAll('.quiz-block').forEach(initQuizBlock);
+
+// ── Pauses-réflexion (dans le fil du cours) ─────────────────
+function initReflect(root) {
+  root.querySelectorAll('.reflect').forEach(box => {
+    const ta = box.querySelector('.reflect-input');
+    const btn = box.querySelector('.reflect-btn');
+    const ans = box.querySelector('.reflect-answer');
+    const hint = box.querySelector('.reflect-hint');
+    ta.addEventListener('input', () => { if (!btn.dataset.done) btn.disabled = ta.value.trim().length < 12; });
+    btn.addEventListener('click', () => {
+      ans.hidden = false; btn.disabled = true; btn.dataset.done = '1';
+      btn.textContent = 'Piste affichée'; ta.readOnly = true;
+      if (hint) hint.textContent = 'Compare avec ta réponse : as-tu les mêmes idées principales?';
+    });
+  });
+}
+initReflect(document);
+
+
+
+// ── Laboratoires du chapitre 2 ──
+(function(){var fm=function(n){return String(n).replace('.',',').replace('-','\u2212')};
+var st={v:1,a:1};
+function acR(){var r=document.getElementById('ac-read'),p=document.getElementById('ac-ph');if(!r)return;
+ var ar=function(s){return s>0?'\u2192':'\u2190'};var sg=function(s){return s>0?'positive':'n\u00e9gative'};
+ var fast=st.v*st.a>0;var va=document.getElementById('ac-va'),aa=document.getElementById('ac-aa');if(va){va.setAttribute('x2',180+st.v*70);aa.setAttribute('x2',180+st.a*70);}
+ r.innerHTML='<strong>v</strong> '+ar(st.v)+' ('+sg(st.v)+') &nbsp;\u00b7&nbsp; <strong>a</strong> '+ar(st.a)+' ('+sg(st.a)+')';
+ p.innerHTML=fast?'M\u00eame signe : la grandeur de la vitesse <strong>augmente</strong>. Le corps <strong>acc\u00e9l\u00e8re</strong>, vers les x '+(st.v>0?'positifs':'n\u00e9gatifs')+'.':'Signes oppos\u00e9s : la grandeur de la vitesse <strong>diminue</strong>. Le corps <strong>ralentit</strong>.';}
+document.querySelectorAll('.ac-b').forEach(function(b){b.addEventListener('click',function(){st[b.dataset.k]=+b.dataset.s;
+ document.querySelectorAll('.ac-b[data-k="'+b.dataset.k+'"]').forEach(function(x){x.classList.toggle('on',x===b)});acR();});});acR();
+var vi=document.getElementById('vt-vi'),a=document.getElementById('vt-a');
+function vtR(){if(!vi)return;var v0=+vi.value,ac=+a.value,vf=v0+ac*10,L=document.getElementById('vt-line');
+ L.setAttribute('y1',112-v0*2.25);L.setAttribute('y2',112-vf*2.25);
+ document.getElementById('vt-vio').textContent=fm(v0)+' m/s';document.getElementById('vt-ao').textContent=fm(ac)+' m/s\u00b2';
+ var t=ac===0?'Droite horizontale : l\u2019acc\u00e9l\u00e9ration est nulle (MRU).':(ac>0?'Pente positive : la vitesse augmente.':'Pente n\u00e9gative : la vitesse diminue.');
+ if(ac!==0&&v0*vf<0)t+=' La droite traverse l\u2019axe : le corps s\u2019arr\u00eate \u00e0 t = '+fm(Math.round(-v0/ac*10)/10)+' s, puis repart en sens inverse.';
+ document.getElementById('vt-read').innerHTML='pente = \u0394v / \u0394t = ('+fm(vf)+' \u2212 '+(v0<0?'('+fm(v0)+')':fm(v0))+') / 10 = <strong>'+fm(ac)+' m/s\u00b2</strong> &nbsp;\u00b7&nbsp; v \u00e0 10 s : '+fm(vf)+' m/s<br>'+t;}
+if(vi){vi.addEventListener('input',vtR);a.addEventListener('input',vtR);vtR();}
+var sv=document.getElementById('sp-vi'),sa=document.getElementById('sp-a');
+function spR(){if(!sv)return;var v0=+sv.value,ac=+sa.value;document.getElementById('sp-vio').textContent=fm(v0)+' m/s';document.getElementById('sp-ao').textContent=fm(ac)+' m/s²';
+ var h='';for(var t=0;t<=5;t++){var v=v0+ac*t;h+='<div class="sp-c"><div class="sp-t">t = '+t+' s</div><div class="sp-v">'+fm(Math.round(v*100)/100)+'</div></div>';}
+ document.getElementById('sp-row').innerHTML=h;
+ document.getElementById('sp-read').innerHTML='Chaque seconde, la vitesse '+(ac===0?'<strong>ne change pas</strong> (a = 0).':'change de <strong>'+(ac>0?'+':'')+fm(ac)+' m/s</strong> : c’est ce que veut dire a = '+fm(ac)+' m/s².');}
+if(sv){sv.addEventListener('input',spR);sa.addEventListener('input',spR);spR();}
+var zi=document.getElementById('tz-vi'),zf=document.getElementById('tz-vf'),zd=document.getElementById('tz-dt');
+function tzR(){if(!zi)return;var a=+zi.value,b=+zf.value,d=+zd.value,X=function(t){return 48+50*t},Y=function(v){return 200-14*v};
+ var P=function(arr){return arr.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)}).join(' ')};
+ document.getElementById('tz-rect').setAttribute('points',P([[0,0],[d,0],[d,a],[0,a]]));
+ document.getElementById('tz-tri').setAttribute('points',P([[0,a],[d,a],[d,b]]));
+ var l=document.getElementById('tz-line');l.setAttribute('x1',X(0));l.setAttribute('y1',Y(a));l.setAttribute('x2',X(d));l.setAttribute('y2',Y(b));
+ document.getElementById('tz-vio').textContent=fm(a)+' m/s';document.getElementById('tz-vfo').textContent=fm(b)+' m/s';document.getElementById('tz-dto').textContent=fm(d)+' s';
+ var r=a*d,tr=(b-a)*d/2,R=function(x){return fm(Math.round(x*100)/100)};
+ document.getElementById('tz-read').innerHTML='Rectangle : '+R(a)+' × '+R(d)+' = <strong>'+R(r)+' m</strong> &nbsp;·&nbsp; Triangle : ½ × ('+R(b-a)+') × '+R(d)+' = <strong>'+R(tr)+' m</strong>'+(b<a?' (négatif : il se retranche du rectangle)':'')+'<br>Δx = '+R(r)+' + ('+R(tr)+') = <strong>'+R(r+tr)+' m</strong> &nbsp;·&nbsp; contrôle avec ½ (v initiale + v finale) × Δt : '+R((a+b)/2*d)+' m';}
+if(zi){[zi,zf,zd].forEach(function(e){e.addEventListener('input',tzR)});tzR();}
+})();
+</script>
+
+</body>
+</html>
